@@ -1,0 +1,12 @@
+{
+  "name": "daily-investment-research-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update": "node scripts/update-data.mjs",
+    "build": "node scripts/build-pages.mjs",
+    "dev": "node scripts/serve.mjs",
+    "check": "node scripts/update-data.mjs --check"
+  }
+}
