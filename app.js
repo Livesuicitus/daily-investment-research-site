@@ -8,6 +8,13 @@ const state = {
     heatWindow: "all",
     focusOnly: false,
   },
+  ai: {
+    query: "",
+    layer: "全部层级",
+    segment: "全部",
+    includeAll: true,
+    selectedNode: "gpu",
+  },
   selectedSymbol: null,
 };
 
@@ -46,6 +53,21 @@ const elements = {
   socialSource: document.querySelector("#social-source"),
   socialLeaders: document.querySelector("#social-leaders"),
   socialNote: document.querySelector("#social-note"),
+  aiStatGrid: document.querySelector("#ai-stat-grid"),
+  aiTabs: document.querySelectorAll("[data-ai-scroll]"),
+  aiSearch: document.querySelector("#ai-chain-search"),
+  aiLayer: document.querySelector("#ai-layer-filter"),
+  aiReset: document.querySelector("#ai-reset-view"),
+  aiIncludeAll: document.querySelector("#ai-include-all"),
+  aiSegments: document.querySelector("#ai-segments"),
+  aiMapCanvas: document.querySelector("#ai-map-canvas"),
+  aiNodeTitle: document.querySelector("#ai-node-title"),
+  aiNodeSummary: document.querySelector("#ai-node-summary"),
+  aiSummaryStats: document.querySelector("#ai-summary-stats"),
+  aiNodeCompanies: document.querySelector("#ai-node-companies"),
+  aiSemiView: document.querySelector("#ai-semi-view"),
+  aiModelView: document.querySelector("#ai-model-view"),
+  aiAppView: document.querySelector("#ai-app-view"),
   stockSearch: document.querySelector("#search-input"),
   focus: document.querySelector("#focus-toggle"),
   count: document.querySelector("#visible-count"),
@@ -74,6 +96,208 @@ const glossary = [
   ["社媒热度", "来自 WSB 公开帖子匹配的讨论强度，X 热度预留 API 接口。"],
   ["触发条件", "能让主线被确认或被证伪的下一组数据、价格或事件。"],
 ];
+
+const aiLayers = [
+  "上游材料",
+  "半导体设备",
+  "晶圆制造",
+  "芯片设计",
+  "存储",
+  "先进封装",
+  "网络与互联",
+  "服务器与数据中心",
+  "下游需求",
+];
+
+const aiLayerX = [5, 16, 27, 38, 49, 60, 71, 82, 93];
+const aiLeafY = [24, 38, 65, 79];
+
+const aiLayerConfig = [
+  {
+    id: "materials",
+    title: "上游材料",
+    segment: "上游材料",
+    summary: "硅片、光刻胶、电子特气和 CMP 材料决定先进制程良率，是 AI 芯片扩产的物理起点。",
+    symbols: ["FCX", "NEM"],
+    leaves: [
+      ["silicon", "硅片", "先进制程需要更高纯度和更稳定供应。", ["TSM"]],
+      ["photoresist", "光刻胶", "EUV 和先进制程材料认证周期长。", ["ASML"]],
+      ["gas", "电子特气", "刻蚀、沉积、清洗工艺的关键耗材。", ["AMAT"]],
+      ["cmp", "CMP 材料", "多层布线和先进封装提高平坦化需求。", ["AMAT"]],
+    ],
+  },
+  {
+    id: "equipment",
+    title: "半导体设备",
+    segment: "半导体设备",
+    summary: "设备端是 AI 算力资本开支最硬的约束之一，重点看光刻、刻蚀、沉积和量测检测。",
+    symbols: ["ASML", "AMAT"],
+    leaves: [
+      ["lithography", "光刻", "EUV 决定先进制程上限。", ["ASML"]],
+      ["etch", "刻蚀", "高深宽比结构和 3D NAND 都需要刻蚀能力。", ["AMAT"]],
+      ["deposition", "薄膜沉积", "先进逻辑、HBM 和封装都依赖沉积工艺。", ["AMAT"]],
+      ["metrology", "量测检测", "良率爬坡阶段的瓶颈识别工具。", ["ASML", "AMAT"]],
+    ],
+  },
+  {
+    id: "foundry",
+    title: "晶圆制造",
+    segment: "晶圆制造",
+    summary: "先进制程、成熟制程和代工产能共同决定 GPU、ASIC、网络芯片和电源芯片的供给弹性。",
+    symbols: ["TSM"],
+    leaves: [
+      ["advanced-node", "先进制程", "高端 GPU、AI ASIC 与 CPU 的核心制程。", ["TSM", "NVDA", "AVGO", "AMD"]],
+      ["mature-node", "成熟制程", "电源、模拟、车规和工业芯片仍需要成熟产能。", ["TSM"]],
+      ["power-semi", "功率半导体", "数据中心电力转换和电网升级的隐性约束。", ["ETN", "VRT"]],
+      ["wafer-capacity", "晶圆代工", "客户质量、产能分配和资本开支决定供给节奏。", ["TSM"]],
+    ],
+  },
+  {
+    id: "chip-design",
+    title: "芯片设计",
+    segment: "芯片设计",
+    summary: "GPU、CPU、ASIC 和 DPU/NIC 是 AI 训练与推理的核心算力载体。",
+    symbols: ["NVDA", "AVGO", "AMD"],
+    leaves: [
+      ["gpu", "GPU", "训练集群主力，短期仍是 AI 算力核心。", ["NVDA", "AMD"]],
+      ["cpu", "CPU", "负责通用计算、控制面和服务器平台。", ["AMD"]],
+      ["ai-asic", "AI ASIC", "云厂商自研加速器降低推理成本。", ["AVGO", "GOOGL", "AMZN"]],
+      ["dpu-nic", "DPU / NIC", "把网络、安全和存储卸载到专用芯片。", ["NVDA", "AVGO", "ANET"]],
+    ],
+  },
+  {
+    id: "memory",
+    title: "存储",
+    segment: "存储",
+    summary: "HBM、DRAM、NAND 和企业级 SSD 决定模型训练吞吐、推理缓存和数据中心存储成本。",
+    symbols: ["NVDA", "AMD"],
+    leaves: [
+      ["hbm", "HBM", "高端 GPU 封装的核心瓶颈。", ["NVDA", "AMD"]],
+      ["dram", "DRAM", "训练和推理服务器的基础内存需求。", ["NVDA", "AMD"]],
+      ["nand", "NAND", "数据湖和向量库需要大规模低成本存储。", ["AMZN", "MSFT", "GOOGL"]],
+      ["enterprise-ssd", "企业级 SSD", "推理缓存、日志和数据管线的性能层。", ["AMZN", "MSFT"]],
+    ],
+  },
+  {
+    id: "packaging",
+    title: "先进封装",
+    segment: "先进封装",
+    summary: "CoWoS、SoIC、2.5D/3D 和 Chiplet 把先进制程、HBM 与高带宽互联整合成可交付算力。",
+    symbols: ["TSM", "NVDA", "AMD"],
+    leaves: [
+      ["cowos", "CoWoS", "GPU 与 HBM 连接的关键封装能力。", ["TSM", "NVDA"]],
+      ["soic", "SoIC", "3D 堆叠和系统级集成的长期方向。", ["TSM"]],
+      ["advanced-package", "2.5D / 3D 封装", "提升带宽、功耗和面积效率。", ["TSM", "AMD"]],
+      ["chiplet", "Chiplet", "让复杂芯片按功能模块拆分迭代。", ["AMD", "AVGO"]],
+    ],
+  },
+  {
+    id: "network",
+    title: "网络与互联",
+    segment: "网络与互联",
+    summary: "AI 集群的瓶颈从单卡性能转向集群通信，CPO、光模块、交换芯片和高速互联变得更重要。",
+    symbols: ["ANET", "AVGO", "NVDA"],
+    leaves: [
+      ["cpo", "CPO", "共封装光学有望降低高带宽互联功耗。", ["AVGO", "ANET"]],
+      ["optical", "光模块", "集群东西向流量提升光模块需求。", ["ANET"]],
+      ["switching", "交换芯片", "高速交换芯片决定集群网络上限。", ["AVGO", "ANET"]],
+      ["infiniband", "InfiniBand / Ethernet", "训练集群和云网络的主干协议。", ["NVDA", "ANET"]],
+    ],
+  },
+  {
+    id: "datacenter",
+    title: "服务器与数据中心",
+    segment: "服务器与数据中心",
+    summary: "服务器、电力、液冷和数据中心运营把芯片需求转化为真实资本开支。",
+    symbols: ["VRT", "ETN", "GEV", "MSFT", "AMZN", "GOOGL"],
+    leaves: [
+      ["ai-server", "AI 服务器", "GPU、CPU、网络、电源和散热的系统集成。", ["NVDA", "AMD", "ANET", "VRT"]],
+      ["liquid-cooling", "液冷", "高功耗机柜推动液冷渗透率上升。", ["VRT"]],
+      ["ups-power", "UPS 电源", "供电可靠性和电能质量约束数据中心扩张。", ["VRT", "ETN"]],
+      ["dc-operator", "数据中心运营", "云资本开支和电力接入决定需求兑现。", ["MSFT", "AMZN", "GOOGL", "GEV"]],
+    ],
+  },
+  {
+    id: "demand",
+    title: "下游需求",
+    segment: "下游需求",
+    summary: "云厂商、大模型、企业软件和行业应用决定 AI 基础设施投资能否转化为收入。",
+    symbols: ["MSFT", "GOOGL", "AMZN", "PANW", "CRWD", "LLY", "ISRG"],
+    leaves: [
+      ["cloud", "云厂商", "训练和推理需求的最大买方。", ["MSFT", "GOOGL", "AMZN"]],
+      ["foundation-model", "大模型", "模型能力和推理成本决定应用扩散速度。", ["MSFT", "GOOGL", "AMZN", "NVDA"]],
+      ["enterprise-ai", "企业软件", "AI 从试点进入工作流才会兑现收入。", ["MSFT", "PANW", "CRWD"]],
+      ["vertical-app", "下游场景", "医疗、工业、机器人和安全是中长期应用落点。", ["LLY", "ISRG", "PANW", "CRWD"]],
+    ],
+  },
+];
+
+const aiNodes = aiLayerConfig.flatMap((layer, layerIndex) => {
+  const x = aiLayerX[layerIndex];
+  return [
+    {
+      id: layer.id,
+      title: layer.title,
+      layer: layer.title,
+      segment: layer.segment,
+      kind: "hub",
+      x,
+      y: 50,
+      summary: layer.summary,
+      symbols: layer.symbols,
+    },
+    ...layer.leaves.map(([id, title, summary, symbols], leafIndex) => ({
+      id,
+      title,
+      layer: layer.title,
+      segment: layer.segment,
+      kind: "leaf",
+      x,
+      y: aiLeafY[leafIndex],
+      summary,
+      symbols,
+    })),
+  ];
+});
+
+const aiNodeById = new Map(aiNodes.map((node) => [node.id, node]));
+const aiHubByLayer = new Map(aiLayerConfig.map((layer) => [layer.title, layer.id]));
+const aiLinks = [
+  ...aiLayerConfig.slice(0, -1).map((layer, index) => [layer.id, aiLayerConfig[index + 1].id]),
+  ...aiNodes.filter((node) => node.kind === "leaf").map((node) => [aiHubByLayer.get(node.layer), node.id]),
+  ["gpu", "hbm"],
+  ["gpu", "cowos"],
+  ["ai-asic", "advanced-node"],
+  ["ai-asic", "cloud"],
+  ["dpu-nic", "switching"],
+  ["hbm", "cowos"],
+  ["cowos", "ai-server"],
+  ["infiniband", "ai-server"],
+  ["switching", "dc-operator"],
+  ["ups-power", "dc-operator"],
+  ["liquid-cooling", "dc-operator"],
+  ["cloud", "foundation-model"],
+  ["foundation-model", "enterprise-ai"],
+  ["enterprise-ai", "vertical-app"],
+];
+
+const aiDeepViews = {
+  semi: [
+    ["设备与制程", "ASML / AMAT / TSM 是当前研究池里最直接的制造底座。先看设备订单、先进制程利用率和 CoWoS 产能。"],
+    ["存储与封装", "HBM 和先进封装决定高端 GPU 交付，相关变化会先体现在 NVDA、AMD、TSM 的指引里。"],
+    ["电力侧联动", "功率、电源、液冷和电网会从“配套”变成 AI 数据中心扩张的硬约束。"],
+  ],
+  models: [
+    ["训练", "训练继续依赖 GPU / HBM / 高速网络，重点看大模型参数规模、训练集群资本开支和单卡利用率。"],
+    ["推理", "推理会推动 ASIC、模型压缩、边缘部署和云平台收入，成本下降是应用扩散的关键。"],
+    ["平台", "云平台把算力、模型、数据和安全打包，MSFT / GOOGL / AMZN 是需求侧主观察对象。"],
+  ],
+  apps: [
+    ["企业工作流", "AI 真正进入办公、客服、开发、安全和数据分析流程，才会从叙事变成现金流。"],
+    ["安全", "模型、身份、数据和终端安全会形成新增预算，PANW / CRWD 是研究池里的观察点。"],
+    ["垂直行业", "医疗、工业和机器人等场景需要更长验证周期，但一旦落地会带来新的推理需求。"],
+  ],
+};
 
 async function loadData() {
   const response = await fetch("./data/market.json", { cache: "no-store" });
@@ -291,6 +515,249 @@ function setupFilters(companies) {
     state.filters.focusOnly = event.target.checked;
     renderCompanies();
   });
+}
+
+function setupAiIndustry() {
+  if (!elements.aiLayer) return;
+
+  elements.aiLayer.innerHTML = ["全部层级", ...aiLayers]
+    .map((layer) => `<option value="${layer}">${layer}</option>`)
+    .join("");
+
+  elements.aiSearch.addEventListener("input", (event) => {
+    state.ai.query = event.target.value.trim().toLowerCase();
+    renderAiIndustry();
+  });
+
+  elements.aiLayer.addEventListener("change", (event) => {
+    state.ai.layer = event.target.value;
+    renderAiIndustry();
+  });
+
+  elements.aiIncludeAll.addEventListener("change", (event) => {
+    state.ai.includeAll = event.target.checked;
+    renderAiIndustry();
+  });
+
+  elements.aiReset.addEventListener("click", () => {
+    state.ai = {
+      query: "",
+      layer: "全部层级",
+      segment: "全部",
+      includeAll: true,
+      selectedNode: "gpu",
+    };
+    elements.aiSearch.value = "";
+    elements.aiLayer.value = "全部层级";
+    elements.aiIncludeAll.checked = true;
+    renderAiIndustry();
+  });
+
+  elements.aiTabs.forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelector(`#${button.dataset.aiScroll}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function aiCompaniesFor(node) {
+  return Array.from(new Set(node.symbols || []))
+    .map(companyBySymbol)
+    .filter(Boolean)
+    .map(enrichCompany)
+    .sort((a, b) => b.score - a.score || b.socialToday.score - a.socialToday.score);
+}
+
+function aiNodeMatches(node) {
+  const layerMatch = state.ai.layer === "全部层级" || node.layer === state.ai.layer;
+  const segmentMatch = state.ai.segment === "全部" || node.segment === state.ai.segment;
+  const query = state.ai.query;
+  if (!layerMatch || !segmentMatch) return false;
+  if (!query) return true;
+
+  const companies = aiCompaniesFor(node);
+  const text = [
+    node.title,
+    node.layer,
+    node.segment,
+    node.summary,
+    ...companies.flatMap((company) => [company.symbol, company.name, company.industry, company.logic]),
+  ]
+    .join(" ")
+    .toLowerCase();
+  return text.includes(query);
+}
+
+function renderAiIndustry() {
+  if (!state.data || !elements.aiMapCanvas) return;
+
+  const matchingNodes = aiNodes.filter(aiNodeMatches);
+  const matchingIds = new Set(matchingNodes.map((node) => node.id));
+  const filterActive = Boolean(state.ai.query || state.ai.layer !== "全部层级" || state.ai.segment !== "全部");
+  const visibleNodes = state.ai.includeAll ? aiNodes : matchingNodes;
+  const visibleIds = new Set(visibleNodes.map((node) => node.id));
+
+  if (!visibleIds.has(state.ai.selectedNode)) {
+    state.ai.selectedNode = matchingNodes[0]?.id || "gpu";
+  }
+
+  elements.aiStatGrid.innerHTML = [
+    ["Layers", aiLayers.length],
+    ["Segments", aiNodes.length],
+    ["Companies", state.data.companies.length],
+    ["Links", aiLinks.length],
+  ]
+    .map(
+      ([label, value]) => `
+        <div class="ai-stat">
+          <span>${label}</span>
+          <b>${value}</b>
+        </div>
+      `,
+    )
+    .join("");
+
+  elements.aiSegments.innerHTML = ["全部", ...aiLayers]
+    .map(
+      (segment) => `
+        <button class="${state.ai.segment === segment ? "active" : ""}" type="button" data-ai-segment="${segment}">
+          ${segment}
+        </button>
+      `,
+    )
+    .join("");
+
+  elements.aiSegments.querySelectorAll("[data-ai-segment]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.ai.segment = button.dataset.aiSegment;
+      renderAiIndustry();
+    });
+  });
+
+  const edgeHtml = aiLinks
+    .filter(([from, to]) => visibleIds.has(from) && visibleIds.has(to))
+    .map(([from, to]) => {
+      const start = aiNodeById.get(from);
+      const end = aiNodeById.get(to);
+      const dim = filterActive && (!matchingIds.has(from) || !matchingIds.has(to));
+      return `<line class="${dim ? "dim" : ""}" x1="${start.x}%" y1="${start.y}%" x2="${end.x}%" y2="${end.y}%" />`;
+    })
+    .join("");
+
+  const nodeHtml = visibleNodes
+    .map((node) => {
+      const companies = aiCompaniesFor(node);
+      const dim = filterActive && !matchingIds.has(node.id);
+      const labelSide = node.x > 84 ? "left-label" : "";
+      return `
+        <button
+          class="ai-node ${node.kind} ${labelSide} ${state.ai.selectedNode === node.id ? "active" : ""} ${dim ? "dim" : ""}"
+          type="button"
+          data-ai-node="${node.id}"
+          style="left:${node.x}%; top:${node.y}%"
+        >
+          <span>${node.title}</span>
+          <small>${companies.length ? `${companies.length}家公司` : "待补档案"}</small>
+        </button>
+      `;
+    })
+    .join("");
+
+  elements.aiMapCanvas.innerHTML = `
+    <span class="ai-map-count">${visibleNodes.length} nodes · ${aiLinks.length} links</span>
+    <svg class="ai-map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      ${edgeHtml}
+    </svg>
+    <div class="ai-node-layer">${nodeHtml}</div>
+  `;
+
+  elements.aiMapCanvas.querySelectorAll("[data-ai-node]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.ai.selectedNode = button.dataset.aiNode;
+      renderAiIndustry();
+    });
+  });
+
+  renderAiNodeSummary();
+  renderAiDeepViews();
+}
+
+function renderAiNodeSummary() {
+  const node = aiNodeById.get(state.ai.selectedNode) || aiNodeById.get("gpu");
+  const companies = aiCompaniesFor(node);
+  const connected = aiLinks.filter(([from, to]) => from === node.id || to === node.id).length;
+
+  elements.aiNodeTitle.textContent = `${node.title} 关系卡`;
+  elements.aiNodeSummary.textContent = node.summary;
+  elements.aiSummaryStats.innerHTML = [
+    ["层级", node.layer],
+    ["连接边", connected],
+    ["研究池公司", companies.length],
+    ["节点类型", node.kind === "hub" ? "产业层" : "细分节点"],
+  ]
+    .map(
+      ([label, value]) => `
+        <div>
+          <span>${label}</span>
+          <b>${value}</b>
+        </div>
+      `,
+    )
+    .join("");
+
+  elements.aiNodeCompanies.innerHTML = companies.length
+    ? companies
+        .map(
+          (company) => `
+            <button type="button" data-symbol="${company.symbol}">
+              <b>${company.symbol}</b>
+              <span>${company.name}</span>
+              <em>${company.score}</em>
+            </button>
+          `,
+        )
+        .join("")
+    : `
+      <div class="ai-empty">
+        <b>公司档案待补</b>
+        <span>这个节点先保留在产业链关系图里，后续可以继续补全公司池。</span>
+      </div>
+    `;
+
+  elements.aiNodeCompanies.querySelectorAll("[data-symbol]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const company = companyBySymbol(button.dataset.symbol);
+      if (!company) return;
+      state.selectedSymbol = company.symbol;
+      renderCompanies();
+      renderDetail(enrichCompany(company));
+      document.querySelector("#research")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function renderAiDeepViews() {
+  elements.aiSemiView.innerHTML = aiDeepViews.semi.map(renderAiDeepItem).join("");
+  elements.aiModelView.innerHTML = aiDeepViews.models.map(renderAiDeepItem).join("");
+  elements.aiAppView.innerHTML = aiDeepViews.apps.map(renderAiDeepItem).join("");
+}
+
+function renderAiDeepItem([title, text]) {
+  const matched = state.data.companies
+    .map(enrichCompany)
+    .filter((company) => text.includes(company.symbol) || text.includes(company.name))
+    .slice(0, 4);
+  return `
+    <div class="ai-deep-item" data-searchable>
+      <b>${title}</b>
+      <p>${text}</p>
+      ${
+        matched.length
+          ? `<div class="ai-mini-symbols">${matched.map((company) => `<span>${company.symbol} ${company.score}</span>`).join("")}</div>`
+          : ""
+      }
+    </div>
+  `;
 }
 
 function renderHeader() {
@@ -722,6 +1189,7 @@ function renderAll() {
   renderFeeds();
   renderWatchlist();
   renderSocialHeat();
+  renderAiIndustry();
   renderCompanies();
   renderGlossary();
   renderSiteSearch();
@@ -731,6 +1199,7 @@ async function init() {
   setupTheme();
   setupNavigation();
   setupSearch();
+  setupAiIndustry();
 
   try {
     state.data = await loadData();
