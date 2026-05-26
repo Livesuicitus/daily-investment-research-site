@@ -5,7 +5,7 @@ const state = {
     siteQuery: "",
     industry: "全部",
     tier: "全部",
-    heatWindow: "all",
+    heatWindow: "today",
     focusOnly: false,
   },
   ai: {
@@ -494,6 +494,7 @@ function setupFilters(companies) {
   elements.tier.innerHTML = optionList(companies.map((item) => item.tier))
     .map((item) => `<option value="${item}">${item}</option>`)
     .join("");
+  elements.heatFilter.value = state.filters.heatWindow;
 
   elements.stockSearch.addEventListener("input", (event) => {
     state.filters.query = event.target.value.trim().toLowerCase();
