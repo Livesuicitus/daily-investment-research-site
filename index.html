@@ -81,6 +81,213 @@
         </article>
       </section>
 
+      <section class="panel social-panel" aria-label="社媒热度榜">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Social Heat</p>
+            <h2>今日 / 本周热门股票</h2>
+          </div>
+          <span class="tag muted" id="social-source">--</span>
+        </div>
+        <div class="heat-toolbar" role="group" aria-label="热度窗口">
+          <button class="heat-tab active" type="button" data-heat-window="all">全部</button>
+          <button class="heat-tab" type="button" data-heat-window="today">今日热门</button>
+          <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
+        </div>
+        <div class="heat-leaders" id="social-leaders"></div>
+        <p class="heat-note" id="social-note">正在读取社媒热度...</p>
+      </section>
+
+      <section class="panel controls-panel" aria-label="研究池筛选">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Watchlist</p>
+            <h2>行业与公司研究池</h2>
+          </div>
+          <div class="count-pill" id="visible-count">0 / 0</div>
+        </div>
+        <div class="controls">
+          <label class="search">
+            <span>搜索</span>
+            <input id="search-input" type="search" placeholder="公司、代码、逻辑、行业" />
+          </label>
+          <label>
+            <span>行业</span>
+            <select id="industry-filter"></select>
+          </label>
+          <label>
+            <span>梯队</span>
+            <select id="tier-filter"></select>
+          </label>
+          <label>
+            <span>社媒热度</span>
+            <select id="heat-filter">
+              <option value="all">全部</option>
+              <option value="today">今日热门</option>
+              <option value="week">本周热门</option>
+            </select>
+          </label>
+          <label class="toggle">
+            <input id="focus-toggle" type="checkbox" />
+            <span>只看强信号</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="research-layout">
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>公司</th>
+                  <th>代码</th>
+                  <th>行业</th>
+                  <th>梯队</th>
+                  <th>价格</th>
+                  <th>日涨跌</th>
+                  <th>估值分位</th>
+                  <th>盈利兑现</th>
+                  <th>综合分</th>
+                  <th>社媒热度</th>
+                  <th>逻辑</th>
+                </tr>
+              </thead>
+              <tbody id="company-table"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside class="panel detail-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Selected</p>
+              <h2 id="detail-title">选择一家公司</h2>
+            </div>
+            <span class="tag muted" id="detail-symbol">--</span>
+          </div>
+          <div id="detail-body" class="detail-body">
+            <p>点击表格里的公司，查看研究逻辑、风险点、价格变化和下一步跟踪项。</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel playbook-panel" aria-label="实操流程">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Playbook</p>
+            <h2>每天怎么用这张表</h2>
+          </div>
+          <span class="tag muted">非投资建议</span>
+        </div>
+        <div class="steps">
+          <div>
+            <b>1. 先看大方向</b>
+            <span>康波决定长期主线：AI、半导体、电力、医疗、资源。</span>
+          </div>
+          <div>
+            <b>2. 再看小周期</b>
+            <span>美林时钟决定仓位节奏：过热后段少追高，滞胀边缘重视现金流。</span>
+          </div>
+          <div>
+            <b>3. 最后看公司</b>
+            <span>估值分位不要太贵，盈利兑现要跟得上，风险点要能解释清楚。</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>数据来自公开免费源，可能延迟或缺失。</span>
+      <span>本页面只做研究记录，不构成投资建议。</span>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="康波周期与美林时钟结合的投资研究仪表盘，自动更新宏观数据、股票行情与行业研究池。"
+    />
+    <title>康波 × 美林时钟投资研究仪表盘</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Daily Investment Research</p>
+        <h1>康波 × 美林时钟投资研究仪表盘</h1>
+        <p class="summary" id="market-summary">正在读取每日数据...</p>
+      </div>
+      <div class="topbar-actions" aria-label="数据状态">
+        <span class="status-dot" id="freshness-dot"></span>
+        <span id="last-updated">--</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="dashboard-grid" aria-label="宏观与周期状态">
+        <article class="panel cycle-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Long Wave</p>
+              <h2>康波判断</h2>
+            </div>
+            <span class="tag" id="k-wave-tag">--</span>
+          </div>
+          <p class="lead" id="k-wave-summary">--</p>
+          <div class="signal-list" id="k-wave-signals"></div>
+        </article>
+
+        <article class="panel clock-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Business Cycle</p>
+              <h2>美林时钟</h2>
+            </div>
+            <span class="tag" id="clock-tag">--</span>
+          </div>
+          <div class="clock-grid" id="clock-grid" aria-label="美林时钟四象限">
+            <div class="clock-cell" data-stage="复苏">
+              <b>复苏</b>
+              <span>增长上行 / 通胀回落</span>
+              <small>股票、成长资产</small>
+            </div>
+            <div class="clock-cell" data-stage="过热">
+              <b>过热</b>
+              <span>增长上行 / 通胀上行</span>
+              <small>商品、资源、电力</small>
+            </div>
+            <div class="clock-cell" data-stage="衰退">
+              <b>衰退</b>
+              <span>增长下行 / 通胀回落</span>
+              <small>债券、现金、优质股</small>
+            </div>
+            <div class="clock-cell" data-stage="滞胀">
+              <b>滞胀</b>
+              <span>增长下行 / 通胀上行</span>
+              <small>现金、黄金、防御</small>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel macro-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Macro Signals</p>
+              <h2>每日宏观读数</h2>
+            </div>
+            <span class="tag muted" id="macro-source">--</span>
+          </div>
+          <div class="metric-grid" id="macro-metrics"></div>
+        </article>
+      </section>
+
       <section class="panel controls-panel" aria-label="研究池筛选">
         <div class="section-head">
           <div>
