@@ -195,6 +195,14 @@ p {
   background: var(--panel-3);
 }
 
+.primary-nav > a,
+.primary-nav > .nav-section > .nav-disclosure {
+  min-height: 44px;
+  padding: 10px 11px;
+  font-size: 15px;
+  font-weight: 760;
+}
+
 .nav-disclosure {
   width: 100%;
   cursor: pointer;
