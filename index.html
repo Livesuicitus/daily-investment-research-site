@@ -30,7 +30,7 @@
           <a href="#overview" data-nav="overview">市场总览</a>
           <a href="#daily-report" data-nav="daily-report">每日报告</a>
           <a href="#event-flow" data-nav="event-flow">新闻资讯</a>
-          <a href="#semiconductor" data-nav="semiconductor">半导体行业资讯</a>
+          <a href="#ai-semiconductor-chain" data-nav="ai-semiconductor-chain">半导体行业资讯</a>
           <a href="#letters" data-nav="letters">基金信函</a>
           <a href="#research" data-nav="research">投行研报</a>
           <a href="#glossary" data-nav="glossary">术语表</a>
@@ -59,10 +59,14 @@
             </div>
           </div>
 
-          <div class="nav-section locked">
-            <button class="nav-disclosure" type="button" aria-expanded="false">AI 产业观察</button>
+          <div class="nav-section ai-nav">
+            <button class="nav-disclosure" type="button" aria-expanded="true">AI 产业观察</button>
             <div class="nav-children">
-              <a href="#ai-watch" data-nav="ai-watch">算力 / 软件 / 电力</a>
+              <a href="#ai-news" data-nav="ai-news">AI 资讯</a>
+              <a href="#ai-industry" data-nav="ai-industry">AI 产业链</a>
+              <a href="#ai-semiconductor-chain" data-nav="ai-semiconductor-chain">半导体制造</a>
+              <a href="#ai-models" data-nav="ai-models">大模型演变</a>
+              <a href="#ai-applications" data-nav="ai-applications">AI 应用</a>
             </div>
           </div>
         </nav>
@@ -185,9 +189,9 @@
           </aside>
         </section>
 
-        <section class="panel social-panel" id="ai-watch" data-search-block>
+        <section class="panel social-panel" id="ai-news" data-search-block>
           <div class="panel-head">
-            <span>社媒热度终端</span>
+            <span>AI 资讯与社媒热度</span>
             <b id="social-source">--</b>
           </div>
           <div class="heat-toolbar" role="group" aria-label="热度窗口">
@@ -197,6 +201,78 @@
           </div>
           <div class="heat-leaders" id="social-leaders"></div>
           <p class="heat-note" id="social-note">正在读取社媒热度...</p>
+        </section>
+
+        <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
+          <div class="ai-hero">
+            <div>
+              <p class="breadcrumb">AI 产业观察 / Relationship Map</p>
+              <h2>45 个节点 × 产业链关系图谱</h2>
+              <p>
+                从上游材料进入公司档案，也可以从公司反查它连接的产业链角色、环节和需求关系。
+              </p>
+            </div>
+            <div class="ai-stat-grid" id="ai-stat-grid"></div>
+          </div>
+
+          <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
+            <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
+            <button type="button" data-ai-scroll="ai-news">AI 资讯</button>
+            <button type="button" data-ai-scroll="ai-semiconductor-chain">半导体制造</button>
+            <button type="button" data-ai-scroll="ai-models">大模型 / 应用</button>
+          </div>
+
+          <div class="ai-workbench">
+            <div class="ai-map-area">
+              <div class="ai-controls">
+                <input id="ai-chain-search" type="search" placeholder="搜索公司、节点、代码" />
+                <select id="ai-layer-filter" aria-label="AI 产业层级"></select>
+                <button id="ai-reset-view" type="button">重置视图</button>
+                <label class="ai-check">
+                  <input id="ai-include-all" type="checkbox" checked />
+                  <span>全量</span>
+                </label>
+              </div>
+              <div class="ai-segments" id="ai-segments"></div>
+              <div class="ai-map-canvas" id="ai-map-canvas" aria-label="AI 产业链关系图谱"></div>
+            </div>
+
+            <aside class="ai-summary-card">
+              <p class="breadcrumb">Map Summary</p>
+              <h3 id="ai-node-title">产业链关系总览</h3>
+              <div class="ai-summary-stats" id="ai-summary-stats"></div>
+              <p id="ai-node-summary">
+                默认展示产业层级和 45 个节点。选择节点后会展开对应公司，选择公司后会反查它的产业链角色。
+              </p>
+              <div class="ai-company-rail" id="ai-node-companies"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="ai-deep-grid" aria-label="AI 产业链拆解">
+          <article class="panel ai-deep-card" id="ai-semiconductor-chain" data-search-block>
+            <div class="panel-head">
+              <span>半导体制造</span>
+              <b>制造底座</b>
+            </div>
+            <div id="ai-semi-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="ai-models" data-search-block>
+            <div class="panel-head">
+              <span>大模型演变</span>
+              <b>从训练到推理</b>
+            </div>
+            <div id="ai-model-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="ai-applications" data-search-block>
+            <div class="panel-head">
+              <span>AI 应用</span>
+              <b>需求侧</b>
+            </div>
+            <div id="ai-app-view" class="ai-deep-list"></div>
+          </article>
         </section>
 
         <section class="panel stock-panel" id="stock-lab" data-search-block>
@@ -269,12 +345,15 @@
           </article>
         </section>
 
-        <section class="panel topic-panel" id="semiconductor" data-search-block>
+        <section class="panel topic-panel" id="terminal-links" data-search-block>
           <div class="panel-head">
             <span>继续深入</span>
             <b>TOPIC TERMINALS</b>
           </div>
           <div class="topic-grid">
+            <a href="#ai-industry">AI 产业链 <small>关系图谱 / 节点</small></a>
+            <a href="#ai-semiconductor-chain">半导体制造 <small>设备 / 制程 / 封装</small></a>
+            <a href="#ai-models">大模型演变 <small>训练 / 推理 / 平台</small></a>
             <a href="#daily-report">每日研判 <small>完整报告</small></a>
             <a href="#asset-map">大类资产 <small>热力图 / 相关性</small></a>
             <a href="#rate-chain">利率 <small>曲线 / 预期</small></a>
