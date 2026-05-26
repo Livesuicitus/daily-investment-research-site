@@ -330,6 +330,23 @@ p {
   box-shadow: var(--shadow);
 }
 
+.section-heading {
+  display: grid;
+  gap: 6px;
+  padding: 8px 0 0;
+}
+
+.section-heading h2 {
+  margin-bottom: 0;
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.section-heading p:not(.breadcrumb) {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
 .panel-head {
   display: flex;
   align-items: center;
