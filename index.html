@@ -13,7 +13,7 @@
   <body>
     <div class="terminal-shell">
       <aside class="sidebar" aria-label="研究导航">
-        <a class="brand" href="#overview" aria-label="回到康波周期与美林时钟">
+        <a class="brand" href="#hot-stocks" aria-label="回到每日每周最热股票">
           <span>INVESTMENT</span>
           <b>RESEARCH</b>
           <small>每日更新研究平台</small>
@@ -27,8 +27,8 @@
         <button class="theme-toggle" id="theme-toggle" type="button">Light / Dark</button>
 
         <nav class="nav-groups primary-nav">
-          <a href="#overview" data-nav="overview">康波周期与美林时钟</a>
           <a href="#hot-stocks" data-nav="hot-stocks">每日 / 每周最热股票</a>
+          <a href="#overview" data-nav="overview">康波周期与美林时钟</a>
           <div class="nav-section ai-nav">
             <button class="nav-disclosure" type="button" aria-expanded="true">产业观察</button>
             <div class="nav-children">
@@ -42,7 +42,7 @@
         <header class="workspace-head">
           <div>
             <p class="breadcrumb">研究终端 / 每日投资决策台</p>
-            <h1>康波周期与美林时钟</h1>
+            <h1>每日 / 每周最热股票</h1>
           </div>
           <div class="status-strip" aria-label="数据状态">
             <span id="last-updated">--</span>
@@ -51,7 +51,26 @@
           </div>
         </header>
 
-        <section class="top-grid" id="overview" data-search-block>
+        <section class="panel social-panel" id="hot-stocks" data-search-block>
+          <div class="panel-head">
+            <span>WSB 热度终端</span>
+            <b id="social-source">--</b>
+          </div>
+          <div class="heat-toolbar" role="group" aria-label="热度窗口">
+            <button class="heat-tab active" type="button" data-heat-window="today">今日热门</button>
+            <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
+          </div>
+          <div class="heat-leaders" id="social-leaders"></div>
+          <p class="heat-note" id="social-note">正在读取社媒热度...</p>
+        </section>
+
+        <section class="section-heading" id="overview" data-search-block>
+          <p class="breadcrumb">核心功能 2 / Macro Cycle</p>
+          <h2>康波周期与美林时钟</h2>
+          <p>用长期技术周期决定主线，再用增长和通胀位置控制节奏、仓位和确认条件。</p>
+        </section>
+
+        <section class="top-grid" data-search-block>
           <article class="panel thesis-panel">
             <div class="panel-head">
               <span>MACRO STATE</span>
@@ -118,19 +137,6 @@
           </div>
         </section>
 
-        <section class="panel social-panel" id="hot-stocks" data-search-block>
-          <div class="panel-head">
-            <span>每日 / 每周最热股票</span>
-            <b id="social-source">--</b>
-          </div>
-          <div class="heat-toolbar" role="group" aria-label="热度窗口">
-            <button class="heat-tab active" type="button" data-heat-window="today">今日热门</button>
-            <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
-          </div>
-          <div class="heat-leaders" id="social-leaders"></div>
-          <p class="heat-note" id="social-note">正在读取社媒热度...</p>
-        </section>
-
         <section class="content-grid">
           <article class="panel ai-panel" id="daily-report" data-search-block>
             <div class="panel-head">
@@ -171,7 +177,7 @@
         <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
           <div class="ai-hero">
             <div>
-              <p class="breadcrumb">AI 产业观察 / Relationship Map</p>
+              <p class="breadcrumb">核心功能 3 / AI 产业观察 / Relationship Map</p>
               <h2>45 个节点 × 产业链关系图谱</h2>
               <p>
                 从上游材料进入公司档案，也可以从公司反查它连接的产业链角色、环节和需求关系。
@@ -242,7 +248,7 @@
 
         <section class="panel stock-panel" id="stock-lab" data-search-block>
           <div class="panel-head">
-            <span>行业与公司研究池</span>
+            <span>AI 产业观察：行业与公司研究池</span>
             <b id="visible-count">0 / 0</b>
           </div>
           <div class="controls">
@@ -292,7 +298,7 @@
         <section class="lower-grid">
           <article class="panel detail-panel" id="research" data-search-block>
             <div class="panel-head">
-              <span>投行研报式拆解</span>
+              <span>AI 产业观察：投行研报式拆解</span>
               <b id="detail-symbol">--</b>
             </div>
             <h2 id="detail-title">选择一家公司</h2>
@@ -303,7 +309,7 @@
 
           <article class="panel glossary-panel" id="glossary" data-search-block>
             <div class="panel-head">
-              <span>术语表</span>
+              <span>产业观察术语表</span>
               <b>GLOSSARY</b>
             </div>
             <div id="glossary-list" class="glossary-list"></div>
@@ -316,8 +322,8 @@
             <b>TOPIC TERMINALS</b>
           </div>
           <div class="topic-grid">
-            <a href="#overview">康波周期与美林时钟 <small>宏观框架 / 周期位置</small></a>
             <a href="#hot-stocks">每日 / 每周最热股票 <small>WSB 热度 / 研究池</small></a>
+            <a href="#overview">康波周期与美林时钟 <small>宏观框架 / 周期位置</small></a>
             <a href="#ai-industry">AI 产业观察 <small>产业链图谱 / 节点公司</small></a>
           </div>
         </section>
