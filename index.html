@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="每日更新的投资研究终端：宏观周期、社媒热度、公司研究池、事件流与触发提醒。"
+      content="每日更新的投资研究终端：康波周期与美林时钟、WSB 热门股票、AI 产业观察。"
     />
     <title>Daily Investment Terminal</title>
     <link rel="stylesheet" href="./styles.css" />
@@ -13,7 +13,7 @@
   <body>
     <div class="terminal-shell">
       <aside class="sidebar" aria-label="研究导航">
-        <a class="brand" href="#overview" aria-label="回到市场总览">
+        <a class="brand" href="#overview" aria-label="回到康波周期与美林时钟">
           <span>INVESTMENT</span>
           <b>RESEARCH</b>
           <small>每日更新研究平台</small>
@@ -26,47 +26,13 @@
 
         <button class="theme-toggle" id="theme-toggle" type="button">Light / Dark</button>
 
-        <nav class="nav-groups">
-          <a href="#overview" data-nav="overview">市场总览</a>
-          <a href="#daily-report" data-nav="daily-report">每日报告</a>
-          <a href="#event-flow" data-nav="event-flow">新闻资讯</a>
-          <a href="#ai-semiconductor-chain" data-nav="ai-semiconductor-chain">半导体行业资讯</a>
-          <a href="#letters" data-nav="letters">基金信函</a>
-          <a href="#research" data-nav="research">投行研报</a>
-          <a href="#glossary" data-nav="glossary">术语表</a>
-
-          <div class="nav-section">
-            <button class="nav-disclosure" type="button" aria-expanded="true">大类资产</button>
-            <div class="nav-children">
-              <a href="#asset-map" data-nav="asset-map">热力图 / 相关性</a>
-              <a href="#watchlist" data-nav="watchlist">Watchlist</a>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <button class="nav-disclosure" type="button" aria-expanded="true">利率</button>
-            <div class="nav-children">
-              <a href="#rate-chain" data-nav="rate-chain">曲线 / 实际利率</a>
-              <a href="#daily-report" data-nav="daily-report">降息路径</a>
-            </div>
-          </div>
-
-          <div class="nav-section">
-            <button class="nav-disclosure" type="button" aria-expanded="true">流动性</button>
-            <div class="nav-children">
-              <a href="#liquidity" data-nav="liquidity">传导链</a>
-              <a href="#event-flow" data-nav="event-flow">事件库</a>
-            </div>
-          </div>
-
+        <nav class="nav-groups primary-nav">
+          <a href="#overview" data-nav="overview">康波周期与美林时钟</a>
+          <a href="#hot-stocks" data-nav="hot-stocks">每日 / 每周最热股票</a>
           <div class="nav-section ai-nav">
-            <button class="nav-disclosure" type="button" aria-expanded="true">AI 产业观察</button>
+            <button class="nav-disclosure" type="button" aria-expanded="true">产业观察</button>
             <div class="nav-children">
-              <a href="#ai-news" data-nav="ai-news">AI 资讯</a>
-              <a href="#ai-industry" data-nav="ai-industry">AI 产业链</a>
-              <a href="#ai-semiconductor-chain" data-nav="ai-semiconductor-chain">半导体制造</a>
-              <a href="#ai-models" data-nav="ai-models">大模型演变</a>
-              <a href="#ai-applications" data-nav="ai-applications">AI 应用</a>
+              <a href="#ai-industry" data-nav="ai-industry">AI 产业观察</a>
             </div>
           </div>
         </nav>
@@ -76,7 +42,7 @@
         <header class="workspace-head">
           <div>
             <p class="breadcrumb">研究终端 / 每日投资决策台</p>
-            <h1>每日市场总览</h1>
+            <h1>康波周期与美林时钟</h1>
           </div>
           <div class="status-strip" aria-label="数据状态">
             <span id="last-updated">--</span>
@@ -152,6 +118,19 @@
           </div>
         </section>
 
+        <section class="panel social-panel" id="hot-stocks" data-search-block>
+          <div class="panel-head">
+            <span>每日 / 每周最热股票</span>
+            <b id="social-source">--</b>
+          </div>
+          <div class="heat-toolbar" role="group" aria-label="热度窗口">
+            <button class="heat-tab active" type="button" data-heat-window="today">今日热门</button>
+            <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
+          </div>
+          <div class="heat-leaders" id="social-leaders"></div>
+          <p class="heat-note" id="social-note">正在读取社媒热度...</p>
+        </section>
+
         <section class="content-grid">
           <article class="panel ai-panel" id="daily-report" data-search-block>
             <div class="panel-head">
@@ -189,20 +168,6 @@
           </aside>
         </section>
 
-        <section class="panel social-panel" id="ai-news" data-search-block>
-          <div class="panel-head">
-            <span>AI 资讯与社媒热度</span>
-            <b id="social-source">--</b>
-          </div>
-          <div class="heat-toolbar" role="group" aria-label="热度窗口">
-            <button class="heat-tab active" type="button" data-heat-window="all">全部</button>
-            <button class="heat-tab" type="button" data-heat-window="today">今日热门</button>
-            <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
-          </div>
-          <div class="heat-leaders" id="social-leaders"></div>
-          <p class="heat-note" id="social-note">正在读取社媒热度...</p>
-        </section>
-
         <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
           <div class="ai-hero">
             <div>
@@ -217,7 +182,7 @@
 
           <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
             <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
-            <button type="button" data-ai-scroll="ai-news">AI 资讯</button>
+            <button type="button" data-ai-scroll="hot-stocks">热股信号</button>
             <button type="button" data-ai-scroll="ai-semiconductor-chain">半导体制造</button>
             <button type="button" data-ai-scroll="ai-models">大模型 / 应用</button>
           </div>
@@ -297,7 +262,7 @@
               <span>社媒热度</span>
               <select id="heat-filter">
                 <option value="all">全部</option>
-                <option value="today">今日热门</option>
+                <option value="today" selected>今日热门</option>
                 <option value="week">本周热门</option>
               </select>
             </label>
@@ -351,15 +316,9 @@
             <b>TOPIC TERMINALS</b>
           </div>
           <div class="topic-grid">
-            <a href="#ai-industry">AI 产业链 <small>关系图谱 / 节点</small></a>
-            <a href="#ai-semiconductor-chain">半导体制造 <small>设备 / 制程 / 封装</small></a>
-            <a href="#ai-models">大模型演变 <small>训练 / 推理 / 平台</small></a>
-            <a href="#daily-report">每日研判 <small>完整报告</small></a>
-            <a href="#asset-map">大类资产 <small>热力图 / 相关性</small></a>
-            <a href="#rate-chain">利率 <small>曲线 / 预期</small></a>
-            <a href="#liquidity">流动性 <small>传导链</small></a>
-            <a href="#event-flow">事件库 <small>新闻流</small></a>
-            <a href="#research">研报库 <small>投行研报</small></a>
+            <a href="#overview">康波周期与美林时钟 <small>宏观框架 / 周期位置</small></a>
+            <a href="#hot-stocks">每日 / 每周最热股票 <small>WSB 热度 / 研究池</small></a>
+            <a href="#ai-industry">AI 产业观察 <small>产业链图谱 / 节点公司</small></a>
           </div>
         </section>
 
