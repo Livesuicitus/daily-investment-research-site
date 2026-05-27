@@ -6,6 +6,7 @@ const state = {
     industry: "全部",
     tier: "全部",
     heatWindow: "today",
+    companyHeat: "all",
     focusOnly: false,
   },
   ai: {
@@ -128,137 +129,141 @@ const cyclePlaybook = {
   },
 };
 
-const aiLayers = [
-  "上游材料",
-  "半导体设备",
-  "晶圆制造",
-  "芯片设计",
-  "存储",
-  "先进封装",
-  "网络与互联",
-  "服务器与数据中心",
-  "下游需求",
-];
+const companyDirectory = Object.fromEntries(
+  [
+    candidate("CEG", "Constellation Energy", "低碳电力与电网", "核心龙头", "核电和稳定电力供给，是 AI 数据中心长协电力的重要候选。", 80),
+    candidate("VST", "Vistra", "低碳电力与电网", "周期弹性", "电力负荷上行和容量市场受益，适合跟踪数据中心用电需求。", 76),
+    candidate("NEE", "NextEra Energy", "低碳电力与电网", "防御配置", "可再生能源、储能和电网资产组合，偏长期电力基础设施。", 74),
+    candidate("PWR", "Quanta Services", "低碳电力与电网", "产业链配套", "输配电、变电站和电网工程建设直接受益于电网升级。", 78),
+    candidate("HUBB", "Hubbell", "数据中心电力与冷却", "产业链配套", "电气连接、配电和电网部件，受益电气化和数据中心建设。", 76),
+    candidate("TT", "Trane Technologies", "数据中心电力与冷却", "核心龙头", "热管理和暖通系统龙头，液冷和高效制冷需求提升。", 77),
+    candidate("CARR", "Carrier", "数据中心电力与冷却", "产业链配套", "制冷和楼宇系统供应商，数据中心热管理是新增看点。", 73),
+    candidate("JCI", "Johnson Controls", "数据中心电力与冷却", "产业链配套", "楼宇自控和冷却系统，受益高能耗设施效率升级。", 72),
+    candidate("LRCX", "Lam Research", "半导体设备与制造", "核心龙头", "刻蚀和薄膜设备龙头，先进逻辑、HBM 和存储扩产受益。", 79),
+    candidate("KLAC", "KLA", "半导体设备与制造", "核心龙头", "量测检测设备龙头，先进制程良率爬坡越难越重要。", 80),
+    candidate("MU", "Micron", "AI 算力与芯片", "周期弹性", "HBM、DRAM 和数据中心存储周期弹性高。", 76),
+    candidate("MRVL", "Marvell", "AI 算力与芯片", "二线弹性", "高速互联、定制 ASIC 和数据中心芯片具备 AI 弹性。", 75),
+    candidate("ARM", "Arm Holdings", "AI 算力与芯片", "平台型资产", "CPU IP 进入云、边缘和终端 AI，长期生态位置重要。", 74),
+    candidate("META", "Meta Platforms", "云平台与 AI 软件", "核心龙头", "自研模型、推荐系统和广告 AI 变现能力强。", 82),
+    candidate("ORCL", "Oracle", "云平台与 AI 软件", "产业链配套", "云基础设施和数据库客户基础支撑企业 AI 迁移。", 75),
+    candidate("SNOW", "Snowflake", "云平台与 AI 软件", "二线弹性", "数据云和企业数据治理是模型落地的底座。", 72),
+    candidate("DDOG", "Datadog", "云平台与 AI 软件", "二线弹性", "云观测和 AI 运维需求跟随复杂系统扩张。", 73),
+    candidate("NOW", "ServiceNow", "云平台与 AI 软件", "核心龙头", "企业工作流平台，AI Agent 更容易进入预算和流程。", 78),
+    candidate("CRM", "Salesforce", "云平台与 AI 软件", "核心龙头", "企业 CRM 数据和 Agent 应用，是 AI 软件变现观察点。", 75),
+    candidate("ADBE", "Adobe", "云平台与 AI 软件", "核心龙头", "生成式 AI 进入创意工作流，重点看提价和留存。", 74),
+    candidate("PLTR", "Palantir", "云平台与 AI 软件", "二线弹性", "企业和政府 AI 工作流平台，订单兑现决定估值支撑。", 73),
+    candidate("SCCO", "Southern Copper", "资源品", "周期弹性", "铜供给偏紧，电网、数据中心和电气化提升长期需求。", 72),
+    candidate("GOLD", "Barrick Gold", "资源品", "防御对冲", "黄金矿企，对冲滞胀、地缘和实际利率下行。", 68),
+    candidate("CCJ", "Cameco", "资源品", "周期弹性", "铀和核燃料链，AI 数据中心电力需求强化核电叙事。", 74),
+    candidate("XOM", "Exxon Mobil", "资源品", "防御现金流", "油气现金流和能源安全属性，适合高通胀环境观察。", 70),
+    candidate("TSLA", "Tesla", "AI 应用", "高波动弹性", "自动驾驶、机器人和能源业务具备 AI 应用想象力。", 67),
+    candidate("SYM", "Symbotic", "AI 应用", "高波动弹性", "仓储自动化和机器人系统，是实体 AI 应用观察点。", 66),
+    candidate("PATH", "UiPath", "AI 应用", "高波动弹性", "RPA 和 Agent 工作流结合，适合观察企业自动化预算。", 64),
+    candidate("QCOM", "Qualcomm", "AI 算力与芯片", "终端 AI", "端侧 AI、手机芯片和边缘推理生态是应用层算力观察点。", 70),
+  ].map((company) => [company.symbol, company]),
+);
 
-const aiLayerX = [5, 16, 27, 38, 49, 60, 71, 82, 93];
-const aiLeafY = [24, 38, 65, 79];
+const cycleSectorCandidates = {
+  "数据中心电力与冷却": ["VRT", "ETN", "GEV", "HUBB", "TT", "CARR", "JCI", "PWR"],
+  "低碳电力与电网": ["GEV", "CEG", "VST", "NEE", "PWR", "ETN", "HUBB"],
+  "半导体设备与制造": ["TSM", "ASML", "AMAT", "LRCX", "KLAC"],
+  "AI 算力与芯片": ["NVDA", "AVGO", "AMD", "MRVL", "MU", "ARM", "TSM"],
+  "资源品": ["FCX", "SCCO", "NEM", "GOLD", "CCJ", "XOM"],
+  "云平台与 AI 软件": ["MSFT", "GOOGL", "AMZN", "META", "ORCL", "NOW", "CRM", "ADBE", "SNOW"],
+  "网络安全": ["PANW", "CRWD", "DDOG"],
+  "医疗创新": ["LLY", "ISRG"],
+};
+
+function candidate(symbol, name, industry, tier, logic, baseScore = 72) {
+  return {
+    symbol,
+    name,
+    industry,
+    tier,
+    description: logic,
+    logic,
+    risk: "扩展候选池标的，需结合估值、财报、订单和价格趋势二次确认。",
+    nextCheck: "下一步看财报指引、订单/收入增速、估值分位和行业资本开支变化。",
+    valuationPercentile: 66,
+    earningsDelivery: Math.max(62, Math.min(90, baseScore + 3)),
+    baseScore,
+  };
+}
+
+const aiLayers = ["能源", "芯片", "基础设施", "模型", "应用"];
+
+const aiLayerX = [9, 30, 51, 72, 93];
+const aiLeafY = [18, 32, 46, 60, 74];
 
 const aiLayerConfig = [
   {
-    id: "materials",
-    title: "上游材料",
-    segment: "上游材料",
-    summary: "硅片、光刻胶、电子特气和 CMP 材料决定先进制程良率，是 AI 芯片扩产的物理起点。",
-    symbols: ["FCX", "NEM"],
+    id: "energy",
+    title: "能源",
+    segment: "能源",
+    summary: "黄仁勋五层蛋糕的底层是能源。AI 工厂首先是电力工程，约束来自发电、输配电、冷却和电力设备。",
+    symbols: ["GEV", "CEG", "VST", "ETN", "VRT", "PWR"],
     leaves: [
-      ["silicon", "硅片", "先进制程需要更高纯度和更稳定供应。", ["TSM"]],
-      ["photoresist", "光刻胶", "EUV 和先进制程材料认证周期长。", ["ASML"]],
-      ["gas", "电子特气", "刻蚀、沉积、清洗工艺的关键耗材。", ["AMAT"]],
-      ["cmp", "CMP 材料", "多层布线和先进封装提高平坦化需求。", ["AMAT"]],
+      ["power-generation", "电力供给", "核电、燃机和可再生能源共同决定 AI 数据中心能否拿到稳定电。", ["CEG", "VST", "NEE", "GEV"]],
+      ["grid-buildout", "电网与输配", "变压器、开关、输配电工程和并网能力是扩容瓶颈。", ["ETN", "HUBB", "PWR", "GEV"]],
+      ["cooling", "冷却与热管理", "高功率机柜推动液冷、高效制冷和楼宇控制升级。", ["VRT", "TT", "CARR", "JCI"]],
+      ["backup-power", "备用电源", "AI 工厂对可靠性要求高，燃机、UPS 和电力管理需求上升。", ["GEV", "ETN", "VRT"]],
+      ["energy-materials", "能源材料", "铜、铀、天然气和电气化材料共同支撑电力基础设施。", ["FCX", "SCCO", "CCJ", "XOM"]],
     ],
   },
   {
-    id: "equipment",
-    title: "半导体设备",
-    segment: "半导体设备",
-    summary: "设备端是 AI 算力资本开支最硬的约束之一，重点看光刻、刻蚀、沉积和量测检测。",
-    symbols: ["ASML", "AMAT"],
+    id: "chips",
+    title: "芯片",
+    segment: "芯片",
+    summary: "第二层是芯片和加速计算。GPU、ASIC、HBM、先进制程和封装决定 AI 算力供给。",
+    symbols: ["NVDA", "AVGO", "AMD", "TSM", "ASML", "AMAT", "MU", "MRVL"],
     leaves: [
-      ["lithography", "光刻", "EUV 决定先进制程上限。", ["ASML"]],
-      ["etch", "刻蚀", "高深宽比结构和 3D NAND 都需要刻蚀能力。", ["AMAT"]],
-      ["deposition", "薄膜沉积", "先进逻辑、HBM 和封装都依赖沉积工艺。", ["AMAT"]],
-      ["metrology", "量测检测", "良率爬坡阶段的瓶颈识别工具。", ["ASML", "AMAT"]],
+      ["gpu", "GPU / 加速器", "训练和推理的核心算力载体，短期仍是 AI 基建中心。", ["NVDA", "AMD", "ARM"]],
+      ["ai-asic", "AI ASIC", "云厂商定制芯片降低推理成本，也带动高速互联和先进封装。", ["AVGO", "MRVL", "GOOGL", "AMZN"]],
+      ["foundry", "先进制程", "先进逻辑制程决定高端 GPU、CPU、ASIC 的供给弹性。", ["TSM", "ASML", "AMAT", "LRCX", "KLAC"]],
+      ["hbm-memory", "HBM / 存储", "HBM、DRAM 和企业级 SSD 决定训练吞吐、缓存和数据管线。", ["MU", "NVDA", "AMD", "TSM"]],
+      ["advanced-packaging", "先进封装", "CoWoS、Chiplet 和 2.5D/3D 封装把芯片、HBM 与互联集成。", ["TSM", "AMAT", "NVDA", "AMD"]],
     ],
   },
   {
-    id: "foundry",
-    title: "晶圆制造",
-    segment: "晶圆制造",
-    summary: "先进制程、成熟制程和代工产能共同决定 GPU、ASIC、网络芯片和电源芯片的供给弹性。",
-    symbols: ["TSM"],
+    id: "infrastructure",
+    title: "基础设施",
+    segment: "基础设施",
+    summary: "第三层是基础设施，把芯片变成可运营的 AI 工厂：数据中心、云、网络、存储和安全。",
+    symbols: ["MSFT", "AMZN", "GOOGL", "ANET", "VRT", "PANW", "CRWD"],
     leaves: [
-      ["advanced-node", "先进制程", "高端 GPU、AI ASIC 与 CPU 的核心制程。", ["TSM", "NVDA", "AVGO", "AMD"]],
-      ["mature-node", "成熟制程", "电源、模拟、车规和工业芯片仍需要成熟产能。", ["TSM"]],
-      ["power-semi", "功率半导体", "数据中心电力转换和电网升级的隐性约束。", ["ETN", "VRT"]],
-      ["wafer-capacity", "晶圆代工", "客户质量、产能分配和资本开支决定供给节奏。", ["TSM"]],
+      ["ai-datacenter", "AI 数据中心", "机柜、供电、散热、调度和运营能力决定算力能否交付。", ["VRT", "ETN", "GEV", "MSFT", "AMZN", "GOOGL"]],
+      ["cloud-platform", "云平台", "云厂商把算力、模型、数据和企业客户整合成平台。", ["MSFT", "AMZN", "GOOGL", "ORCL"]],
+      ["networking", "网络与互联", "训练集群瓶颈从单卡转向东西向流量和低延迟网络。", ["ANET", "AVGO", "NVDA", "MRVL"]],
+      ["storage-data", "存储与数据层", "数据湖、向量库、企业数据治理和高性能存储支撑模型落地。", ["SNOW", "AMZN", "MSFT", "GOOGL"]],
+      ["security-ops", "安全与运维", "身份、云安全、终端安全和可观测性成为企业 AI 上线前提。", ["PANW", "CRWD", "DDOG", "MSFT"]],
     ],
   },
   {
-    id: "chip-design",
-    title: "芯片设计",
-    segment: "芯片设计",
-    summary: "GPU、CPU、ASIC 和 DPU/NIC 是 AI 训练与推理的核心算力载体。",
-    symbols: ["NVDA", "AVGO", "AMD"],
+    id: "models",
+    title: "模型",
+    segment: "模型",
+    summary: "第四层是模型。通用大模型、垂直模型、推理优化和数据平台决定 AI 能力如何转成服务。",
+    symbols: ["MSFT", "GOOGL", "AMZN", "META", "NOW", "SNOW"],
     leaves: [
-      ["gpu", "GPU", "训练集群主力，短期仍是 AI 算力核心。", ["NVDA", "AMD"]],
-      ["cpu", "CPU", "负责通用计算、控制面和服务器平台。", ["AMD"]],
-      ["ai-asic", "AI ASIC", "云厂商自研加速器降低推理成本。", ["AVGO", "GOOGL", "AMZN"]],
-      ["dpu-nic", "DPU / NIC", "把网络、安全和存储卸载到专用芯片。", ["NVDA", "AVGO", "ANET"]],
+      ["foundation-model", "通用大模型", "模型能力、成本曲线和生态入口决定应用扩散速度。", ["MSFT", "GOOGL", "META", "AMZN"]],
+      ["inference", "推理服务", "推理成本下降会放大应用调用量和云平台收入。", ["NVDA", "AVGO", "MSFT", "GOOGL", "AMZN"]],
+      ["data-model", "企业数据模型", "企业私有数据、治理和检索增强决定模型是否能进入工作流。", ["SNOW", "ORCL", "MSFT", "NOW"]],
+      ["ai-agent-platform", "Agent 平台", "从聊天机器人转向能执行任务的流程代理。", ["MSFT", "NOW", "CRM", "PLTR"]],
+      ["model-tooling", "模型工具链", "观测、评测、安全和部署工具是企业级 AI 的中间层。", ["DDOG", "PANW", "CRWD", "GOOGL"]],
     ],
   },
   {
-    id: "memory",
-    title: "存储",
-    segment: "存储",
-    summary: "HBM、DRAM、NAND 和企业级 SSD 决定模型训练吞吐、推理缓存和数据中心存储成本。",
-    symbols: ["NVDA", "AMD"],
+    id: "applications",
+    title: "应用",
+    segment: "应用",
+    summary: "第五层是应用。真正的经济价值来自企业工作流、医疗、机器人、自动驾驶和行业软件。",
+    symbols: ["MSFT", "CRM", "ADBE", "PANW", "CRWD", "LLY", "ISRG", "TSLA"],
     leaves: [
-      ["hbm", "HBM", "高端 GPU 封装的核心瓶颈。", ["NVDA", "AMD"]],
-      ["dram", "DRAM", "训练和推理服务器的基础内存需求。", ["NVDA", "AMD"]],
-      ["nand", "NAND", "数据湖和向量库需要大规模低成本存储。", ["AMZN", "MSFT", "GOOGL"]],
-      ["enterprise-ssd", "企业级 SSD", "推理缓存、日志和数据管线的性能层。", ["AMZN", "MSFT"]],
-    ],
-  },
-  {
-    id: "packaging",
-    title: "先进封装",
-    segment: "先进封装",
-    summary: "CoWoS、SoIC、2.5D/3D 和 Chiplet 把先进制程、HBM 与高带宽互联整合成可交付算力。",
-    symbols: ["TSM", "NVDA", "AMD"],
-    leaves: [
-      ["cowos", "CoWoS", "GPU 与 HBM 连接的关键封装能力。", ["TSM", "NVDA"]],
-      ["soic", "SoIC", "3D 堆叠和系统级集成的长期方向。", ["TSM"]],
-      ["advanced-package", "2.5D / 3D 封装", "提升带宽、功耗和面积效率。", ["TSM", "AMD"]],
-      ["chiplet", "Chiplet", "让复杂芯片按功能模块拆分迭代。", ["AMD", "AVGO"]],
-    ],
-  },
-  {
-    id: "network",
-    title: "网络与互联",
-    segment: "网络与互联",
-    summary: "AI 集群的瓶颈从单卡性能转向集群通信，CPO、光模块、交换芯片和高速互联变得更重要。",
-    symbols: ["ANET", "AVGO", "NVDA"],
-    leaves: [
-      ["cpo", "CPO", "共封装光学有望降低高带宽互联功耗。", ["AVGO", "ANET"]],
-      ["optical", "光模块", "集群东西向流量提升光模块需求。", ["ANET"]],
-      ["switching", "交换芯片", "高速交换芯片决定集群网络上限。", ["AVGO", "ANET"]],
-      ["infiniband", "InfiniBand / Ethernet", "训练集群和云网络的主干协议。", ["NVDA", "ANET"]],
-    ],
-  },
-  {
-    id: "datacenter",
-    title: "服务器与数据中心",
-    segment: "服务器与数据中心",
-    summary: "服务器、电力、液冷和数据中心运营把芯片需求转化为真实资本开支。",
-    symbols: ["VRT", "ETN", "GEV", "MSFT", "AMZN", "GOOGL"],
-    leaves: [
-      ["ai-server", "AI 服务器", "GPU、CPU、网络、电源和散热的系统集成。", ["NVDA", "AMD", "ANET", "VRT"]],
-      ["liquid-cooling", "液冷", "高功耗机柜推动液冷渗透率上升。", ["VRT"]],
-      ["ups-power", "UPS 电源", "供电可靠性和电能质量约束数据中心扩张。", ["VRT", "ETN"]],
-      ["dc-operator", "数据中心运营", "云资本开支和电力接入决定需求兑现。", ["MSFT", "AMZN", "GOOGL", "GEV"]],
-    ],
-  },
-  {
-    id: "demand",
-    title: "下游需求",
-    segment: "下游需求",
-    summary: "云厂商、大模型、企业软件和行业应用决定 AI 基础设施投资能否转化为收入。",
-    symbols: ["MSFT", "GOOGL", "AMZN", "PANW", "CRWD", "LLY", "ISRG"],
-    leaves: [
-      ["cloud", "云厂商", "训练和推理需求的最大买方。", ["MSFT", "GOOGL", "AMZN"]],
-      ["foundation-model", "大模型", "模型能力和推理成本决定应用扩散速度。", ["MSFT", "GOOGL", "AMZN", "NVDA"]],
-      ["enterprise-ai", "企业软件", "AI 从试点进入工作流才会兑现收入。", ["MSFT", "PANW", "CRWD"]],
-      ["vertical-app", "下游场景", "医疗、工业、机器人和安全是中长期应用落点。", ["LLY", "ISRG", "PANW", "CRWD"]],
+      ["enterprise-app", "企业应用", "AI Copilot 和 Agent 进入 CRM、办公、ITSM、数据分析和创意流程。", ["MSFT", "CRM", "NOW", "ADBE", "PATH"]],
+      ["cybersecurity-app", "安全应用", "AI 带来新攻击面，也提升检测、响应和身份安全预算。", ["PANW", "CRWD", "MSFT", "DDOG"]],
+      ["healthcare-ai", "医疗与生命科学", "药物研发、手术机器人和诊疗流程自动化是长期落点。", ["LLY", "ISRG", "GOOGL", "MSFT"]],
+      ["robotics-industrial", "机器人与工业", "实体 AI、仓储自动化和工业软件把模型带进物理世界。", ["TSLA", "SYM", "ISRG", "GEV"]],
+      ["auto-edge", "自动驾驶与边缘", "自动驾驶、端侧 AI 和边缘推理决定应用层新增算力需求。", ["TSLA", "NVDA", "ARM", "QCOM"]],
     ],
   },
 ];
@@ -296,37 +301,43 @@ const aiHubByLayer = new Map(aiLayerConfig.map((layer) => [layer.title, layer.id
 const aiLinks = [
   ...aiLayerConfig.slice(0, -1).map((layer, index) => [layer.id, aiLayerConfig[index + 1].id]),
   ...aiNodes.filter((node) => node.kind === "leaf").map((node) => [aiHubByLayer.get(node.layer), node.id]),
-  ["gpu", "hbm"],
-  ["gpu", "cowos"],
-  ["ai-asic", "advanced-node"],
-  ["ai-asic", "cloud"],
-  ["dpu-nic", "switching"],
-  ["hbm", "cowos"],
-  ["cowos", "ai-server"],
-  ["infiniband", "ai-server"],
-  ["switching", "dc-operator"],
-  ["ups-power", "dc-operator"],
-  ["liquid-cooling", "dc-operator"],
-  ["cloud", "foundation-model"],
-  ["foundation-model", "enterprise-ai"],
-  ["enterprise-ai", "vertical-app"],
+  ["power-generation", "ai-datacenter"],
+  ["grid-buildout", "ai-datacenter"],
+  ["cooling", "ai-datacenter"],
+  ["gpu", "ai-datacenter"],
+  ["ai-asic", "inference"],
+  ["foundry", "gpu"],
+  ["hbm-memory", "gpu"],
+  ["advanced-packaging", "gpu"],
+  ["ai-datacenter", "cloud-platform"],
+  ["cloud-platform", "foundation-model"],
+  ["networking", "ai-datacenter"],
+  ["storage-data", "data-model"],
+  ["security-ops", "model-tooling"],
+  ["foundation-model", "enterprise-app"],
+  ["inference", "enterprise-app"],
+  ["ai-agent-platform", "enterprise-app"],
+  ["data-model", "enterprise-app"],
+  ["model-tooling", "cybersecurity-app"],
+  ["enterprise-app", "robotics-industrial"],
+  ["inference", "auto-edge"],
 ];
 
 const aiDeepViews = {
   semi: [
-    ["设备与制程", "ASML / AMAT / TSM 是当前研究池里最直接的制造底座。先看设备订单、先进制程利用率和 CoWoS 产能。"],
-    ["存储与封装", "HBM 和先进封装决定高端 GPU 交付，相关变化会先体现在 NVDA、AMD、TSM 的指引里。"],
-    ["电力侧联动", "功率、电源、液冷和电网会从“配套”变成 AI 数据中心扩张的硬约束。"],
+    ["能源底座", "GEV / CEG / VST / ETN / VRT / PWR 对应黄仁勋五层蛋糕的能源层，先看电力接入、输配电和冷却订单。"],
+    ["芯片供给", "NVDA / AVGO / AMD / TSM / ASML / AMAT / LRCX / KLAC / MU 是芯片层观察池，重点看先进制程、HBM 和封装。"],
+    ["基础设施", "MSFT / AMZN / GOOGL / ANET / ORCL / PANW / CRWD 把芯片转成云、网络、安全和可运营 AI 工厂。"],
   ],
   models: [
-    ["训练", "训练继续依赖 GPU / HBM / 高速网络，重点看大模型参数规模、训练集群资本开支和单卡利用率。"],
-    ["推理", "推理会推动 ASIC、模型压缩、边缘部署和云平台收入，成本下降是应用扩散的关键。"],
-    ["平台", "云平台把算力、模型、数据和安全打包，MSFT / GOOGL / AMZN 是需求侧主观察对象。"],
+    ["通用模型", "MSFT / GOOGL / META / AMZN 的模型能力和推理成本曲线决定应用扩散速度。"],
+    ["Agent 平台", "NOW / CRM / MSFT / PLTR 代表模型进入企业流程，关键看续费、席位和工作流渗透。"],
+    ["数据模型", "SNOW / ORCL / MSFT 解决企业数据治理、检索增强和私有化落地。"],
   ],
   apps: [
-    ["企业工作流", "AI 真正进入办公、客服、开发、安全和数据分析流程，才会从叙事变成现金流。"],
-    ["安全", "模型、身份、数据和终端安全会形成新增预算，PANW / CRWD 是研究池里的观察点。"],
-    ["垂直行业", "医疗、工业和机器人等场景需要更长验证周期，但一旦落地会带来新的推理需求。"],
+    ["企业应用", "MSFT / CRM / NOW / ADBE / PATH 观察 AI Copilot 和 Agent 是否真正进入预算。"],
+    ["安全应用", "PANW / CRWD / DDOG / MSFT 受益于 AI 带来的新攻击面、身份安全和可观测性需求。"],
+    ["实体 AI", "LLY / ISRG / TSLA / SYM 是医疗、机器人、自动驾驶和工业自动化方向的应用层候选。"],
   ],
 };
 
@@ -402,7 +413,16 @@ function quoteFor(symbol) {
 }
 
 function companyBySymbol(symbol) {
-  return state.data.companies.find((company) => company.symbol === symbol);
+  return state.data.companies.find((company) => company.symbol === symbol) || companyDirectory[symbol];
+}
+
+function allKnownCompanies() {
+  const seen = new Set();
+  return [...state.data.companies, ...Object.values(companyDirectory)].filter((company) => {
+    if (seen.has(company.symbol)) return false;
+    seen.add(company.symbol);
+    return true;
+  });
 }
 
 function scoreClass(score) {
@@ -425,12 +445,15 @@ function enrichCompany(company) {
   const socialToday = socialHeatFor(company.symbol, "today");
   const socialWeek = socialHeatFor(company.symbol, "week");
   const socialCurrent = socialHeatFor(company.symbol);
+  const baseScore = company.baseScore ?? 70;
+  const earningsDelivery = company.earningsDelivery ?? 72;
+  const valuationPercentile = company.valuationPercentile ?? 66;
   const priceChange = quote.changePercent ?? 0;
   const score = Math.round(
-    company.baseScore +
-      (company.earningsDelivery - 70) * 0.18 -
-      Math.max(company.valuationPercentile - 65, 0) * 0.14 +
-      Math.max(65 - company.valuationPercentile, 0) * 0.05 +
+    baseScore +
+      (earningsDelivery - 70) * 0.18 -
+      Math.max(valuationPercentile - 65, 0) * 0.14 +
+      Math.max(65 - valuationPercentile, 0) * 0.05 +
       Math.max(Math.min(priceChange, 6), -6) * 0.7,
   );
 
@@ -482,12 +505,10 @@ function hotCompanies(windowKey = "today", limit = 10) {
 
 function setHeatWindow(value) {
   state.filters.heatWindow = value;
-  if (elements.heatFilter.value !== value) elements.heatFilter.value = value;
   elements.heatTabs.forEach((button) => {
     button.classList.toggle("active", button.dataset.heatWindow === value);
   });
   renderSocialHeat();
-  renderCompanies();
 }
 
 function setupTheme() {
@@ -548,7 +569,7 @@ function setupFilters(companies) {
   elements.tier.innerHTML = optionList(companies.map((item) => item.tier))
     .map((item) => `<option value="${item}">${item}</option>`)
     .join("");
-  elements.heatFilter.value = state.filters.heatWindow;
+  elements.heatFilter.value = state.filters.companyHeat;
 
   elements.stockSearch.addEventListener("input", (event) => {
     state.filters.query = event.target.value.trim().toLowerCase();
@@ -562,7 +583,10 @@ function setupFilters(companies) {
     state.filters.tier = event.target.value;
     renderCompanies();
   });
-  elements.heatFilter.addEventListener("change", (event) => setHeatWindow(event.target.value));
+  elements.heatFilter.addEventListener("change", (event) => {
+    state.filters.companyHeat = event.target.value;
+    renderCompanies();
+  });
   elements.heatTabs.forEach((button) => {
     button.addEventListener("click", () => setHeatWindow(button.dataset.heatWindow));
   });
@@ -658,8 +682,8 @@ function renderAiIndustry() {
 
   elements.aiStatGrid.innerHTML = [
     ["Layers", aiLayers.length],
-    ["Segments", aiNodes.length],
-    ["Companies", state.data.companies.length],
+    ["Nodes", aiNodes.length],
+    ["Companies", new Set([...state.data.companies.map((company) => company.symbol), ...Object.keys(companyDirectory)]).size],
     ["Links", aiLinks.length],
   ]
     .map(
@@ -798,7 +822,7 @@ function renderAiDeepViews() {
 }
 
 function renderAiDeepItem([title, text]) {
-  const matched = state.data.companies
+  const matched = allKnownCompanies()
     .map(enrichCompany)
     .filter((company) => text.includes(company.symbol) || text.includes(company.name))
     .slice(0, 4);
@@ -875,9 +899,7 @@ function renderThesis() {
 
 function renderCycleSectors() {
   const playbook = cyclePlaybook[state.data.macro.stage] || cyclePlaybook.复苏;
-  const available = playbook.industries.filter((industry) =>
-    state.data.companies.some((company) => company.industry === industry),
-  );
+  const available = playbook.industries.filter((industry) => cycleSectorCandidates[industry]?.length);
   if (!state.selectedSector || !available.includes(state.selectedSector)) {
     state.selectedSector = available[0] || "全部";
   }
@@ -900,11 +922,12 @@ function renderCycleSectors() {
     });
   });
 
-  const companies = state.data.companies
-    .filter((company) => company.industry === state.selectedSector)
+  const companies = (cycleSectorCandidates[state.selectedSector] || [])
+    .map(companyBySymbol)
+    .filter(Boolean)
     .map(enrichCompany)
     .sort((a, b) => b.score - a.score || b.socialWeek.score - a.socialWeek.score)
-    .slice(0, 6);
+    .slice(0, 8);
 
   elements.sectorCompanies.innerHTML = companies
     .map(
@@ -916,6 +939,7 @@ function renderCycleSectors() {
           </span>
           <em>${company.score}</em>
           <p>${company.logic}</p>
+          <small class="sector-check">${company.nextCheck}</small>
         </button>
       `,
     )
@@ -1187,7 +1211,7 @@ function renderHotDetail(item) {
   elements.hotDetail.innerHTML = `
     <div class="hot-detail-main" data-searchable>
       <div>
-        <span class="hot-kicker">${heatLabel(heatWindowKey())}热度详情</span>
+        <span class="hot-kicker">${heatLabel(heatWindowKey())}热股公司档案</span>
         <h3>${item.symbol} ${company?.name || item.name || ""}</h3>
         <p>${company ? company.logic : "该代码来自社媒热度榜，尚未进入本站公司研究池。"}</p>
       </div>
@@ -1202,24 +1226,16 @@ function renderHotDetail(item) {
       <b>代表帖子</b>
       <span>${topPost ? topPost.title : "暂无代表帖子；如果 X API 后续接入，这里会合并 X 讨论热度。"}</span>
     </div>
-    ${
-      company
-        ? `<button class="hot-research-link" type="button" data-hot-research="${company.symbol}">查看 AI 产业观察里的公司档案</button>`
-        : ""
-    }
+    <div class="hot-detail-post" data-searchable>
+      <b>跟踪要点</b>
+      <span>${company ? `${company.nextCheck} 主要风险：${company.risk}` : "先观察热度是否连续进入今日/本周榜，再补充公司基本面档案。"}</span>
+    </div>
   `;
-
-  elements.hotDetail.querySelector("[data-hot-research]")?.addEventListener("click", (event) => {
-    const company = companyBySymbol(event.currentTarget.dataset.hotResearch);
-    if (!company) return;
-    state.selectedSymbol = company.symbol;
-    renderCompanies();
-    document.querySelector("#research")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
 }
 
 function filteredCompanies() {
   const query = state.filters.query;
+  const companyHeat = state.filters.companyHeat;
   return state.data.companies
     .map(enrichCompany)
     .filter((company) => {
@@ -1238,11 +1254,11 @@ function filteredCompanies() {
     })
     .filter((company) => state.filters.industry === "全部" || company.industry === state.filters.industry)
     .filter((company) => state.filters.tier === "全部" || company.tier === state.filters.tier)
-    .filter((company) => state.filters.heatWindow === "all" || company.socialCurrent.score > 0)
+    .filter((company) => companyHeat === "all" || socialHeatFor(company.symbol, companyHeat).score > 0)
     .filter((company) => !state.filters.focusOnly || company.score >= 78)
     .sort((a, b) => {
-      if (state.filters.heatWindow !== "all") {
-        return b.socialCurrent.score - a.socialCurrent.score || b.score - a.score;
+      if (companyHeat !== "all") {
+        return socialHeatFor(b.symbol, companyHeat).score - socialHeatFor(a.symbol, companyHeat).score || b.score - a.score;
       }
       return b.score - a.score || b.socialToday.score - a.socialToday.score;
     });
@@ -1267,7 +1283,8 @@ function renderCompanies() {
   elements.table.innerHTML = companies
     .map((company) => {
       const quote = company.quote;
-      const currentHeat = company.socialCurrent;
+      const heatKey = state.filters.companyHeat === "week" ? "week" : "today";
+      const currentHeat = socialHeatFor(company.symbol, heatKey);
       return `
         <tr data-symbol="${company.symbol}" class="${state.selectedSymbol === company.symbol ? "selected" : ""}" data-searchable>
           <td>
@@ -1283,7 +1300,7 @@ function renderCompanies() {
           <td>
             <div class="heat-cell">
               <b>${currentHeat.score}</b>
-              <span>${heatLabel(heatWindowKey())} / ${currentHeat.posts}帖</span>
+              <span>${state.filters.companyHeat === "all" ? "今日" : heatLabel(heatKey)} / ${currentHeat.posts}帖</span>
             </div>
           </td>
           <td class="logic-cell">${company.logic}</td>

@@ -1702,6 +1702,22 @@ body.light .status-strip {
   stroke-width: 10;
 }
 
+.wave-years text,
+.wave-phases text {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.wave-years text {
+  text-anchor: middle;
+}
+
+.wave-phases text {
+  fill: var(--green);
+  font-size: 12px;
+}
+
 .wave-labels {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1709,13 +1725,27 @@ body.light .status-strip {
 }
 
 .wave-labels span {
-  min-height: 42px;
+  display: grid;
+  gap: 4px;
+  min-height: 78px;
   padding: 8px;
   color: var(--muted);
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-radius: 8px;
   font-size: 12px;
+}
+
+.wave-labels b {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.wave-labels small,
+.wave-labels em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
 }
 
 .k-wave-chart p,
@@ -1891,7 +1921,7 @@ body.light .status-strip {
 
 .sector-company-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -1899,7 +1929,7 @@ body.light .status-strip {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px;
-  min-height: 124px;
+  min-height: 154px;
   padding: 13px;
   color: var(--text);
   background: var(--panel-2);
@@ -1922,6 +1952,12 @@ body.light .status-strip {
 .sector-company p {
   color: var(--muted);
   font-size: 12px;
+}
+
+.sector-check {
+  grid-column: 1 / -1;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
 }
 
 .sector-company em {

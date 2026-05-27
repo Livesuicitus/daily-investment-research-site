@@ -105,17 +105,31 @@
               <svg viewBox="0 0 900 320" role="img">
                 <path class="wave-line" d="M40 160 C60 72 100 72 120 160 C140 248 180 248 200 160 C220 72 260 72 280 160 C300 248 340 248 360 160 C380 72 420 72 440 160 C460 248 500 248 520 160 C540 72 580 72 600 160 C620 248 660 248 680 160 C700 72 740 72 760 160 C780 248 820 248 840 160" />
                 <line class="wave-axis" x1="30" y1="160" x2="860" y2="160" />
+                <g class="wave-years">
+                  <text x="40" y="292">1780</text>
+                  <text x="200" y="292">1848</text>
+                  <text x="360" y="292">1896</text>
+                  <text x="520" y="292">1945</text>
+                  <text x="680" y="292">1982</text>
+                  <text x="840" y="292">2030s</text>
+                </g>
+                <g class="wave-phases">
+                  <text x="72" y="42">复苏</text>
+                  <text x="112" y="42">繁荣</text>
+                  <text x="152" y="42">衰退</text>
+                  <text x="192" y="42">萧条</text>
+                </g>
                 <g class="wave-marker">
                   <line x1="735" y1="48" x2="735" y2="270" />
                   <circle cx="735" cy="86" r="8" />
                 </g>
               </svg>
               <div class="wave-labels">
-                <span>1 蒸汽/纺织</span>
-                <span>2 铁路/钢铁</span>
-                <span>3 电气/化工</span>
-                <span>4 汽车/石油</span>
-                <span>5 信息技术/AI扩散</span>
+                <span><b>1 蒸汽/纺织</b><small>约 1780-1848</small><em>复苏 → 繁荣 → 衰退 → 萧条</em></span>
+                <span><b>2 铁路/钢铁</b><small>约 1848-1896</small><em>复苏 → 繁荣 → 衰退 → 萧条</em></span>
+                <span><b>3 电气/化工</b><small>约 1896-1945</small><em>复苏 → 繁荣 → 衰退 → 萧条</em></span>
+                <span><b>4 汽车/石油</b><small>约 1945-1982</small><em>复苏 → 繁荣 → 衰退 → 萧条</em></span>
+                <span><b>5 信息技术/AI扩散</b><small>约 1982-2030s</small><em>复苏 → 繁荣 → 衰退 → 萧条</em></span>
               </div>
               <p id="k-wave-position">当前处于第五轮信息技术革命后段，AI 是这一轮向应用和基础设施扩散的主线。</p>
             </div>
@@ -169,9 +183,9 @@
           <div class="ai-hero">
             <div>
               <p class="breadcrumb">核心功能 3 / AI 产业观察 / Relationship Map</p>
-              <h2>45 个节点 × 产业链关系图谱</h2>
+              <h2>黄仁勋 5 层蛋糕 × AI 产业链图谱</h2>
               <p>
-                从上游材料进入公司档案，也可以从公司反查它连接的产业链角色、环节和需求关系。
+                按 NVIDIA 官方五层框架重排：能源、芯片、基础设施、模型、应用。每个节点列出多家公司，方便从环节反查标的。
               </p>
             </div>
             <div class="ai-stat-grid" id="ai-stat-grid"></div>
@@ -179,8 +193,8 @@
 
           <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
             <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
-            <button type="button" data-ai-scroll="ai-semiconductor-chain">半导体制造</button>
-            <button type="button" data-ai-scroll="ai-models">大模型 / 应用</button>
+            <button type="button" data-ai-scroll="ai-semiconductor-chain">能源 / 芯片 / 基建</button>
+            <button type="button" data-ai-scroll="ai-models">模型 / Agent</button>
             <button type="button" data-ai-scroll="stock-lab">公司研究池</button>
           </div>
 
@@ -204,7 +218,7 @@
               <h3 id="ai-node-title">产业链关系总览</h3>
               <div class="ai-summary-stats" id="ai-summary-stats"></div>
               <p id="ai-node-summary">
-                默认展示产业层级和 45 个节点。选择节点后会展开对应公司，选择公司后会反查它的产业链角色。
+                默认展示黄仁勋五层框架。选择节点后会展开多家公司，选择公司后会反查它的产业链角色。
               </p>
               <div class="ai-company-rail" id="ai-node-companies"></div>
             </aside>
@@ -214,16 +228,16 @@
         <section class="ai-deep-grid" aria-label="AI 产业链拆解">
           <article class="panel ai-deep-card" id="ai-semiconductor-chain" data-search-block>
             <div class="panel-head">
-              <span>半导体制造</span>
-              <b>制造底座</b>
+              <span>能源 / 芯片 / 基础设施</span>
+              <b>底层三层</b>
             </div>
             <div id="ai-semi-view" class="ai-deep-list"></div>
           </article>
 
           <article class="panel ai-deep-card" id="ai-models" data-search-block>
             <div class="panel-head">
-              <span>大模型演变</span>
-              <b>从训练到推理</b>
+              <span>模型 / Agent</span>
+              <b>能力层</b>
             </div>
             <div id="ai-model-view" class="ai-deep-list"></div>
           </article>
