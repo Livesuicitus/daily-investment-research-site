@@ -1,0 +1,1928 @@
+window.__MARKET_DATA__ = {
+  "generatedAt": "2026-05-27T13:46:40.585Z",
+  "sourceStatus": {
+    "quoteOk": true,
+    "macroOk": true,
+    "socialOk": true,
+    "summary": "行情与宏观数据已更新，行情覆盖 19/19；WSB 热度已更新，匹配 7 只研究池股票；X 热度需配置 API 后接入"
+  },
+  "macro": {
+    "stage": "过热",
+    "growthMomentum": "up",
+    "inflationMomentum": "up",
+    "metrics": [
+      {
+        "label": "实际 GDP 动能",
+        "value": 1.9897217789708987,
+        "format": "pct",
+        "note": "FRED GDPC1 最近两期变化，作为增长动能近似值"
+      },
+      {
+        "label": "CPI 同比",
+        "value": 3.7792458367415627,
+        "format": "pct",
+        "note": "FRED CPIAUCSL 12 个月变化，观察通胀是否高于目标区间"
+      },
+      {
+        "label": "失业率",
+        "value": 4.3,
+        "format": "pct",
+        "note": "FRED UNRATE，观察就业是否开始明显走弱"
+      },
+      {
+        "label": "有效联邦基金利率",
+        "value": 3.62,
+        "format": "pct",
+        "note": "FRED DFF；10 年期美债收益率约 4.56%"
+      }
+    ]
+  },
+  "cycles": {
+    "kondratiev": {
+      "stage": "信息技术革命后段 / AI 扩散期",
+      "summary": "长期主线仍围绕 AI、半导体、数据中心、电力基础设施、网络安全和医疗创新展开，但要用美林时钟控制节奏。",
+      "signals": [
+        {
+          "title": "技术扩散",
+          "text": "AI 从模型能力转向算力、数据中心、电力、软件工作流和终端应用。"
+        },
+        {
+          "title": "资本开支",
+          "text": "云厂商和企业 AI 基础设施开支决定上游公司盈利兑现。"
+        },
+        {
+          "title": "制度重构",
+          "text": "能源、电网、芯片安全、数据安全会影响长期行业排序。"
+        }
+      ]
+    }
+  },
+  "quotes": {
+    "NVDA": {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corp",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:32",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 211.565,
+      "volume": null,
+      "change": -3.2949982,
+      "changePercent": -1.5335559,
+      "source": "google-finance"
+    },
+    "AVGO": {
+      "symbol": "AVGO",
+      "name": "Broadcom Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:32",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 426.63,
+      "volume": null,
+      "change": 4.619995,
+      "changePercent": 1.0947596,
+      "source": "google-finance"
+    },
+    "AMD": {
+      "symbol": "AMD",
+      "name": "Advanced Micro Devices Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:32",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 497.555,
+      "volume": null,
+      "change": -6.335022,
+      "changePercent": -1.2572231,
+      "source": "google-finance"
+    },
+    "ASML": {
+      "symbol": "ASML",
+      "name": "ASML Holding NV",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 1606.13,
+      "volume": null,
+      "change": -25.900024,
+      "changePercent": -1.5869821,
+      "source": "google-finance"
+    },
+    "AMAT": {
+      "symbol": "AMAT",
+      "name": "Applied Materials Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 448.64,
+      "volume": null,
+      "change": -6.25,
+      "changePercent": -1.3739585,
+      "source": "google-finance"
+    },
+    "ANET": {
+      "symbol": "ANET",
+      "name": "Arista Networks Inc",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 155.99,
+      "volume": null,
+      "change": -1.9749908,
+      "changePercent": -1.4211979,
+      "source": "google-finance"
+    },
+    "VRT": {
+      "symbol": "VRT",
+      "name": "Vertiv Holdings Co",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 313.91,
+      "volume": null,
+      "change": -10.040009,
+      "changePercent": -3.0992463,
+      "source": "google-finance"
+    },
+    "ETN": {
+      "symbol": "ETN",
+      "name": "Eaton Corporation PLC",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:34",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 397.62,
+      "volume": null,
+      "change": -5.480011,
+      "changePercent": -1.3594669,
+      "source": "google-finance"
+    },
+    "GEV": {
+      "symbol": "GEV",
+      "name": "GE Vernova Inc",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 1024.98,
+      "volume": null,
+      "change": -46.599976,
+      "changePercent": -4.3487167,
+      "source": "google-finance"
+    },
+    "MSFT": {
+      "symbol": "MSFT",
+      "name": "Microsoft Corp",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 412.85,
+      "volume": null,
+      "change": -3.1799927,
+      "changePercent": -0.7643662,
+      "source": "google-finance"
+    },
+    "GOOGL": {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc Class A",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:33",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 388.08,
+      "volume": null,
+      "change": -0.8000183,
+      "changePercent": -0.20572369,
+      "source": "google-finance"
+    },
+    "AMZN": {
+      "symbol": "AMZN",
+      "name": "Amazon.com Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:34",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 267.03,
+      "volume": null,
+      "change": 1.625,
+      "changePercent": 0.6558823,
+      "source": "google-finance"
+    },
+    "PANW": {
+      "symbol": "PANW",
+      "name": "Palo Alto Networks Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:34",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 248.77,
+      "volume": null,
+      "change": -7.9799957,
+      "changePercent": -3.1080801,
+      "source": "google-finance"
+    },
+    "CRWD": {
+      "symbol": "CRWD",
+      "name": "Crowdstrike Holdings Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:34",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 646.63,
+      "volume": null,
+      "change": -24.919983,
+      "changePercent": -3.7108157,
+      "source": "google-finance"
+    },
+    "LLY": {
+      "symbol": "LLY",
+      "name": "Eli Lilly And Co",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:34",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 1082.26,
+      "volume": null,
+      "change": 15.560059,
+      "changePercent": 1.4943343,
+      "source": "google-finance"
+    },
+    "ISRG": {
+      "symbol": "ISRG",
+      "name": "Intuitive Surgical Inc",
+      "exchange": "NASDAQ",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:35",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 434.1,
+      "volume": null,
+      "change": -2.5400085,
+      "changePercent": -0.58171684,
+      "source": "google-finance"
+    },
+    "FCX": {
+      "symbol": "FCX",
+      "name": "Freeport-McMoRan Inc",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:35",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 63.47,
+      "volume": null,
+      "change": -0.87999725,
+      "changePercent": -1.3985978,
+      "source": "google-finance"
+    },
+    "NEM": {
+      "symbol": "NEM",
+      "name": "Newmont Corporation",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:35",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 108.8,
+      "volume": null,
+      "change": -2.5299988,
+      "changePercent": -2.272522,
+      "source": "google-finance"
+    },
+    "TSM": {
+      "symbol": "TSM",
+      "name": "Taiwan Semicndctr Mnufctrng Co Ltd",
+      "exchange": "NYSE",
+      "currency": "USD",
+      "date": "2026-05-27",
+      "time": "13:46:32",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": 422.68,
+      "volume": null,
+      "change": 10.350006,
+      "changePercent": 2.5101268,
+      "source": "google-finance"
+    }
+  },
+  "companies": [
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "industry": "AI 算力与芯片",
+      "tier": "核心龙头",
+      "description": "AI GPU、加速计算和数据中心生态核心公司。",
+      "logic": "AI 算力卖铲人，数据中心收入兑现强，生态壁垒高。",
+      "risk": "估值拥挤、单一大客户资本开支放缓、出口限制。",
+      "nextCheck": "数据中心收入增速、毛利率、云厂商资本开支指引。",
+      "valuationPercentile": 82,
+      "earningsDelivery": 93,
+      "baseScore": 86
+    },
+    {
+      "symbol": "AVGO",
+      "name": "Broadcom",
+      "industry": "AI 算力与芯片",
+      "tier": "核心龙头",
+      "description": "定制 AI 芯片、交换芯片、网络芯片和基础设施软件。",
+      "logic": "大厂自研 AI 芯片与高速网络升级受益，软件业务增强现金流。",
+      "risk": "客户集中、并购整合、AI 订单节奏波动。",
+      "nextCheck": "AI 半导体收入、ASIC 客户数量、软件利润率。",
+      "valuationPercentile": 74,
+      "earningsDelivery": 88,
+      "baseScore": 84
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD",
+      "industry": "AI 算力与芯片",
+      "tier": "二线弹性",
+      "description": "CPU、GPU、AI 加速卡和数据中心芯片公司。",
+      "logic": "AI GPU 挑战者，若 MI 系列放量，弹性高于成熟龙头。",
+      "risk": "软件生态弱于 NVIDIA，竞争和价格压力更大。",
+      "nextCheck": "AI GPU 出货、数据中心毛利率、客户采用情况。",
+      "valuationPercentile": 69,
+      "earningsDelivery": 72,
+      "baseScore": 74
+    },
+    {
+      "symbol": "TSM",
+      "name": "TSMC",
+      "industry": "半导体设备与制造",
+      "tier": "核心龙头",
+      "description": "全球先进制程代工核心公司。",
+      "logic": "先进制程和先进封装是 AI 算力底座，客户质量高。",
+      "risk": "地缘风险、资本开支周期、先进制程利用率波动。",
+      "nextCheck": "HPC 收入占比、先进封装产能、资本开支计划。",
+      "valuationPercentile": 66,
+      "earningsDelivery": 90,
+      "baseScore": 86
+    },
+    {
+      "symbol": "ASML",
+      "name": "ASML",
+      "industry": "半导体设备与制造",
+      "tier": "核心龙头",
+      "description": "EUV 光刻机核心供应商。",
+      "logic": "先进制程绕不开 EUV，技术壁垒极高。",
+      "risk": "设备订单周期、出口管制、客户扩产放缓。",
+      "nextCheck": "EUV 订单、积压订单、主要客户资本开支。",
+      "valuationPercentile": 71,
+      "earningsDelivery": 82,
+      "baseScore": 82
+    },
+    {
+      "symbol": "AMAT",
+      "name": "Applied Materials",
+      "industry": "半导体设备与制造",
+      "tier": "产业链配套",
+      "description": "材料工程、沉积、刻蚀和半导体设备龙头。",
+      "logic": "先进制程、存储和封装扩产都会拉动设备需求。",
+      "risk": "半导体资本开支下行、政策限制。",
+      "nextCheck": "半导体系统订单、服务收入、客户库存。",
+      "valuationPercentile": 61,
+      "earningsDelivery": 78,
+      "baseScore": 77
+    },
+    {
+      "symbol": "ANET",
+      "name": "Arista Networks",
+      "industry": "数据中心网络",
+      "tier": "核心龙头",
+      "description": "高速数据中心交换机和云网络设备公司。",
+      "logic": "AI 集群需要高速低延迟网络，云厂商网络升级持续受益。",
+      "risk": "大客户订单波动、网络设备竞争、估值较高。",
+      "nextCheck": "云客户订单、AI 网络产品占比、毛利率趋势。",
+      "valuationPercentile": 78,
+      "earningsDelivery": 84,
+      "baseScore": 80
+    },
+    {
+      "symbol": "VRT",
+      "name": "Vertiv",
+      "industry": "数据中心电力与冷却",
+      "tier": "核心龙头",
+      "description": "数据中心供电、热管理、液冷和关键基础设施公司。",
+      "logic": "AI 数据中心功率密度提升，供电和冷却成为硬约束。",
+      "risk": "订单兑现、竞争加剧、估值快速上升。",
+      "nextCheck": "订单积压、液冷收入、数据中心客户需求。",
+      "valuationPercentile": 83,
+      "earningsDelivery": 86,
+      "baseScore": 82
+    },
+    {
+      "symbol": "ETN",
+      "name": "Eaton",
+      "industry": "数据中心电力与冷却",
+      "tier": "核心龙头",
+      "description": "电力管理、配电、电气设备公司。",
+      "logic": "AI 数据中心、电网升级、工业电气化共同受益。",
+      "risk": "工业周期放缓、估值不便宜、项目交付周期。",
+      "nextCheck": "电气业务订单、数据中心敞口、利润率。",
+      "valuationPercentile": 70,
+      "earningsDelivery": 82,
+      "baseScore": 81
+    },
+    {
+      "symbol": "GEV",
+      "name": "GE Vernova",
+      "industry": "低碳电力与电网",
+      "tier": "产业链配套",
+      "description": "燃机、电网、风电和电力系统设备公司。",
+      "logic": "AI 和电气化推高电力需求，电网与发电设备进入长周期。",
+      "risk": "风电业务波动、项目执行、政策和利率敏感。",
+      "nextCheck": "电网订单、燃机需求、自由现金流。",
+      "valuationPercentile": 73,
+      "earningsDelivery": 76,
+      "baseScore": 76
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft",
+      "industry": "云平台与 AI 软件",
+      "tier": "核心龙头",
+      "description": "Azure、Microsoft 365、Copilot 和企业软件平台。",
+      "logic": "AI 商业化路径清晰，云和企业软件形成现金流底座。",
+      "risk": "云增速放缓、AI 投入回报周期、监管压力。",
+      "nextCheck": "Azure 增速、AI 收入贡献、资本开支回报。",
+      "valuationPercentile": 68,
+      "earningsDelivery": 88,
+      "baseScore": 86
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet",
+      "industry": "云平台与 AI 软件",
+      "tier": "核心龙头",
+      "description": "搜索、YouTube、Google Cloud、Gemini 和 TPU。",
+      "logic": "广告现金流强，云与 AI 提供长期增量，估值相对不算极端。",
+      "risk": "搜索被 AI 重构、监管、云利润率波动。",
+      "nextCheck": "Google Cloud 增速、搜索份额、AI 产品变现。",
+      "valuationPercentile": 55,
+      "earningsDelivery": 86,
+      "baseScore": 85
+    },
+    {
+      "symbol": "AMZN",
+      "name": "Amazon",
+      "industry": "云平台与 AI 软件",
+      "tier": "核心龙头",
+      "description": "AWS、全球电商、物流和 AI 基础设施。",
+      "logic": "AWS 是云核心平台，AI 推理和企业云迁移带来长期增量。",
+      "risk": "资本开支高、零售利润波动、云竞争。",
+      "nextCheck": "AWS 增速、运营利润率、AI 基础设施利用率。",
+      "valuationPercentile": 63,
+      "earningsDelivery": 82,
+      "baseScore": 82
+    },
+    {
+      "symbol": "PANW",
+      "name": "Palo Alto Networks",
+      "industry": "网络安全",
+      "tier": "核心龙头",
+      "description": "网络安全、云安全、SASE 和 AI 安全平台。",
+      "logic": "企业云化和 AI 化越深入，安全需求越刚性。",
+      "risk": "平台化转型影响短期订单，估值敏感。",
+      "nextCheck": "下一代安全 ARR、账单增速、平台化留存。",
+      "valuationPercentile": 67,
+      "earningsDelivery": 80,
+      "baseScore": 78
+    },
+    {
+      "symbol": "CRWD",
+      "name": "CrowdStrike",
+      "industry": "网络安全",
+      "tier": "二线弹性",
+      "description": "云原生终端安全、威胁检测和身份安全公司。",
+      "logic": "终端安全和云安全平台化能力强，增长弹性较高。",
+      "risk": "历史事故影响、估值高、竞争强。",
+      "nextCheck": "ARR 增速、客户留存、事故后续影响。",
+      "valuationPercentile": 80,
+      "earningsDelivery": 76,
+      "baseScore": 74
+    },
+    {
+      "symbol": "LLY",
+      "name": "Eli Lilly",
+      "industry": "医疗创新",
+      "tier": "核心龙头",
+      "description": "GLP-1、糖尿病、肥胖症、肿瘤和免疫创新药公司。",
+      "logic": "GLP-1 是医疗创新里盈利兑现强的长期方向。",
+      "risk": "估值高、药价政策、产能与竞争。",
+      "nextCheck": "GLP-1 销售、产能扩张、管线进展。",
+      "valuationPercentile": 84,
+      "earningsDelivery": 91,
+      "baseScore": 82
+    },
+    {
+      "symbol": "ISRG",
+      "name": "Intuitive Surgical",
+      "industry": "医疗创新",
+      "tier": "核心龙头",
+      "description": "达芬奇手术机器人系统龙头。",
+      "logic": "手术机器人渗透率提升，设备、耗材、服务形成复合模式。",
+      "risk": "医院资本开支、竞争产品、估值较高。",
+      "nextCheck": "装机量、手术量、耗材收入和新系统推广。",
+      "valuationPercentile": 72,
+      "earningsDelivery": 84,
+      "baseScore": 80
+    },
+    {
+      "symbol": "FCX",
+      "name": "Freeport-McMoRan",
+      "industry": "资源品",
+      "tier": "周期弹性",
+      "description": "全球大型铜矿公司。",
+      "logic": "电网、AI 数据中心、新能源和工业电气化都需要铜。",
+      "risk": "铜价波动、矿山运营、资源国政策。",
+      "nextCheck": "铜价、产量、单位现金成本、资本开支。",
+      "valuationPercentile": 58,
+      "earningsDelivery": 68,
+      "baseScore": 70
+    },
+    {
+      "symbol": "NEM",
+      "name": "Newmont",
+      "industry": "资源品",
+      "tier": "防御对冲",
+      "description": "全球大型黄金矿企。",
+      "logic": "滞胀、实际利率下行和避险环境下有配置价值。",
+      "risk": "矿山成本、金价波动、经营杠杆高于黄金本身。",
+      "nextCheck": "金价、AISC 成本、自由现金流和资产出售。",
+      "valuationPercentile": 52,
+      "earningsDelivery": 64,
+      "baseScore": 66
+    }
+  ],
+  "socialHeat": {
+    "generatedAt": "2026-05-27T13:46:40.585Z",
+    "sourceStatus": {
+      "redditOk": true,
+      "xOk": false,
+      "summary": "WSB 热度已更新，匹配 7 只研究池股票；X 热度需配置 API 后接入"
+    },
+    "windows": {
+      "today": {
+        "key": "today",
+        "label": "今日",
+        "source": "wallstreetbets",
+        "fetchedPosts": 76,
+        "leaders": [
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet",
+            "score": 100,
+            "mentions": 11,
+            "posts": 3,
+            "comments": 252,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "NVDA",
+            "name": "NVIDIA",
+            "score": 96,
+            "mentions": 16,
+            "posts": 5,
+            "comments": 311,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "AMD",
+            "name": "AMD",
+            "score": 84,
+            "mentions": 13,
+            "posts": 6,
+            "comments": 1005,
+            "topPost": {
+              "title": "AMD +$11M",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1to86h2/amd_11m/",
+              "score": 13029,
+              "comments": 788,
+              "createdAt": "2026-05-26T14:12:02.000Z"
+            }
+          },
+          {
+            "symbol": "AVGO",
+            "name": "Broadcom",
+            "score": 60,
+            "mentions": 9,
+            "posts": 4,
+            "comments": 296,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft",
+            "score": 48,
+            "mentions": 7,
+            "posts": 3,
+            "comments": 184,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon",
+            "score": 40,
+            "mentions": 5,
+            "posts": 2,
+            "comments": 179,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "LLY",
+            "name": "Eli Lilly",
+            "score": 39,
+            "mentions": 4,
+            "posts": 1,
+            "comments": 163,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 746,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          }
+        ],
+        "items": {
+          "NVDA": {
+            "symbol": "NVDA",
+            "score": 96,
+            "mentions": 16,
+            "posts": 5,
+            "comments": 311,
+            "upvotes": 882,
+            "sources": {
+              "reddit": {
+                "mentions": 16,
+                "posts": 5,
+                "comments": 311,
+                "upvotes": 882,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "Going balls deep in $HPE because its not overvalued and I'm out of other ideas",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tob77v/going_balls_deep_in_hpe_because_its_not/",
+                    "score": 64,
+                    "comments": 95,
+                    "createdAt": "2026-05-26T15:57:38.000Z"
+                  },
+                  {
+                    "title": "SOXS is destined to die unless a world shaking event occurs",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tom4v5/soxs_is_destined_to_die_unless_a_world_shaking/",
+                    "score": 34,
+                    "comments": 22,
+                    "createdAt": "2026-05-26T22:15:33.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AVGO": {
+            "symbol": "AVGO",
+            "score": 60,
+            "mentions": 9,
+            "posts": 4,
+            "comments": 296,
+            "upvotes": 882,
+            "sources": {
+              "reddit": {
+                "mentions": 9,
+                "posts": 4,
+                "comments": 296,
+                "upvotes": 882,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "Going balls deep in $HPE because its not overvalued and I'm out of other ideas",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tob77v/going_balls_deep_in_hpe_because_its_not/",
+                    "score": 64,
+                    "comments": 95,
+                    "createdAt": "2026-05-26T15:57:38.000Z"
+                  },
+                  {
+                    "title": "SOXS is destined to die unless a world shaking event occurs",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tom4v5/soxs_is_destined_to_die_unless_a_world_shaking/",
+                    "score": 34,
+                    "comments": 22,
+                    "createdAt": "2026-05-26T22:15:33.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMD": {
+            "symbol": "AMD",
+            "score": 84,
+            "mentions": 13,
+            "posts": 6,
+            "comments": 1005,
+            "upvotes": 13873,
+            "sources": {
+              "reddit": {
+                "mentions": 13,
+                "posts": 6,
+                "comments": 1005,
+                "upvotes": 13873,
+                "topPosts": [
+                  {
+                    "title": "AMD +$11M",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1to86h2/amd_11m/",
+                    "score": 13029,
+                    "comments": 788,
+                    "createdAt": "2026-05-26T14:12:02.000Z"
+                  },
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "SOXS is destined to die unless a world shaking event occurs",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tom4v5/soxs_is_destined_to_die_unless_a_world_shaking/",
+                    "score": 34,
+                    "comments": 22,
+                    "createdAt": "2026-05-26T22:15:33.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "TSM": {
+            "symbol": "TSM",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ASML": {
+            "symbol": "ASML",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMAT": {
+            "symbol": "AMAT",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ANET": {
+            "symbol": "ANET",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "VRT": {
+            "symbol": "VRT",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ETN": {
+            "symbol": "ETN",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "GEV": {
+            "symbol": "GEV",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "MSFT": {
+            "symbol": "MSFT",
+            "score": 48,
+            "mentions": 7,
+            "posts": 3,
+            "comments": 184,
+            "upvotes": 810,
+            "sources": {
+              "reddit": {
+                "mentions": 7,
+                "posts": 3,
+                "comments": 184,
+                "upvotes": 810,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "CBOE: Pre-Market Options Trading starts in July",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tomrj5/cboe_premarket_options_trading_starts_in_july/",
+                    "score": 38,
+                    "comments": 16,
+                    "createdAt": "2026-05-26T22:39:24.000Z"
+                  },
+                  {
+                    "title": "Best Year So Far (+ Current Positions)",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1ton37l/best_year_so_far_current_positions/",
+                    "score": 26,
+                    "comments": 5,
+                    "createdAt": "2026-05-26T22:52:14.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "GOOGL": {
+            "symbol": "GOOGL",
+            "score": 100,
+            "mentions": 11,
+            "posts": 3,
+            "comments": 252,
+            "upvotes": 1136,
+            "sources": {
+              "reddit": {
+                "mentions": 11,
+                "posts": 3,
+                "comments": 252,
+                "upvotes": 1136,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "SUPER auspicious closing prices for Both GOOGL 388.88 and GOOG 384.84 -  May 26, 2026",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tox7hw/super_auspicious_closing_prices_for_both_googl/",
+                    "score": 352,
+                    "comments": 73,
+                    "createdAt": "2026-05-27T06:28:29.000Z"
+                  },
+                  {
+                    "title": "CBOE: Pre-Market Options Trading starts in July",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tomrj5/cboe_premarket_options_trading_starts_in_july/",
+                    "score": 38,
+                    "comments": 16,
+                    "createdAt": "2026-05-26T22:39:24.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMZN": {
+            "symbol": "AMZN",
+            "score": 40,
+            "mentions": 5,
+            "posts": 2,
+            "comments": 179,
+            "upvotes": 784,
+            "sources": {
+              "reddit": {
+                "mentions": 5,
+                "posts": 2,
+                "comments": 179,
+                "upvotes": 784,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "CBOE: Pre-Market Options Trading starts in July",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tomrj5/cboe_premarket_options_trading_starts_in_july/",
+                    "score": 38,
+                    "comments": 16,
+                    "createdAt": "2026-05-26T22:39:24.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "PANW": {
+            "symbol": "PANW",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "CRWD": {
+            "symbol": "CRWD",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "LLY": {
+            "symbol": "LLY",
+            "score": 39,
+            "mentions": 4,
+            "posts": 1,
+            "comments": 163,
+            "upvotes": 746,
+            "sources": {
+              "reddit": {
+                "mentions": 4,
+                "posts": 1,
+                "comments": 163,
+                "upvotes": 746,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 746,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ISRG": {
+            "symbol": "ISRG",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "FCX": {
+            "symbol": "FCX",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "NEM": {
+            "symbol": "NEM",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          }
+        },
+        "summary": "今日 WSB 热度最高：GOOGL / NVDA / AMD"
+      },
+      "week": {
+        "key": "week",
+        "label": "本周",
+        "source": "wallstreetbets",
+        "fetchedPosts": 165,
+        "leaders": [
+          {
+            "symbol": "NVDA",
+            "name": "NVIDIA",
+            "score": 100,
+            "mentions": 62,
+            "posts": 17,
+            "comments": 4765,
+            "topPost": {
+              "title": "$67 invested in CS2 vs $NVDA in 2020",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tna6df/67_invested_in_cs2_vs_nvda_in_2020/",
+              "score": 14466,
+              "comments": 791,
+              "createdAt": "2026-05-25T14:04:34.000Z"
+            }
+          },
+          {
+            "symbol": "GOOGL",
+            "name": "Alphabet",
+            "score": 52,
+            "mentions": 27,
+            "posts": 10,
+            "comments": 2979,
+            "topPost": {
+              "title": "Elon Musk's estimated wealth soared by $45 billion to a record $722 billion on Thursday after the release of SpaceX's IPO prospectus.",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tmjrfw/elon_musks_estimated_wealth_soared_by_45_billion/",
+              "score": 3552,
+              "comments": 691,
+              "createdAt": "2026-05-24T18:15:07.000Z"
+            }
+          },
+          {
+            "symbol": "MSFT",
+            "name": "Microsoft",
+            "score": 44,
+            "mentions": 24,
+            "posts": 7,
+            "comments": 1032,
+            "topPost": {
+              "title": "Microsoft reportedly cuts Claude Code for GitHub Copilot CLI. AI coding costs may exceed human engineers",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tn85jr/microsoft_reportedly_cuts_claude_code_for_github/",
+              "score": 1270,
+              "comments": 202,
+              "createdAt": "2026-05-25T12:46:59.000Z"
+            }
+          },
+          {
+            "symbol": "AMD",
+            "name": "AMD",
+            "score": 33,
+            "mentions": 19,
+            "posts": 9,
+            "comments": 1948,
+            "topPost": {
+              "title": "AMD +$11M",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1to86h2/amd_11m/",
+              "score": 13030,
+              "comments": 788,
+              "createdAt": "2026-05-26T14:12:02.000Z"
+            }
+          },
+          {
+            "symbol": "AMZN",
+            "name": "Amazon",
+            "score": 27,
+            "mentions": 14,
+            "posts": 6,
+            "comments": 1820,
+            "topPost": {
+              "title": "$ASTS The Space Trade Came - now it's time for post nut clarity.",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tnimoe/asts_the_space_trade_came_now_its_time_for_post/",
+              "score": 2500,
+              "comments": 726,
+              "createdAt": "2026-05-25T19:05:22.000Z"
+            }
+          },
+          {
+            "symbol": "AVGO",
+            "name": "Broadcom",
+            "score": 17,
+            "mentions": 9,
+            "posts": 4,
+            "comments": 296,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 747,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          },
+          {
+            "symbol": "LLY",
+            "name": "Eli Lilly",
+            "score": 10,
+            "mentions": 4,
+            "posts": 1,
+            "comments": 163,
+            "topPost": {
+              "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+              "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+              "score": 747,
+              "comments": 163,
+              "createdAt": "2026-05-27T02:32:08.000Z"
+            }
+          }
+        ],
+        "items": {
+          "NVDA": {
+            "symbol": "NVDA",
+            "score": 100,
+            "mentions": 62,
+            "posts": 17,
+            "comments": 4765,
+            "upvotes": 33142,
+            "sources": {
+              "reddit": {
+                "mentions": 62,
+                "posts": 17,
+                "comments": 4765,
+                "upvotes": 33142,
+                "topPosts": [
+                  {
+                    "title": "$67 invested in CS2 vs $NVDA in 2020",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tna6df/67_invested_in_cs2_vs_nvda_in_2020/",
+                    "score": 14466,
+                    "comments": 791,
+                    "createdAt": "2026-05-25T14:04:34.000Z"
+                  },
+                  {
+                    "title": "NVDA earnings 600k yolo",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1titayv/nvda_earnings_600k_yolo/",
+                    "score": 6013,
+                    "comments": 2024,
+                    "createdAt": "2026-05-20T17:51:53.000Z"
+                  },
+                  {
+                    "title": "Tried explaining covered calls to a date and now I’m banned from Applebee’s.",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tnpvqv/tried_explaining_covered_calls_to_a_date_and_now/",
+                    "score": 7304,
+                    "comments": 256,
+                    "createdAt": "2026-05-25T23:47:17.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AVGO": {
+            "symbol": "AVGO",
+            "score": 17,
+            "mentions": 9,
+            "posts": 4,
+            "comments": 296,
+            "upvotes": 889,
+            "sources": {
+              "reddit": {
+                "mentions": 9,
+                "posts": 4,
+                "comments": 296,
+                "upvotes": 889,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 747,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  },
+                  {
+                    "title": "Going balls deep in $HPE because its not overvalued and I'm out of other ideas",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tob77v/going_balls_deep_in_hpe_because_its_not/",
+                    "score": 66,
+                    "comments": 95,
+                    "createdAt": "2026-05-26T15:57:38.000Z"
+                  },
+                  {
+                    "title": "SOXS is destined to die unless a world shaking event occurs",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tom4v5/soxs_is_destined_to_die_unless_a_world_shaking/",
+                    "score": 39,
+                    "comments": 22,
+                    "createdAt": "2026-05-26T22:15:33.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMD": {
+            "symbol": "AMD",
+            "score": 33,
+            "mentions": 19,
+            "posts": 9,
+            "comments": 1948,
+            "upvotes": 16539,
+            "sources": {
+              "reddit": {
+                "mentions": 19,
+                "posts": 9,
+                "comments": 1948,
+                "upvotes": 16539,
+                "topPosts": [
+                  {
+                    "title": "AMD +$11M",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1to86h2/amd_11m/",
+                    "score": 13030,
+                    "comments": 788,
+                    "createdAt": "2026-05-26T14:12:02.000Z"
+                  },
+                  {
+                    "title": "I am getting worried",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tkcppr/i_am_getting_worried/",
+                    "score": 1165,
+                    "comments": 569,
+                    "createdAt": "2026-05-22T08:26:35.000Z"
+                  },
+                  {
+                    "title": "Why the app you’re using should be a stock you own ($RDDT)",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tmhr3t/why_the_app_youre_using_should_be_a_stock_you_own/",
+                    "score": 756,
+                    "comments": 300,
+                    "createdAt": "2026-05-24T17:02:00.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "TSM": {
+            "symbol": "TSM",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ASML": {
+            "symbol": "ASML",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMAT": {
+            "symbol": "AMAT",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ANET": {
+            "symbol": "ANET",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "VRT": {
+            "symbol": "VRT",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ETN": {
+            "symbol": "ETN",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "GEV": {
+            "symbol": "GEV",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "MSFT": {
+            "symbol": "MSFT",
+            "score": 44,
+            "mentions": 24,
+            "posts": 7,
+            "comments": 1032,
+            "upvotes": 3219,
+            "sources": {
+              "reddit": {
+                "mentions": 24,
+                "posts": 7,
+                "comments": 1032,
+                "upvotes": 3219,
+                "topPosts": [
+                  {
+                    "title": "Microsoft reportedly cuts Claude Code for GitHub Copilot CLI. AI coding costs may exceed human engineers",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tn85jr/microsoft_reportedly_cuts_claude_code_for_github/",
+                    "score": 1270,
+                    "comments": 202,
+                    "createdAt": "2026-05-25T12:46:59.000Z"
+                  },
+                  {
+                    "title": "Why the app you’re using should be a stock you own ($RDDT)",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tmhr3t/why_the_app_youre_using_should_be_a_stock_you_own/",
+                    "score": 756,
+                    "comments": 300,
+                    "createdAt": "2026-05-24T17:02:00.000Z"
+                  },
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 747,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "GOOGL": {
+            "symbol": "GOOGL",
+            "score": 52,
+            "mentions": 27,
+            "posts": 10,
+            "comments": 2979,
+            "upvotes": 10507,
+            "sources": {
+              "reddit": {
+                "mentions": 27,
+                "posts": 10,
+                "comments": 2979,
+                "upvotes": 10507,
+                "topPosts": [
+                  {
+                    "title": "Elon Musk's estimated wealth soared by $45 billion to a record $722 billion on Thursday after the release of SpaceX's IPO prospectus.",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tmjrfw/elon_musks_estimated_wealth_soared_by_45_billion/",
+                    "score": 3552,
+                    "comments": 691,
+                    "createdAt": "2026-05-24T18:15:07.000Z"
+                  },
+                  {
+                    "title": "$ASTS The Space Trade Came - now it's time for post nut clarity.",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tnimoe/asts_the_space_trade_came_now_its_time_for_post/",
+                    "score": 2500,
+                    "comments": 726,
+                    "createdAt": "2026-05-25T19:05:22.000Z"
+                  },
+                  {
+                    "title": "Google's latest creation: Gemini 3.5 Flash.  Puts.",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tjxa6g/googles_latest_creation_gemini_35_flash_puts/",
+                    "score": 1810,
+                    "comments": 315,
+                    "createdAt": "2026-05-21T20:42:13.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "AMZN": {
+            "symbol": "AMZN",
+            "score": 27,
+            "mentions": 14,
+            "posts": 6,
+            "comments": 1820,
+            "upvotes": 4832,
+            "sources": {
+              "reddit": {
+                "mentions": 14,
+                "posts": 6,
+                "comments": 1820,
+                "upvotes": 4832,
+                "topPosts": [
+                  {
+                    "title": "$ASTS The Space Trade Came - now it's time for post nut clarity.",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tnimoe/asts_the_space_trade_came_now_its_time_for_post/",
+                    "score": 2500,
+                    "comments": 726,
+                    "createdAt": "2026-05-25T19:05:22.000Z"
+                  },
+                  {
+                    "title": "I am getting worried",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tkcppr/i_am_getting_worried/",
+                    "score": 1165,
+                    "comments": 569,
+                    "createdAt": "2026-05-22T08:26:35.000Z"
+                  },
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 747,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "PANW": {
+            "symbol": "PANW",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "CRWD": {
+            "symbol": "CRWD",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "LLY": {
+            "symbol": "LLY",
+            "score": 10,
+            "mentions": 4,
+            "posts": 1,
+            "comments": 163,
+            "upvotes": 747,
+            "sources": {
+              "reddit": {
+                "mentions": 4,
+                "posts": 1,
+                "comments": 163,
+                "upvotes": 747,
+                "topPosts": [
+                  {
+                    "title": "Micron tops $1T market cap. $MU +19% after UBS raises price target from $535 to $1,625 on AI demand",
+                    "url": "https://www.reddit.com/r/wallstreetbets/comments/1tosamm/micron_tops_1t_market_cap_mu_19_after_ubs_raises/",
+                    "score": 747,
+                    "comments": 163,
+                    "createdAt": "2026-05-27T02:32:08.000Z"
+                  }
+                ]
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "ISRG": {
+            "symbol": "ISRG",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "FCX": {
+            "symbol": "FCX",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          },
+          "NEM": {
+            "symbol": "NEM",
+            "score": 0,
+            "mentions": 0,
+            "posts": 0,
+            "comments": 0,
+            "upvotes": 0,
+            "sources": {
+              "reddit": {
+                "mentions": 0,
+                "posts": 0,
+                "comments": 0,
+                "upvotes": 0,
+                "topPosts": []
+              },
+              "x": {
+                "mentions": null,
+                "status": "not_configured"
+              }
+            }
+          }
+        },
+        "summary": "本周 WSB 热度最高：NVDA / GOOGL / MSFT"
+      }
+    }
+  }
+};

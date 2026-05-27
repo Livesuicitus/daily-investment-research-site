@@ -61,6 +61,7 @@ const elements = {
   merrillPosition: document.querySelector("#merrill-position"),
   merrillClock: document.querySelector("#merrill-clock"),
   clockMarker: document.querySelector("#clock-marker"),
+  clockCurrentCard: document.querySelector("#clock-current-card"),
   sectorConclusion: document.querySelector("#sector-conclusion"),
   sectorButtons: document.querySelector("#sector-buttons"),
   sectorCompanies: document.querySelector("#sector-companies"),
@@ -330,6 +331,9 @@ const aiDeepViews = {
 };
 
 async function loadData() {
+  if (window.__MARKET_DATA__) {
+    return window.__MARKET_DATA__;
+  }
   const response = await fetch("./data/market.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`数据读取失败：${response.status}`);
   return response.json();
@@ -824,6 +828,8 @@ function renderHeader() {
   elements.merrillStage.textContent = macro.stage;
   elements.merrillPosition.textContent = merrillConclusion(macro.stage);
   elements.merrillClock.dataset.stage = macro.stage;
+  elements.clockMarker.textContent = macro.stage;
+  elements.clockCurrentCard.querySelector("span").textContent = `${macro.stage}：${merrillConclusion(macro.stage)}`;
   elements.kWaveSignals.innerHTML = cycles.kondratiev.signals
     .map(
       (signal) => `

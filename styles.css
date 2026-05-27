@@ -1681,6 +1681,7 @@ body.light .status-strip {
   stroke: var(--blue);
   stroke-width: 6;
   stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .wave-axis {
@@ -1794,15 +1795,49 @@ body.light .status-strip {
   z-index: 4;
   display: inline-grid;
   place-items: center;
-  width: 54px;
-  height: 54px;
+  min-width: 58px;
+  height: 42px;
+  padding: 0 12px;
   color: #07101f;
   background: var(--green);
   border: 6px solid rgba(53, 211, 154, 0.2);
-  border-radius: 50%;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 900;
   transform: translate(-50%, -50%);
+}
+
+.clock-current-card {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(5, 8, 16, 0.68);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+}
+
+.clock-current-card b {
+  color: var(--green);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clock-current-card span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .merrill-clock[data-stage="复苏"] .clock-marker {

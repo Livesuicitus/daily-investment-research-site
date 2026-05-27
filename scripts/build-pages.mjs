@@ -14,6 +14,7 @@ for (const file of ["index.html", "styles.css", "app.js"]) {
 }
 
 await cp(join(root, "data", "market.json"), join(dist, "data", "market.json"));
+await cp(join(root, "data", "market-data.js"), join(dist, "data", "market-data.js"));
 await writeFile(join(dist, ".nojekyll"), "", "utf8");
 
 console.log(`Built static site in ${dist}`);

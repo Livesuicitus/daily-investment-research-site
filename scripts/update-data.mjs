@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const dataPath = join(root, "data", "market.json");
+const dataScriptPath = join(root, "data", "market-data.js");
 const isCheck = process.argv.includes("--check");
 
 const FRED_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv";
@@ -610,6 +611,11 @@ const output = {
 
 if (!isCheck) {
   await writeFile(dataPath, `${JSON.stringify(output, null, 2)}\n`, "utf8");
+  await writeFile(
+    dataScriptPath,
+    `window.__MARKET_DATA__ = ${JSON.stringify(output, null, 2).replace(/</g, "\\u003c")};\n`,
+    "utf8",
+  );
 }
 
 console.log(output.sourceStatus.summary);
