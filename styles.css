@@ -1375,15 +1375,14 @@ tbody tr.selected {
 }
 
 .workspace-head {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  position: relative;
+  z-index: 2;
   min-width: 0;
   width: 100%;
   min-height: 62px;
-  padding: 12px 0 14px;
-  background: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 88%, transparent) 86%, transparent 100%);
-  backdrop-filter: blur(14px);
+  padding: 8px 0 2px;
+  background: transparent;
+  backdrop-filter: none;
 }
 
 .workspace-head h1 {
@@ -1509,7 +1508,8 @@ body.light .status-strip {
     background 160ms ease;
 }
 
-.heat-card:hover {
+.heat-card:hover,
+.heat-card.active {
   transform: translateY(-2px);
   border-color: rgba(102, 163, 255, 0.48);
   background:
@@ -1544,6 +1544,90 @@ body.light .status-strip {
   line-height: 1.45;
 }
 
+.hot-detail {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(5, 8, 16, 0.36);
+  border: 1px solid rgba(102, 163, 255, 0.18);
+  border-radius: var(--radius);
+}
+
+.hot-detail-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.75fr);
+  gap: 16px;
+}
+
+.hot-kicker {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hot-detail h3 {
+  margin: 5px 0 8px;
+  font-size: 22px;
+}
+
+.hot-detail p,
+.hot-detail-post span {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hot-detail-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hot-detail-metrics span {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.hot-detail-metrics b {
+  color: var(--green);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.hot-detail-metrics small,
+.hot-detail-post b {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hot-detail-post {
+  display: grid;
+  gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.hot-research-link {
+  justify-self: start;
+  min-height: 38px;
+  padding: 8px 12px;
+  color: #07101f;
+  background: linear-gradient(180deg, #8fbbff, var(--blue));
+  border: 0;
+  border-radius: 7px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
 .section-heading {
   position: relative;
   gap: 8px;
@@ -1569,6 +1653,251 @@ body.light .status-strip {
 
 .top-grid {
   grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.75fr);
+}
+
+.cycle-visual-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 18px;
+}
+
+.chart-panel {
+  min-height: 390px;
+}
+
+.k-wave-chart {
+  display: grid;
+  gap: 12px;
+}
+
+.k-wave-chart svg {
+  width: 100%;
+  min-height: 220px;
+  overflow: visible;
+}
+
+.wave-line {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.wave-axis {
+  stroke: var(--line-strong);
+  stroke-width: 2;
+  stroke-dasharray: 8 8;
+}
+
+.wave-marker line {
+  stroke: var(--green);
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+}
+
+.wave-marker circle {
+  fill: var(--green);
+  stroke: rgba(53, 211, 154, 0.2);
+  stroke-width: 10;
+}
+
+.wave-labels {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wave-labels span {
+  min-height: 42px;
+  padding: 8px;
+  color: var(--muted);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.k-wave-chart p,
+.clock-note,
+.sector-conclusion {
+  margin: 0;
+  color: var(--muted);
+}
+
+.merrill-clock {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 266px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 1px), var(--line-strong) calc(50% - 1px), var(--line-strong) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(180deg, transparent calc(50% - 1px), var(--line-strong) calc(50% - 1px), var(--line-strong) calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--panel-2);
+}
+
+.clock-quadrant {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 133px;
+  padding: 18px;
+}
+
+.clock-quadrant b {
+  font-size: 18px;
+}
+
+.clock-quadrant span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.clock-quadrant.overheat {
+  background: rgba(229, 186, 66, 0.1);
+}
+
+.clock-quadrant.recovery {
+  background: rgba(53, 211, 154, 0.08);
+}
+
+.clock-quadrant.stagflation {
+  background: rgba(255, 105, 120, 0.08);
+}
+
+.clock-axis {
+  position: absolute;
+  z-index: 2;
+  color: var(--faint);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clock-axis.x {
+  right: 14px;
+  bottom: 50%;
+  transform: translateY(22px);
+}
+
+.clock-axis.y {
+  left: 50%;
+  top: 12px;
+  transform: translateX(12px);
+}
+
+.clock-marker {
+  position: absolute;
+  z-index: 4;
+  display: inline-grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  color: #07101f;
+  background: var(--green);
+  border: 6px solid rgba(53, 211, 154, 0.2);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+}
+
+.merrill-clock[data-stage="复苏"] .clock-marker {
+  left: 72%;
+  top: 72%;
+}
+
+.merrill-clock[data-stage="过热"] .clock-marker {
+  left: 72%;
+  top: 28%;
+}
+
+.merrill-clock[data-stage="滞胀"] .clock-marker {
+  left: 28%;
+  top: 28%;
+}
+
+.merrill-clock[data-stage="衰退"] .clock-marker {
+  left: 28%;
+  top: 72%;
+}
+
+.sector-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.sector-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sector-buttons button {
+  min-height: 40px;
+  padding: 8px 12px;
+  color: var(--muted);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.sector-buttons button:hover,
+.sector-buttons button.active {
+  color: var(--text);
+  border-color: var(--blue);
+  background: rgba(102, 163, 255, 0.12);
+}
+
+.sector-company-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sector-company {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 124px;
+  padding: 13px;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sector-company:hover {
+  border-color: var(--blue);
+}
+
+.sector-company span {
+  display: grid;
+  gap: 3px;
+}
+
+.sector-company small,
+.sector-company p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.sector-company em {
+  color: var(--amber);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.sector-company p {
+  grid-column: 1 / -1;
+  margin: 0;
 }
 
 .thesis-panel h2,
@@ -1807,6 +2136,7 @@ body.light .ai-map-canvas {
   .content-grid,
   .lower-grid,
   .mini-grid,
+  .cycle-visual-grid,
   .ai-hero,
   .ai-deep-grid {
     grid-template-columns: 1fr;
@@ -1818,7 +2148,9 @@ body.light .ai-map-canvas {
   }
 
   .heat-leaders,
-  .topic-grid {
+  .topic-grid,
+  .sector-company-grid,
+  .hot-detail-main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1845,6 +2177,13 @@ body.light .ai-map-canvas {
   .workspace-head {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .hot-detail-main,
+  .hot-detail-metrics,
+  .sector-company-grid,
+  .wave-labels {
+    grid-template-columns: 1fr;
   }
 
   .status-strip {

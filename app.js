@@ -16,6 +16,8 @@ const state = {
     selectedNode: "gpu",
   },
   selectedSymbol: null,
+  selectedHotSymbol: null,
+  selectedSector: null,
 };
 
 const elements = {
@@ -50,9 +52,18 @@ const elements = {
   tier: document.querySelector("#tier-filter"),
   heatFilter: document.querySelector("#heat-filter"),
   heatTabs: document.querySelectorAll(".heat-tab"),
+  hotDetail: document.querySelector("#hot-detail"),
   socialSource: document.querySelector("#social-source"),
   socialLeaders: document.querySelector("#social-leaders"),
   socialNote: document.querySelector("#social-note"),
+  kWavePosition: document.querySelector("#k-wave-position"),
+  merrillStage: document.querySelector("#merrill-stage"),
+  merrillPosition: document.querySelector("#merrill-position"),
+  merrillClock: document.querySelector("#merrill-clock"),
+  clockMarker: document.querySelector("#clock-marker"),
+  sectorConclusion: document.querySelector("#sector-conclusion"),
+  sectorButtons: document.querySelector("#sector-buttons"),
+  sectorCompanies: document.querySelector("#sector-companies"),
   aiStatGrid: document.querySelector("#ai-stat-grid"),
   aiTabs: document.querySelectorAll("[data-ai-scroll]"),
   aiSearch: document.querySelector("#ai-chain-search"),
@@ -89,13 +100,32 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
 });
 
 const glossary = [
-  ["康波周期", "用长期技术革命和资本开支周期解释产业主线，适合判断大方向。"],
-  ["美林时钟", "用增长和通胀方向划分复苏、过热、滞胀、衰退，适合控制仓位节奏。"],
-  ["估值分位", "当前估值相对历史区间的位置，越高说明预期越满。"],
-  ["盈利兑现", "收入、利润和现金流对叙事的验证程度。"],
-  ["社媒热度", "来自 WSB 公开帖子匹配的讨论强度，X 热度预留 API 接口。"],
-  ["触发条件", "能让主线被确认或被证伪的下一组数据、价格或事件。"],
+  ["HBM", "高带宽内存，决定高端 GPU 训练吞吐和封装供给弹性。"],
+  ["CoWoS", "台积电先进封装能力，连接 GPU 与 HBM，是 AI 芯片交付的重要瓶颈。"],
+  ["AI ASIC", "云厂商或大客户定制 AI 加速芯片，主要用于降低推理成本。"],
+  ["CPO", "共封装光学，把光互联更靠近交换芯片，用来降低高带宽网络功耗。"],
+  ["液冷", "高功率机柜散热方案，AI 数据中心功率密度提升后渗透率上升。"],
+  ["推理", "模型被真实调用和部署的环节，比训练更接近应用收入兑现。"],
 ];
+
+const cyclePlaybook = {
+  复苏: {
+    text: "美林时钟偏复苏时，股票胜率通常高于商品和现金；结合康波第五轮信息技术后段，优先看云平台、AI 软件、半导体制造和算力弹性。",
+    industries: ["云平台与 AI 软件", "AI 算力与芯片", "半导体设备与制造", "网络安全"],
+  },
+  过热: {
+    text: "当前模型指向过热：增长仍有动能，通胀也偏强。结论不是追所有成长股，而是优先选择盈利兑现强、受益 AI 资本开支和实物约束的行业。",
+    industries: ["数据中心电力与冷却", "低碳电力与电网", "半导体设备与制造", "AI 算力与芯片", "资源品"],
+  },
+  滞胀: {
+    text: "滞胀阶段要降低纯估值扩张依赖，优先看资源品、防御现金流、医疗创新，以及 AI 基建里订单更硬的电力和冷却环节。",
+    industries: ["资源品", "医疗创新", "数据中心电力与冷却", "低碳电力与电网"],
+  },
+  衰退: {
+    text: "衰退阶段先保护仓位，偏向现金流稳定、资产负债表强和需求韧性高的公司；高弹性 AI 芯片更适合作为右侧观察。",
+    industries: ["医疗创新", "云平台与 AI 软件", "网络安全", "低碳电力与电网"],
+  },
+};
 
 const aiLayers = [
   "上游材料",
@@ -417,15 +447,33 @@ function strongestCompanies(limit = 5) {
     .slice(0, limit);
 }
 
-function hotCompanies(windowKey = "today", limit = 5) {
-  return socialWindow(windowKey)
-    .leaders.map((item) => ({
+function hotCompanies(windowKey = "today", limit = 10) {
+  const window = socialWindow(windowKey);
+  const seen = new Set();
+  const leaders = (window.leaders || []).map((item) => {
+    seen.add(item.symbol);
+    return {
       ...item,
       company: companyBySymbol(item.symbol),
       quote: quoteFor(item.symbol),
+      isSocialOnly: !companyBySymbol(item.symbol),
+    };
+  });
+
+  const fillers = Object.values(window.items || {})
+    .filter((item) => !seen.has(item.symbol))
+    .map((item) => ({
+      ...item,
+      name: companyBySymbol(item.symbol)?.name || item.symbol,
+      topPost: item.sources?.reddit?.topPosts?.[0] || null,
+      company: companyBySymbol(item.symbol),
+      quote: quoteFor(item.symbol),
+      isSocialOnly: !companyBySymbol(item.symbol),
     }))
-    .filter((item) => item.company)
-    .slice(0, limit);
+    .filter((item) => item.score > 0 || Number.isFinite(item.quote?.changePercent))
+    .sort((a, b) => b.score - a.score || b.mentions - a.mentions || Math.abs(b.quote?.changePercent || 0) - Math.abs(a.quote?.changePercent || 0));
+
+  return [...leaders, ...fillers].slice(0, limit);
 }
 
 function setHeatWindow(value) {
@@ -772,6 +820,10 @@ function renderHeader() {
   elements.kWaveTag.textContent = cycles.kondratiev.stage;
   elements.marketSummary.textContent = `当前框架：康波处于「${cycles.kondratiev.stage}」，美林时钟偏「${macro.stage}」。`;
   elements.kWaveSummary.textContent = cycles.kondratiev.summary;
+  elements.kWavePosition.textContent = `当前处于第五轮信息技术革命后段：AI 正从芯片和模型能力，扩散到数据中心、电力、网络、安全和企业工作流。`;
+  elements.merrillStage.textContent = macro.stage;
+  elements.merrillPosition.textContent = merrillConclusion(macro.stage);
+  elements.merrillClock.dataset.stage = macro.stage;
   elements.kWaveSignals.innerHTML = cycles.kondratiev.signals
     .map(
       (signal) => `
@@ -784,19 +836,23 @@ function renderHeader() {
     .join("");
 }
 
+function merrillConclusion(stage) {
+  const copy = {
+    复苏: "当前位置：增长向上、通胀向下。股票和成长资产弹性更好，优先看云平台、软件和半导体修复。",
+    过热: "当前位置：增长向上、通胀向上。主线仍可做，但要偏向盈利兑现、资本开支确定和实物约束强的行业。",
+    滞胀: "当前位置：增长向下、通胀向上。压估值环境里优先看资源、防御现金流和必要基础设施。",
+    衰退: "当前位置：增长向下、通胀向下。先看防御、现金流和利率下行受益资产，等待风险偏好修复。",
+  };
+  return copy[stage] || "等待宏观数据确认美林时钟位置。";
+}
+
 function renderThesis() {
-  const leaders = strongestCompanies(3);
-  const hot = hotCompanies("today", 1)[0];
+  const playbook = cyclePlaybook[state.data.macro.stage] || cyclePlaybook.复苏;
   const thesis = [
-    ["主线", `长期主线仍在 AI、半导体、电力基础设施、云平台和医疗创新，当前节奏由「${state.data.macro.stage}」约束。`],
-    ["反证", "若实际利率继续上行、信用利差扩张，成长资产估值会先受压；若油价和通胀回落，优质科技会恢复弹性。"],
-    [
-      "触发",
-      hot
-        ? `${hot.symbol} 今日社媒热度 ${hot.score}，代表帖子带来短线关注；强趋势股优先验证成交和基本面兑现。`
-        : "等待社媒和价格同时确认，避免只追单一情绪信号。",
-    ],
-    ["确认", `综合分靠前：${leaders.map((item) => `${item.symbol} ${item.score}`).join(" / ")}。`],
+    ["康波位置", "第五轮信息技术革命后段，AI 是这一轮信息技术向基础设施和应用扩散的核心变量。"],
+    ["美林位置", merrillConclusion(state.data.macro.stage)],
+    ["配置结论", playbook.text],
+    ["操作方式", `先点下方行业按钮，再看每个行业里综合分、估值分位和社媒热度排序靠前的股票。`],
   ];
 
   elements.thesisPoints.innerHTML = thesis
@@ -809,6 +865,65 @@ function renderThesis() {
       `,
     )
     .join("");
+}
+
+function renderCycleSectors() {
+  const playbook = cyclePlaybook[state.data.macro.stage] || cyclePlaybook.复苏;
+  const available = playbook.industries.filter((industry) =>
+    state.data.companies.some((company) => company.industry === industry),
+  );
+  if (!state.selectedSector || !available.includes(state.selectedSector)) {
+    state.selectedSector = available[0] || "全部";
+  }
+
+  elements.sectorConclusion.textContent = playbook.text;
+  elements.sectorButtons.innerHTML = available
+    .map(
+      (industry) => `
+        <button class="${state.selectedSector === industry ? "active" : ""}" type="button" data-sector="${industry}">
+          ${industry}
+        </button>
+      `,
+    )
+    .join("");
+
+  elements.sectorButtons.querySelectorAll("[data-sector]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedSector = button.dataset.sector;
+      renderCycleSectors();
+    });
+  });
+
+  const companies = state.data.companies
+    .filter((company) => company.industry === state.selectedSector)
+    .map(enrichCompany)
+    .sort((a, b) => b.score - a.score || b.socialWeek.score - a.socialWeek.score)
+    .slice(0, 6);
+
+  elements.sectorCompanies.innerHTML = companies
+    .map(
+      (company) => `
+        <button class="sector-company" type="button" data-sector-symbol="${company.symbol}" data-searchable>
+          <span>
+            <b>${company.symbol}</b>
+            <small>${company.name} · ${company.tier}</small>
+          </span>
+          <em>${company.score}</em>
+          <p>${company.logic}</p>
+        </button>
+      `,
+    )
+    .join("");
+
+  elements.sectorCompanies.querySelectorAll("[data-sector-symbol]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const company = companyBySymbol(button.dataset.sectorSymbol);
+      if (!company) return;
+      state.selectedSymbol = company.symbol;
+      renderCompanies();
+      document.querySelector("#stock-lab")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
 }
 
 function renderMacroTable() {
@@ -1006,27 +1121,32 @@ function renderWatchlist() {
 function renderSocialHeat() {
   const selectedWindow = heatWindowKey();
   const heat = socialWindow(selectedWindow);
+  const leaders = hotCompanies(selectedWindow, 10);
   const status = state.data.socialHeat?.sourceStatus;
   elements.socialSource.textContent = status?.redditOk ? "WSB 已更新" : "热度待刷新";
   elements.socialNote.textContent =
-    status?.summary || `${heatLabel(selectedWindow)}热度来自 WallStreetBets 公开帖子匹配。`;
+    status?.summary || `${heatLabel(selectedWindow)}热度来自 WallStreetBets 公开帖子匹配；X 热度保留接入口。`;
 
-  if (!heat.leaders?.length) {
+  if (!leaders.length) {
     elements.socialLeaders.innerHTML = `
       <div class="heat-empty">
         <b>${heatLabel(selectedWindow)}暂无匹配</b>
         <span>当前研究池股票在 WSB 公开帖子里没有明显提及，或数据源暂时不可用。</span>
       </div>
     `;
+    elements.hotDetail.innerHTML = "";
     return;
   }
 
-  elements.socialLeaders.innerHTML = heat.leaders
-    .slice(0, 6)
+  if (!leaders.some((item) => item.symbol === state.selectedHotSymbol)) {
+    state.selectedHotSymbol = leaders[0].symbol;
+  }
+
+  elements.socialLeaders.innerHTML = leaders
     .map((item, index) => {
-      const company = companyBySymbol(item.symbol);
+      const company = item.company;
       return `
-        <button class="heat-card" type="button" data-symbol="${item.symbol}" data-searchable>
+        <button class="heat-card ${state.selectedHotSymbol === item.symbol ? "active" : ""}" type="button" data-symbol="${item.symbol}" data-searchable>
           <span class="rank">${index + 1}</span>
           <span class="heat-main">
             <b>${item.symbol}</b>
@@ -1042,12 +1162,53 @@ function renderSocialHeat() {
 
   elements.socialLeaders.querySelectorAll(".heat-card").forEach((card) => {
     card.addEventListener("click", () => {
-      state.selectedSymbol = card.dataset.symbol;
-      if (state.filters.heatWindow === "all") setHeatWindow(selectedWindow);
-      else renderCompanies();
-      renderDetail(enrichCompany(companyBySymbol(state.selectedSymbol)));
-      document.querySelector("#research").scrollIntoView({ behavior: "smooth", block: "start" });
+      state.selectedHotSymbol = card.dataset.symbol;
+      renderSocialHeat();
     });
+  });
+
+  renderHotDetail(leaders.find((item) => item.symbol === state.selectedHotSymbol) || leaders[0]);
+}
+
+function renderHotDetail(item) {
+  if (!item) {
+    elements.hotDetail.innerHTML = "";
+    return;
+  }
+  const company = item.company;
+  const quote = item.quote || {};
+  const topPost = item.topPost || item.sources?.reddit?.topPosts?.[0];
+  elements.hotDetail.innerHTML = `
+    <div class="hot-detail-main" data-searchable>
+      <div>
+        <span class="hot-kicker">${heatLabel(heatWindowKey())}热度详情</span>
+        <h3>${item.symbol} ${company?.name || item.name || ""}</h3>
+        <p>${company ? company.logic : "该代码来自社媒热度榜，尚未进入本站公司研究池。"}</p>
+      </div>
+      <div class="hot-detail-metrics">
+        <span><b>${item.score}</b><small>热度分</small></span>
+        <span><b>${item.mentions}</b><small>提及</small></span>
+        <span><b>${item.comments}</b><small>评论</small></span>
+        <span><b>${changeText(quote)}</b><small>日涨跌</small></span>
+      </div>
+    </div>
+    <div class="hot-detail-post" data-searchable>
+      <b>代表帖子</b>
+      <span>${topPost ? topPost.title : "暂无代表帖子；如果 X API 后续接入，这里会合并 X 讨论热度。"}</span>
+    </div>
+    ${
+      company
+        ? `<button class="hot-research-link" type="button" data-hot-research="${company.symbol}">查看 AI 产业观察里的公司档案</button>`
+        : ""
+    }
+  `;
+
+  elements.hotDetail.querySelector("[data-hot-research]")?.addEventListener("click", (event) => {
+    const company = companyBySymbol(event.currentTarget.dataset.hotResearch);
+    if (!company) return;
+    state.selectedSymbol = company.symbol;
+    renderCompanies();
+    document.querySelector("#research")?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
@@ -1186,11 +1347,7 @@ function renderGlossary() {
 function renderAll() {
   renderHeader();
   renderThesis();
-  renderMacroTable();
-  renderMiniPanels();
-  renderAiBrief();
-  renderFeeds();
-  renderWatchlist();
+  renderCycleSectors();
   renderSocialHeat();
   renderAiIndustry();
   renderCompanies();

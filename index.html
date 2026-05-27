@@ -46,7 +46,7 @@
         <header class="workspace-head">
           <div>
             <p class="breadcrumb">研究终端 / 每日投资决策台</p>
-            <h1>每日 / 每周最热股票</h1>
+            <h1>每日投资研究台</h1>
           </div>
           <div class="status-strip" aria-label="数据状态">
             <span id="last-updated">--</span>
@@ -65,6 +65,7 @@
             <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
           </div>
           <div class="heat-leaders" id="social-leaders"></div>
+          <div class="hot-detail" id="hot-detail"></div>
           <p class="heat-note" id="social-note">正在读取社媒热度...</p>
         </section>
 
@@ -77,7 +78,7 @@
         <section class="top-grid" data-search-block>
           <article class="panel thesis-panel">
             <div class="panel-head">
-              <span>MACRO STATE</span>
+              <span>周期结论</span>
               <b id="macro-badge">--</b>
             </div>
             <h2 id="market-summary">正在读取每日数据...</h2>
@@ -94,88 +95,70 @@
           </article>
         </section>
 
-        <section class="mini-grid" aria-label="关键变化">
-          <article class="panel mini-panel" id="asset-map" data-search-block>
+        <section class="cycle-visual-grid" aria-label="康波周期与美林时钟图">
+          <article class="panel chart-panel" data-search-block>
             <div class="panel-head">
-              <span>关键市场变化</span>
-              <b id="asset-count">--</b>
+              <span>康波周期图</span>
+              <b>5 轮革命</b>
             </div>
-            <div id="asset-moves" class="rank-list"></div>
+            <div class="k-wave-chart" aria-label="康波周期五轮革命波形图">
+              <svg viewBox="0 0 900 320" role="img">
+                <path class="wave-line" d="M20 210 C70 60 130 60 180 210 S290 360 340 210 S450 60 500 210 S610 360 660 210 S770 60 820 210" />
+                <line class="wave-axis" x1="20" y1="210" x2="870" y2="210" />
+                <g class="wave-marker">
+                  <line x1="770" y1="55" x2="770" y2="260" />
+                  <circle cx="770" cy="105" r="8" />
+                </g>
+              </svg>
+              <div class="wave-labels">
+                <span>1 蒸汽/纺织</span>
+                <span>2 铁路/钢铁</span>
+                <span>3 电气/化工</span>
+                <span>4 汽车/石油</span>
+                <span>5 信息技术/AI扩散</span>
+              </div>
+              <p id="k-wave-position">当前处于第五轮信息技术革命后段，AI 是这一轮向应用和基础设施扩散的主线。</p>
+            </div>
           </article>
 
-          <article class="panel mini-panel" id="rate-chain" data-search-block>
+          <article class="panel chart-panel" data-search-block>
             <div class="panel-head">
-              <span>确认 / 背离</span>
-              <b>CHECKS</b>
+              <span>美林时钟图</span>
+              <b id="merrill-stage">--</b>
             </div>
-            <div id="confirmations" class="rank-list"></div>
-          </article>
-
-          <article class="panel mini-panel" id="liquidity" data-search-block>
-            <div class="panel-head">
-              <span>未来 24/72H 催化剂</span>
-              <b>TRIGGERS</b>
+            <div class="merrill-clock" id="merrill-clock" aria-label="美林时钟四象限">
+              <div class="clock-axis x">增长</div>
+              <div class="clock-axis y">通胀</div>
+              <div class="clock-quadrant recovery">
+                <b>复苏</b>
+                <span>股票 / 成长</span>
+              </div>
+              <div class="clock-quadrant overheat">
+                <b>过热</b>
+                <span>商品 / 工业 / 能源</span>
+              </div>
+              <div class="clock-quadrant recession">
+                <b>衰退</b>
+                <span>债券 / 防御</span>
+              </div>
+              <div class="clock-quadrant stagflation">
+                <b>滞胀</b>
+                <span>现金 / 黄金 / 资源</span>
+              </div>
+              <span class="clock-marker" id="clock-marker">当前</span>
             </div>
-            <div id="triggers" class="rank-list"></div>
+            <p class="clock-note" id="merrill-position">等待宏观数据...</p>
           </article>
         </section>
 
-        <section class="panel data-panel" data-search-block>
+        <section class="panel sector-panel" data-search-block>
           <div class="panel-head">
-            <span>数据可信度</span>
-            <b id="quality-count">--</b>
+            <span>周期行业选择</span>
+            <b>点击行业看股票</b>
           </div>
-          <div class="table-wrap">
-            <table class="metric-table">
-              <thead>
-                <tr>
-                  <th>指标</th>
-                  <th>数值</th>
-                  <th>as-of</th>
-                  <th>来源 / 公式</th>
-                  <th>质量</th>
-                </tr>
-              </thead>
-              <tbody id="macro-table"></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="content-grid">
-          <article class="panel ai-panel" id="daily-report" data-search-block>
-            <div class="panel-head">
-              <span>结构化 AI 分析</span>
-              <b id="ai-confidence">confidence</b>
-            </div>
-            <div id="ai-brief" class="brief-grid"></div>
-          </article>
-
-          <aside class="side-stack">
-            <section class="panel feed-panel" id="event-flow" data-search-block>
-              <div class="panel-head">
-                <span>市场事件流</span>
-                <a href="#stock-lab">研究池 →</a>
-              </div>
-              <div id="event-feed" class="event-feed"></div>
-            </section>
-
-            <section class="panel feed-panel" id="letters" data-search-block>
-              <div class="panel-head">
-                <span>研报 / 基金信函结构化</span>
-                <a href="#research">研报库 →</a>
-              </div>
-              <div id="report-feed" class="report-feed"></div>
-            </section>
-
-            <section class="panel feed-panel" id="watchlist" data-search-block>
-              <div class="panel-head">
-                <span>Watchlist 与触发提醒</span>
-                <b>DASHBOARD ONLY</b>
-              </div>
-              <div id="watch-tags" class="tag-row"></div>
-              <div id="watch-rules" class="rule-list"></div>
-            </section>
-          </aside>
+          <p class="sector-conclusion" id="sector-conclusion">等待周期结论...</p>
+          <div class="sector-buttons" id="sector-buttons" role="group" aria-label="周期看好行业"></div>
+          <div class="sector-company-grid" id="sector-companies"></div>
         </section>
 
         <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
@@ -192,9 +175,9 @@
 
           <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
             <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
-            <button type="button" data-ai-scroll="hot-stocks">热股信号</button>
             <button type="button" data-ai-scroll="ai-semiconductor-chain">半导体制造</button>
             <button type="button" data-ai-scroll="ai-models">大模型 / 应用</button>
+            <button type="button" data-ai-scroll="stock-lab">公司研究池</button>
           </div>
 
           <div class="ai-workbench">
@@ -252,7 +235,7 @@
 
         <section class="panel stock-panel" id="stock-lab" data-search-block>
           <div class="panel-head">
-            <span>AI 产业观察：行业与公司研究池</span>
+            <span>AI 产业观察：公司研究池</span>
             <b id="visible-count">0 / 0</b>
           </div>
           <div class="controls">
@@ -302,7 +285,7 @@
         <section class="lower-grid">
           <article class="panel detail-panel" id="research" data-search-block>
             <div class="panel-head">
-              <span>AI 产业观察：投行研报式拆解</span>
+              <span>AI 产业观察：公司档案拆解</span>
               <b id="detail-symbol">--</b>
             </div>
             <h2 id="detail-title">选择一家公司</h2>
@@ -313,23 +296,11 @@
 
           <article class="panel glossary-panel" id="glossary" data-search-block>
             <div class="panel-head">
-              <span>产业观察术语表</span>
+              <span>AI 产业观察术语表</span>
               <b>GLOSSARY</b>
             </div>
             <div id="glossary-list" class="glossary-list"></div>
           </article>
-        </section>
-
-        <section class="panel topic-panel" id="terminal-links" data-search-block>
-          <div class="panel-head">
-            <span>继续深入</span>
-            <b>TOPIC TERMINALS</b>
-          </div>
-          <div class="topic-grid">
-            <a href="#hot-stocks">每日 / 每周最热股票 <small>WSB 热度 / 研究池</small></a>
-            <a href="#overview">康波周期与美林时钟 <small>宏观框架 / 周期位置</small></a>
-            <a href="#ai-industry">AI 产业观察 <small>产业链图谱 / 节点公司</small></a>
-          </div>
         </section>
 
         <p class="disclaimer">数据来自公开免费源，可能延迟或缺失。本页面只做研究记录，不构成投资建议。</p>

@@ -453,7 +453,7 @@ function buildSocialWindow(windowKey, posts) {
   const leaders = Array.from(rawItems.values())
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score || b.mentions - a.mentions)
-    .slice(0, 8)
+    .slice(0, 10)
     .map((item) => ({
       symbol: item.symbol,
       name: companies.find((company) => company.symbol === item.symbol)?.name || item.symbol,
