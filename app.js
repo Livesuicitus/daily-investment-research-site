@@ -441,9 +441,11 @@ function setHeatWindow(value) {
 function setupTheme() {
   const saved = localStorage.getItem("investment-theme") || "dark";
   document.body.classList.toggle("light", saved === "light");
+  elements.themeToggle.textContent = document.body.classList.contains("light") ? "切换深色" : "切换亮色";
   elements.themeToggle.addEventListener("click", () => {
     document.body.classList.toggle("light");
     localStorage.setItem("investment-theme", document.body.classList.contains("light") ? "light" : "dark");
+    elements.themeToggle.textContent = document.body.classList.contains("light") ? "切换深色" : "切换亮色";
   });
 }
 
