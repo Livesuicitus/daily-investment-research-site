@@ -16,9 +16,18 @@ const state = {
     includeAll: true,
     selectedNode: "gpu",
   },
+  semi: {
+    query: "",
+    layer: "全部层级",
+    segment: "全部",
+    includeAll: true,
+    selectedNode: "semi-equipment",
+  },
   selectedSymbol: null,
   selectedHotSymbol: null,
+  selectedSemiSymbol: null,
   selectedGlossary: "芯片",
+  selectedSemiGlossary: "设备",
 };
 
 const elements = {
@@ -32,6 +41,7 @@ const elements = {
   portalHotSummary: document.querySelector("#portal-hot-summary"),
   portalCycleSummary: document.querySelector("#portal-cycle-summary"),
   portalAiSummary: document.querySelector("#portal-ai-summary"),
+  portalSemiSummary: document.querySelector("#portal-semi-summary"),
   portalSocialSource: document.querySelector("#portal-social-source"),
   portalLeaders: document.querySelector("#portal-leaders"),
   portalMacroBadge: document.querySelector("#portal-macro-badge"),
@@ -89,6 +99,21 @@ const elements = {
   aiSemiView: document.querySelector("#ai-semi-view"),
   aiModelView: document.querySelector("#ai-model-view"),
   aiAppView: document.querySelector("#ai-app-view"),
+  semiStatGrid: document.querySelector("#semi-stat-grid"),
+  semiTabs: document.querySelectorAll("[data-semi-scroll]"),
+  semiSearch: document.querySelector("#semi-chain-search"),
+  semiLayer: document.querySelector("#semi-layer-filter"),
+  semiReset: document.querySelector("#semi-reset-view"),
+  semiIncludeAll: document.querySelector("#semi-include-all"),
+  semiSegments: document.querySelector("#semi-segments"),
+  semiMapCanvas: document.querySelector("#semi-map-canvas"),
+  semiNodeTitle: document.querySelector("#semi-node-title"),
+  semiNodeSummary: document.querySelector("#semi-node-summary"),
+  semiSummaryStats: document.querySelector("#semi-summary-stats"),
+  semiNodeCompanies: document.querySelector("#semi-node-companies"),
+  semiFrontView: document.querySelector("#semi-front-view"),
+  semiManufacturingView: document.querySelector("#semi-manufacturing-view"),
+  semiMarketView: document.querySelector("#semi-market-view"),
   stockSearch: document.querySelector("#search-input"),
   focus: document.querySelector("#focus-toggle"),
   count: document.querySelector("#visible-count"),
@@ -97,6 +122,10 @@ const elements = {
   detailSymbol: document.querySelector("#detail-symbol"),
   detailBody: document.querySelector("#detail-body"),
   glossaryList: document.querySelector("#glossary-list"),
+  semiDetailTitle: document.querySelector("#semi-detail-title"),
+  semiDetailSymbol: document.querySelector("#semi-detail-symbol"),
+  semiDetailBody: document.querySelector("#semi-detail-body"),
+  semiGlossaryList: document.querySelector("#semi-glossary-list"),
 };
 
 const formatter = new Intl.NumberFormat("zh-CN", {
@@ -538,6 +567,461 @@ const aiDeepViews = {
   ],
 };
 
+const semiCompanyDirectory = Object.fromEntries(
+  [
+    candidate("SNPS", "Synopsys", "EDA/IP", "全球龙头", "EDA 软件、IP 和验证工具龙头，先进制程设计复杂度越高，工具链粘性越强。", 82),
+    candidate("CDNS", "Cadence Design Systems", "EDA/IP", "全球龙头", "数字/模拟设计、验证、仿真和系统分析工具龙头，受益 AI 芯片和先进封装设计复杂度。", 81),
+    candidate("ARM", "Arm Holdings", "EDA/IP", "IP 平台", "CPU IP 授权平台，覆盖手机、服务器、汽车和边缘 AI。", 78),
+    candidate("ANSS", "Ansys", "EDA/IP", "系统仿真", "多物理场仿真和系统级验证工具，可补足芯片、封装和热管理验证。", 74),
+    candidate("ASML", "ASML Holding", "设备", "绝对龙头", "EUV/DUV 光刻设备全球核心供应商，是先进逻辑和高端存储扩产的关键瓶颈。", 84),
+    candidate("AMAT", "Applied Materials", "设备", "全球龙头", "薄膜沉积、刻蚀、离子注入和材料工程平台覆盖面广，受益先进逻辑和存储资本开支。", 80),
+    candidate("LRCX", "Lam Research", "设备", "全球龙头", "刻蚀和薄膜设备龙头，存储、HBM 和先进逻辑工艺升级直接受益。", 80),
+    candidate("KLAC", "KLA", "设备", "全球龙头", "量测检测设备龙头，制程越先进，良率爬坡和过程控制价值越高。", 82),
+    candidate("TOELY", "Tokyo Electron", "设备", "全球龙头", "涂胶显影、刻蚀、沉积和清洗设备覆盖广，是日本设备链代表。", 77),
+    candidate("TER", "Teradyne", "封装测试", "测试设备", "自动测试设备供应商，覆盖 SoC、存储和系统级测试。", 75),
+    candidate("ATEYY", "Advantest", "封装测试", "测试设备", "高端半导体测试设备龙头，AI/HPC 芯片和 HBM 测试复杂度提升受益。", 77),
+    candidate("ENTG", "Entegris", "材料", "关键材料", "半导体材料、过滤和化学品供应商，先进制程对纯度和污染控制要求提升。", 74),
+    candidate("WFRD", "Silicon Wafer Basket", "材料", "材料篮子", "硅片、光刻胶、电子特气和 CMP 材料共同决定晶圆厂稳定生产。", 68),
+    candidate("LIN", "Linde", "材料", "电子特气", "工业气体和电子特气供应商，晶圆厂扩产带动高纯气体需求。", 72),
+    candidate("DD", "DuPont", "材料", "电子材料", "电子材料、CMP、封装和互连材料供应商，受益先进封装和制程材料升级。", 70),
+    candidate("TSM", "Taiwan Semiconductor Manufacturing", "晶圆制造", "全球龙头", "先进逻辑代工龙头，AI GPU、ASIC、CPU 和高端手机芯片核心制造平台。", 86),
+    candidate("SSNLF", "Samsung Electronics", "晶圆制造", "IDM / 存储龙头", "先进逻辑、存储、HBM 和封装均有布局，是台积电之外的重要全栈玩家。", 78),
+    candidate("INTC", "Intel", "晶圆制造", "IDM / 代工转型", "CPU、先进封装和晶圆代工转型并行，关键看制程追赶和代工客户。", 70),
+    candidate("UMC", "UMC", "晶圆制造", "成熟制程", "成熟制程代工龙头，汽车、工业、模拟和电源管理需求相关。", 70),
+    candidate("GFS", "GlobalFoundries", "晶圆制造", "特色工艺", "特色工艺和成熟制程代工平台，面向汽车、通信和工业客户。", 69),
+    candidate("NVDA", "NVIDIA", "芯片设计", "AI 龙头", "AI GPU、网络、系统和 CUDA 生态龙头，是先进制程和封装需求的最大牵引之一。", 88),
+    candidate("AMD", "Advanced Micro Devices", "芯片设计", "AI / CPU 龙头", "CPU、GPU 和 AI 加速器平台，Chiplet 和数据中心份额是核心看点。", 77),
+    candidate("AVGO", "Broadcom", "芯片设计", "ASIC / 网络龙头", "定制 ASIC、交换芯片、光互联和基础设施软件结合，受益云厂商自研芯片。", 81),
+    candidate("QCOM", "Qualcomm", "芯片设计", "移动 / 端侧 AI", "手机 SoC、射频、汽车和端侧 AI 芯片平台，观察换机周期和 AI 手机渗透。", 74),
+    candidate("MRVL", "Marvell Technology", "芯片设计", "ASIC / 互联", "定制 ASIC、光互联、存储控制器和数据中心互联芯片具备 AI 弹性。", 75),
+    candidate("TXN", "Texas Instruments", "芯片设计", "模拟龙头", "模拟和嵌入式芯片龙头，工业、汽车和电源管理需求代表。", 72),
+    candidate("ADI", "Analog Devices", "芯片设计", "模拟龙头", "高性能模拟、混合信号和电源管理芯片，汽车和工业周期相关。", 72),
+    candidate("NXPI", "NXP Semiconductors", "芯片设计", "汽车半导体", "汽车 MCU、雷达、连接和安全芯片供应商，跟踪汽车电子周期。", 71),
+    candidate("ON", "ON Semiconductor", "芯片设计", "功率半导体", "功率器件和图像传感器供应商，电动车、工业和能源转型相关。", 69),
+    candidate("HXSCF", "SK Hynix", "存储", "HBM 龙头", "DRAM/HBM 龙头之一，AI 训练和高端 GPU 显存需求直接受益。", 83),
+    candidate("MU", "Micron Technology", "存储", "HBM / DRAM 龙头", "DRAM、NAND 和 HBM 供应商，AI 数据中心带来周期弹性。", 79),
+    candidate("WDC", "Western Digital", "存储", "NAND / SSD", "NAND、硬盘和企业存储供应商，数据增长和存储价格周期相关。", 70),
+    candidate("SIMO", "Silicon Motion", "存储", "控制器", "NAND 控制器供应商，消费和企业级 SSD 周期相关。", 68),
+    candidate("ASX", "ASE Technology", "封装测试", "OSAT 龙头", "全球封测龙头，先进封装、系统级封装和测试需求提升受益。", 74),
+    candidate("AMKR", "Amkor Technology", "封装测试", "OSAT 龙头", "封装测试服务商，汽车、先进封装和系统级封装是跟踪重点。", 72),
+    candidate("IBIDY", "Ibiden", "封装测试", "ABF 基板", "高端封装基板供应商，服务器 CPU/GPU 和先进封装需求相关。", 70),
+    candidate("AAPL", "Apple", "下游应用", "终端龙头", "手机、PC、可穿戴和自研芯片生态，是先进制程最大终端需求之一。", 76),
+    candidate("MSFT", "Microsoft", "下游应用", "AI 云需求", "Azure AI 资本开支拉动 GPU、网络、存储和先进制程需求。", 79),
+    candidate("AMZN", "Amazon", "下游应用", "AI 云需求", "AWS 和自研芯片需求影响加速器、网络、存储和数据中心半导体。", 78),
+    candidate("GOOGL", "Alphabet", "下游应用", "AI 云需求", "TPU、Google Cloud、搜索和广告 AI 需求带动先进芯片和数据中心投资。", 78),
+    candidate("TSLA", "Tesla", "下游应用", "汽车 / 机器人", "自动驾驶、车载计算和机器人是端侧高算力芯片需求样本。", 69),
+  ].map((company) => [company.symbol, company]),
+);
+
+const semiProfileDefaults = {
+  "EDA/IP": {
+    business: "提供芯片设计、验证、仿真、IP 授权和系统级分析工具，是设计公司和晶圆厂之间的前端入口。",
+    chainRole: "前端设计底座：决定芯片能否完成架构、验证、物理设计和流片准备。",
+    revenueMix: ["软件订阅和维护", "IP 授权和版税", "验证硬件或系统分析", "专业服务"],
+    expenseMix: ["研发人员和算法平台", "云算力和验证基础设施", "销售和客户成功", "并购摊销"],
+    financials: "重点看 ARR、续约率、订单 backlog、经营利润率和 AI/先进封装设计需求。",
+    watch: "跟踪先进节点流片数量、AI ASIC 项目、IP 授权增长和大型客户续约。",
+  },
+  材料: {
+    business: "提供硅片、光刻胶、电子特气、CMP、靶材和湿电子化学品，先进制程越复杂，对纯度和稳定供给要求越高。",
+    chainRole: "晶圆制造耗材：影响良率、污染控制、产线稳定性和扩产节奏。",
+    revenueMix: ["电子材料和化学品", "高纯气体或硅片", "过滤和污染控制", "封装与互连材料"],
+    expenseMix: ["原材料和能源", "高纯制造和质量体系", "研发与客户认证", "物流和区域产能"],
+    financials: "重点看晶圆厂开工率、先进制程认证进度、毛利率和库存周期。",
+    watch: "跟踪台积电、三星、存储厂扩产节奏，以及关键材料供给扰动。",
+  },
+  设备: {
+    business: "提供光刻、刻蚀、沉积、量测检测、清洗和离子注入等晶圆制造设备，是晶圆厂资本开支的核心去向。",
+    chainRole: "制造能力瓶颈：决定先进制程、良率爬坡、存储扩产和封装工艺升级速度。",
+    revenueMix: ["新设备销售", "服务、备件和升级", "先进逻辑客户", "存储和成熟制程客户"],
+    expenseMix: ["研发和工程人员", "高精密零部件", "制造装配和服务网络", "库存与供应链"],
+    financials: "重点看订单、出货、backlog、毛利率、服务收入和区域出口限制影响。",
+    watch: "跟踪晶圆厂 CapEx、EUV/刻蚀/量测需求、存储复苏和中国区订单变化。",
+  },
+  晶圆制造: {
+    business: "把设计转化为晶圆，包括先进逻辑、成熟制程、IDM 和特色工艺，核心能力是节点、良率、产能和客户结构。",
+    chainRole: "芯片实物生产平台：承接 AI、手机、汽车、工业和存储需求。",
+    revenueMix: ["先进逻辑代工", "成熟制程和特色工艺", "IDM 产品或代工服务", "先进封装协同"],
+    expenseMix: ["设备折旧和资本开支", "材料和能源", "工艺研发和良率爬坡", "人工与厂务运维"],
+    financials: "重点看产能利用率、HPC/AI 收入占比、毛利率、CapEx 和先进节点迁移。",
+    watch: "跟踪 N2/N3/GAA 进展、客户集中度、地缘风险和存储周期。",
+  },
+  芯片设计: {
+    business: "设计 GPU、CPU、ASIC、SoC、模拟、功率和互联芯片，毛利率和壁垒来自架构、软件生态和客户绑定。",
+    chainRole: "需求定义者：把下游应用需求传导给 EDA、制造、存储和封装测试。",
+    revenueMix: ["数据中心芯片", "移动/汽车/工业芯片", "定制 ASIC 或网络芯片", "软件和生态收入"],
+    expenseMix: ["研发和软件生态", "晶圆与封装采购", "HBM/基板/测试", "销售和客户支持"],
+    financials: "重点看数据中心收入、新产品爬坡、毛利率、库存和客户集中度。",
+    watch: "跟踪云厂商 CapEx、AI 推理需求、先进封装供给和竞争定价。",
+  },
+  存储: {
+    business: "提供 DRAM、HBM、NAND、SSD 和控制器，周期性强，但 AI/HPC 对高端 HBM 和企业存储形成结构性需求。",
+    chainRole: "算力吞吐与数据承载：HBM 决定 AI 加速器效率，NAND/SSD 支撑数据中心存储。",
+    revenueMix: ["DRAM 和 HBM", "NAND 和 SSD", "企业与数据中心存储", "移动、PC、汽车和工业存储"],
+    expenseMix: ["晶圆制造折旧", "先进封装和测试", "研发与制程升级", "库存周期成本"],
+    financials: "重点看 bit 出货、ASP、HBM 份额、毛利率和库存天数。",
+    watch: "跟踪 HBM 认证、云客户订单、DRAM/NAND 价格和供给纪律。",
+  },
+  封装测试: {
+    business: "提供封装、测试、基板、系统级封装和先进封装服务，把晶圆变成可交付芯片或模组。",
+    chainRole: "芯片交付瓶颈：先进封装、测试和基板能力决定 AI/HPC 芯片出货。",
+    revenueMix: ["封装测试服务", "先进封装和 SiP", "测试设备或服务", "基板与封装材料"],
+    expenseMix: ["封测设备和折旧", "基板、材料和人工", "质量认证和良率管理", "客户项目投入"],
+    financials: "重点看先进封装占比、产能利用率、测试时长、毛利率和资本开支。",
+    watch: "跟踪 CoWoS/2.5D/3D 封装产能、HBM 测试需求和客户拉货节奏。",
+  },
+  下游应用: {
+    business: "云、手机、汽车、工业和 AI 应用公司定义半导体需求，资本开支和终端销量决定上游景气。",
+    chainRole: "需求侧：把 AI、消费电子、汽车电子和工业自动化需求传导到芯片链。",
+    revenueMix: ["云服务或终端硬件", "广告/订阅/软件收入", "汽车或工业系统", "AI 应用和服务"],
+    expenseMix: ["数据中心或供应链采购", "研发和芯片定制", "销售渠道", "内容、物流或合规"],
+    financials: "重点看 CapEx、终端销量、云收入增速、库存和新产品周期。",
+    watch: "跟踪 hyperscaler 资本开支、AI 手机/PC 渗透、汽车电子库存和工业订单。",
+  },
+};
+
+const semiCompanyProfiles = {
+  ASML: {
+    business: "ASML 是全球 EUV 光刻设备核心供应商，同时提供 DUV、量测和计算光刻能力。先进逻辑和高端 DRAM/HBM 的节点迁移离不开其设备。",
+    chainRole: "设备 / 光刻：EUV 供给、High-NA 节奏和服务能力决定先进制程扩产速度。",
+    revenueMix: ["EUV 系统", "DUV 系统", "Installed Base 管理和服务", "量测与计算光刻"],
+    expenseMix: ["研发和供应链协同", "高精密零部件采购", "装配和客户现场服务", "库存与交付周期管理"],
+    financials: "重点看订单、backlog、EUV 出货、High-NA 采用和中国区 DUV 需求变化。",
+    watch: "跟踪台积电/三星/英特尔 CapEx、出口管制、High-NA 客户验收和服务收入占比。",
+  },
+  TSM: {
+    business: "台积电是先进逻辑代工核心平台，承接 AI GPU、ASIC、CPU、手机 SoC 和先进封装需求。",
+    chainRole: "晶圆制造 / 先进逻辑：先进制程、CoWoS 和客户迁移节奏决定 AI 芯片交付。",
+    revenueMix: ["HPC/AI", "智能手机", "IoT、汽车和消费", "先进封装服务"],
+    expenseMix: ["先进设备折旧", "材料和能源", "工艺研发与良率爬坡", "厂务和区域扩产"],
+    financials: "重点看 HPC 占比、毛利率、N2/N3 进展、CoWoS 产能和 CapEx 指引。",
+    watch: "跟踪 AI 客户订单、先进封装扩产、地缘风险和美元/台币汇率影响。",
+  },
+  NVDA: {
+    business: "NVIDIA 提供 AI GPU、网络、系统级机柜和 CUDA 软件生态，是 AI 半导体需求的核心牵引者。",
+    chainRole: "芯片设计 / AI 加速器：定义先进制程、HBM、封装、网络和测试需求。",
+    revenueMix: ["数据中心 GPU 和系统", "网络与互联", "游戏 GPU", "专业可视化、汽车和机器人"],
+    expenseMix: ["晶圆、HBM 和封装采购", "研发和软件生态", "供应链锁产能", "渠道和客户支持"],
+    financials: "重点看数据中心收入、毛利率、Blackwell/后续平台爬坡、推理占比和客户集中度。",
+    watch: "跟踪云厂商 CapEx、HBM/CoWoS 供给、竞品 ASIC 和出口限制。",
+  },
+  SNPS: {
+    business: "Synopsys 覆盖数字设计、验证、IP、软件安全和 EDA 自动化，是先进芯片设计前端的关键平台。",
+    chainRole: "EDA/IP：设计复杂度、AI ASIC 项目和先进封装共同推高工具需求。",
+    revenueMix: ["EDA 软件订阅", "IP 授权和版税", "验证硬件", "软件安全和服务"],
+    expenseMix: ["研发人员", "云和验证基础设施", "销售和客户成功", "并购摊销"],
+    financials: "重点看 ARR、backlog、经营利润率、IP 增速和大客户续约。",
+    watch: "跟踪 AI 芯片流片数量、先进节点迁移和 Ansys 并购整合。",
+  },
+  CDNS: {
+    business: "Cadence 提供数字/模拟设计、验证、仿真、系统分析和硬件验证平台，客户覆盖芯片设计、系统厂和晶圆厂。",
+    chainRole: "EDA/IP：验证和系统级仿真能力对 AI/HPC、封装和热设计越来越重要。",
+    revenueMix: ["EDA 软件订阅", "验证硬件", "IP 和系统分析", "服务"],
+    expenseMix: ["研发和算法平台", "销售渠道", "云和硬件验证投入", "并购整合"],
+    financials: "重点看经常性收入、订单能见度、硬件验证需求和经营杠杆。",
+    watch: "跟踪 AI 设计工具采用、封装系统分析需求和大客户续约周期。",
+  },
+  AMAT: {
+    business: "Applied Materials 是材料工程设备平台，覆盖薄膜沉积、刻蚀、离子注入、CMP 和过程控制等多类设备。",
+    chainRole: "设备 / 材料工程：先进逻辑、存储、HBM 和封装工艺升级带来设备需求。",
+    revenueMix: ["半导体系统", "应用全球服务", "显示和相邻市场", "先进封装相关设备"],
+    expenseMix: ["研发与工程", "高精密零部件", "服务网络和库存", "制造和供应链"],
+    financials: "重点看订单、服务收入、毛利率、中国区收入和先进封装/存储复苏。",
+    watch: "跟踪晶圆厂 CapEx、存储周期、出口限制和新材料工艺渗透。",
+  },
+  LRCX: {
+    business: "Lam Research 是刻蚀和沉积设备龙头，存储、先进逻辑和先进封装工艺都需要更复杂的刻蚀能力。",
+    chainRole: "设备 / 刻蚀沉积：高纵深结构、3D NAND、HBM 和先进逻辑提升刻蚀价值量。",
+    revenueMix: ["刻蚀设备", "沉积设备", "客户支持和备件", "存储与逻辑客户"],
+    expenseMix: ["研发和工艺工程", "精密零部件", "服务交付", "库存和供应链"],
+    financials: "重点看存储客户 CapEx、订单、服务收入和毛利率。",
+    watch: "跟踪 DRAM/HBM 扩产、3D NAND 恢复和中国区限制影响。",
+  },
+  KLAC: {
+    business: "KLA 是半导体过程控制龙头，提供检测、量测和良率管理设备，节点越先进越依赖过程控制。",
+    chainRole: "设备 / 量测检测：良率爬坡和缺陷控制决定先进制程经济性。",
+    revenueMix: ["过程控制系统", "服务收入", "先进逻辑客户", "存储和封装客户"],
+    expenseMix: ["研发和光学/电子零部件", "制造装配", "服务网络", "供应链和库存"],
+    financials: "重点看订单、服务收入、毛利率和先进节点客户需求。",
+    watch: "跟踪先进制程良率压力、出口限制和客户资本开支结构。",
+  },
+  MU: {
+    business: "Micron 提供 DRAM、NAND 和 HBM，AI 服务器高端内存需求让存储周期出现结构性弹性。",
+    chainRole: "存储 / HBM：HBM 和服务器 DRAM 决定 AI 加速器吞吐和系统配置。",
+    revenueMix: ["DRAM", "NAND", "HBM 和数据中心内存", "移动、PC、汽车和工业存储"],
+    expenseMix: ["晶圆制造折旧", "封装测试", "研发与制程升级", "库存周期成本"],
+    financials: "重点看 HBM 订单、ASP、bit 出货、毛利率和库存去化。",
+    watch: "跟踪 HBM 认证进度、云客户需求、DRAM/NAND 价格和资本开支纪律。",
+  },
+  HXSCF: {
+    business: "SK Hynix 是 DRAM/HBM 龙头，高端 HBM 供给与 AI GPU 平台绑定度高。",
+    chainRole: "存储 / HBM：HBM3E/后续产品决定 AI 芯片系统性能和供给弹性。",
+    revenueMix: ["DRAM 和 HBM", "NAND", "企业存储", "移动和 PC 存储"],
+    expenseMix: ["晶圆厂折旧", "先进封装和 TSV", "研发和良率爬坡", "材料和测试"],
+    financials: "重点看 HBM 份额、毛利率、价格周期和客户认证。",
+    watch: "跟踪 NVIDIA/云客户需求、HBM 产能扩张和竞争份额变化。",
+  },
+  ASX: {
+    business: "ASE 是全球封测龙头，提供传统封装、先进封装、系统级封装和测试服务。",
+    chainRole: "封装测试 / OSAT：把晶圆转成可交付芯片，先进封装和测试复杂度提升带来价值量。",
+    revenueMix: ["封装服务", "测试服务", "EMS 和系统级封装", "汽车和通信客户"],
+    expenseMix: ["封测设备折旧", "基板和材料", "人工与厂务", "质量认证和客户项目"],
+    financials: "重点看产能利用率、先进封装占比、毛利率和客户拉货。",
+    watch: "跟踪 AI/HPC 封装需求、手机周期和车规订单。",
+  },
+  AMKR: {
+    business: "Amkor 提供外包封装测试服务，客户覆盖通信、汽车、计算和消费电子。",
+    chainRole: "封装测试 / OSAT：系统级封装和先进封装需求提升其战略位置。",
+    revenueMix: ["先进封装", "传统封装", "测试服务", "汽车和通信客户"],
+    expenseMix: ["封测设备", "材料和基板", "人工", "客户认证和区域产能"],
+    financials: "重点看利用率、毛利率、资本开支和汽车/先进封装收入。",
+    watch: "跟踪大客户项目、手机库存和先进封装扩产。",
+  },
+};
+
+const semiLayers = ["EDA/IP", "材料", "设备", "晶圆制造", "芯片设计", "存储", "封装测试", "下游应用"];
+const semiLayerX = [6, 18.5, 31, 43.5, 56, 68.5, 80, 97];
+const semiLeafY = [13, 25, 37, 49, 72, 84];
+
+const semiLayerConfig = [
+  {
+    id: "semi-eda-ip",
+    title: "EDA/IP",
+    summary: "芯片设计从工具和 IP 开始。EDA 订阅、IP 授权、验证仿真和系统分析决定流片效率。",
+    symbols: ["SNPS", "CDNS", "ARM", "ANSS"],
+    leaves: [
+      ["eda-software", "EDA 软件", "数字设计、物理实现、时序、功耗和验证工具。", ["SNPS", "CDNS"]],
+      ["ip-cores", "IP 授权", "CPU、接口、SerDes、存储控制器和基础模块授权。", ["ARM", "SNPS", "CDNS"]],
+      ["verification", "验证仿真", "仿真、形式验证、硬件仿真和系统级验证。", ["SNPS", "CDNS", "ANSS"]],
+      ["system-analysis", "系统分析", "热、电磁、封装和多物理场仿真。", ["ANSS", "CDNS", "SNPS"]],
+    ],
+  },
+  {
+    id: "semi-materials",
+    title: "材料",
+    summary: "材料是晶圆厂的稳定供给底座，核心在纯度、认证周期、区域供应和先进制程适配。",
+    symbols: ["ENTG", "LIN", "DD", "WFRD"],
+    leaves: [
+      ["silicon-wafer", "硅片", "晶圆制造基础载体，尺寸、缺陷率和供给稳定性影响产线。", ["WFRD", "ENTG"]],
+      ["photoresist", "光刻胶", "光刻工艺关键材料，先进节点需要长期认证。", ["WFRD", "DD"]],
+      ["electronic-gas", "电子特气", "高纯气体用于沉积、刻蚀、清洗和工艺环境。", ["LIN", "ENTG"]],
+      ["cmp-materials", "CMP 材料", "化学机械抛光材料影响平坦化和良率。", ["ENTG", "DD"]],
+      ["wet-chemicals", "湿电子化学品", "清洗、蚀刻、显影和污染控制材料。", ["ENTG", "DD", "LIN"]],
+    ],
+  },
+  {
+    id: "semi-equipment",
+    title: "设备",
+    summary: "设备决定制造能力。光刻、刻蚀、沉积、量测检测和测试设备是晶圆厂资本开支的核心。",
+    symbols: ["ASML", "AMAT", "LRCX", "KLAC", "TOELY", "TER", "ATEYY"],
+    leaves: [
+      ["lithography", "光刻", "EUV/DUV 光刻决定图形转移和先进节点推进。", ["ASML", "TOELY"]],
+      ["etch", "刻蚀", "高深宽比结构、逻辑和存储工艺都依赖刻蚀能力。", ["LRCX", "AMAT", "TOELY"]],
+      ["deposition", "薄膜沉积", "CVD/PVD/ALD 等沉积工艺决定材料堆叠和性能。", ["AMAT", "LRCX", "TOELY"]],
+      ["metrology", "量测检测", "缺陷检测和过程控制决定良率爬坡速度。", ["KLAC", "ASML"]],
+      ["test-equipment", "测试设备", "SoC、存储、HPC 和系统级测试复杂度提升。", ["TER", "ATEYY"]],
+    ],
+  },
+  {
+    id: "semi-foundry",
+    title: "晶圆制造",
+    summary: "制造端把设计转成晶圆，核心变量是节点、良率、产能利用率、客户结构和资本开支。",
+    symbols: ["TSM", "SSNLF", "INTC", "UMC", "GFS"],
+    leaves: [
+      ["advanced-foundry", "先进逻辑代工", "AI GPU、ASIC、CPU 和手机 SoC 的高端制程平台。", ["TSM", "SSNLF", "INTC"]],
+      ["mature-foundry", "成熟制程", "汽车、工业、模拟和电源管理芯片的制造底座。", ["UMC", "GFS", "TSM"]],
+      ["idm-manufacturing", "IDM", "设计和制造一体化，覆盖 CPU、存储、模拟和功率。", ["INTC", "SSNLF", "TXN", "ADI"]],
+      ["power-analog-fab", "功率 / 模拟制造", "汽车、工业和电源管理需求相关。", ["TXN", "ADI", "ON", "NXPI"]],
+    ],
+  },
+  {
+    id: "semi-chip-design",
+    title: "芯片设计",
+    summary: "设计公司定义需求，AI、手机、汽车、工业和网络芯片把下游景气传导到制造、封装和材料。",
+    symbols: ["NVDA", "AMD", "AVGO", "QCOM", "MRVL", "ARM", "TXN", "ADI", "NXPI", "ON"],
+    leaves: [
+      ["gpu-ai", "GPU / AI 加速器", "训练和推理算力核心，带动先进制程、HBM 和封装。", ["NVDA", "AMD"]],
+      ["custom-asic", "ASIC / 网络芯片", "云厂商定制芯片、交换芯片和高速互联。", ["AVGO", "MRVL"]],
+      ["mobile-soc", "手机 SoC / 端侧 AI", "手机、PC 和边缘设备的本地推理平台。", ["QCOM", "AAPL", "ARM"]],
+      ["analog-power", "模拟 / 功率", "工业、汽车、电源管理和传感场景。", ["TXN", "ADI", "ON", "NXPI"]],
+      ["cpu-architecture", "CPU / 架构", "服务器、PC 和边缘计算 CPU 及 IP 平台。", ["ARM", "INTC", "AMD"]],
+    ],
+  },
+  {
+    id: "semi-memory",
+    title: "存储",
+    summary: "存储既是周期品也是 AI 硬约束。HBM 决定 AI 加速器效率，NAND/SSD 支撑数据增长。",
+    symbols: ["HXSCF", "MU", "SSNLF", "WDC", "SIMO", "MRVL"],
+    leaves: [
+      ["memory-hbm", "HBM", "高带宽内存是 AI GPU 和 HPC 系统关键瓶颈。", ["HXSCF", "MU", "SSNLF"]],
+      ["memory-dram", "DRAM", "服务器、PC、手机和汽车通用内存，周期弹性明显。", ["MU", "HXSCF", "SSNLF"]],
+      ["memory-nand", "NAND", "企业 SSD、手机和数据存储需求相关。", ["SSNLF", "WDC", "MU"]],
+      ["ssd-controller", "控制器 / SSD", "NAND 控制器和企业 SSD 影响存储系统性能。", ["SIMO", "MRVL", "WDC"]],
+    ],
+  },
+  {
+    id: "semi-packaging-test",
+    title: "封装测试",
+    summary: "先进封装和测试把晶圆变成可交付芯片。AI/HPC 推高 2.5D/3D、基板和测试价值量。",
+    symbols: ["ASX", "AMKR", "IBIDY", "TER", "ATEYY", "TSM"],
+    leaves: [
+      ["osat", "OSAT", "外包封装测试服务，覆盖传统封装和系统级封装。", ["ASX", "AMKR"]],
+      ["advanced-packaging-semi", "先进封装", "CoWoS、2.5D/3D、Chiplet 和 HBM 集成能力。", ["TSM", "ASX", "AMKR"]],
+      ["package-substrate", "封装基板", "ABF 等高端基板是 HPC 芯片封装关键材料。", ["IBIDY", "ASX"]],
+      ["ate-test", "ATE 测试", "高端 SoC、存储和系统级测试复杂度提升。", ["TER", "ATEYY"]],
+    ],
+  },
+  {
+    id: "semi-applications",
+    title: "下游应用",
+    summary: "下游应用决定需求弹性。云 AI、手机、汽车、工业和机器人把订单传导到芯片链。",
+    symbols: ["MSFT", "AMZN", "GOOGL", "AAPL", "TSLA", "NVDA", "QCOM"],
+    leaves: [
+      ["ai-datacenter-demand", "AI 数据中心", "云厂商 CapEx 拉动 GPU、ASIC、网络、存储和电源芯片。", ["MSFT", "AMZN", "GOOGL", "NVDA"]],
+      ["consumer-device", "手机 / 消费", "手机、PC 和可穿戴周期决定先进制程和端侧 AI 芯片需求。", ["AAPL", "QCOM", "SSNLF"]],
+      ["auto-electronics", "汽车电子", "智能驾驶、电动化和座舱推动 MCU、功率和传感器需求。", ["TSLA", "NXPI", "ON", "QCOM"]],
+      ["industrial-iot", "工业 / IoT", "工业自动化、电源管理和边缘计算需求。", ["TXN", "ADI", "INTC", "ARM"]],
+    ],
+  },
+];
+
+const semiNodes = semiLayerConfig.flatMap((layer, layerIndex) => {
+  const x = semiLayerX[layerIndex];
+  return [
+    {
+      id: layer.id,
+      title: layer.title,
+      layer: layer.title,
+      segment: layer.title,
+      kind: "hub",
+      x,
+      y: 60,
+      summary: layer.summary,
+      symbols: layer.symbols,
+    },
+    ...layer.leaves.map(([id, title, summary, symbols], leafIndex) => ({
+      id,
+      title,
+      layer: layer.title,
+      segment: layer.title,
+      kind: "leaf",
+      x,
+      y: semiLeafY[leafIndex],
+      summary,
+      symbols,
+    })),
+  ];
+});
+
+const semiNodeById = new Map(semiNodes.map((node) => [node.id, node]));
+const semiHubByLayer = new Map(semiLayerConfig.map((layer) => [layer.title, layer.id]));
+const semiLinks = [
+  ...semiLayerConfig.slice(0, -1).map((layer, index) => [layer.id, semiLayerConfig[index + 1].id]),
+  ...semiNodes.filter((node) => node.kind === "leaf").map((node) => [semiHubByLayer.get(node.layer), node.id]),
+  ["eda-software", "gpu-ai"],
+  ["ip-cores", "cpu-architecture"],
+  ["verification", "custom-asic"],
+  ["silicon-wafer", "advanced-foundry"],
+  ["photoresist", "lithography"],
+  ["electronic-gas", "etch"],
+  ["cmp-materials", "advanced-foundry"],
+  ["lithography", "advanced-foundry"],
+  ["etch", "advanced-foundry"],
+  ["deposition", "advanced-foundry"],
+  ["metrology", "advanced-foundry"],
+  ["advanced-foundry", "gpu-ai"],
+  ["advanced-foundry", "custom-asic"],
+  ["advanced-foundry", "mobile-soc"],
+  ["gpu-ai", "memory-hbm"],
+  ["custom-asic", "ai-datacenter-demand"],
+  ["memory-hbm", "advanced-packaging-semi"],
+  ["memory-dram", "ai-datacenter-demand"],
+  ["advanced-packaging-semi", "gpu-ai"],
+  ["package-substrate", "advanced-packaging-semi"],
+  ["ate-test", "custom-asic"],
+  ["ai-datacenter-demand", "gpu-ai"],
+  ["consumer-device", "mobile-soc"],
+  ["auto-electronics", "analog-power"],
+  ["industrial-iot", "analog-power"],
+];
+
+const semiDeepViews = {
+  front: [
+    ["设计入口", "SNPS / CDNS / ARM 决定芯片能否完成架构、验证、物理设计和 IP 复用，AI ASIC 项目越多，EDA/IP 粘性越强。"],
+    ["算力设计", "NVDA / AMD / AVGO / MRVL 是 AI 加速器、定制 ASIC、网络和互联芯片观察池。"],
+    ["端侧与模拟", "QCOM / ARM / TXN / ADI / NXPI / ON 代表手机、汽车、工业和电源管理芯片需求。"],
+  ],
+  manufacturing: [
+    ["制造瓶颈", "TSM / Samsung / INTC / UMC / GFS 代表先进逻辑、IDM、成熟制程和特色工艺平台。"],
+    ["设备杠杆", "ASML / AMAT / LRCX / KLAC / Tokyo Electron 是晶圆厂 CapEx 的核心受益环节。"],
+    ["材料底座", "ENTG / LIN / DuPont / 硅片篮子代表高纯材料、电子特气、CMP 和湿电子化学品。"],
+  ],
+  market: [
+    ["存储约束", "SK Hynix / MU / Samsung / WDC / SIMO 对应 HBM、DRAM、NAND 和 SSD 控制器。"],
+    ["封测交付", "ASE / Amkor / Teradyne / Advantest / Ibiden 代表先进封装、OSAT、测试设备和基板。"],
+    ["需求侧", "MSFT / AMZN / GOOGL / AAPL / TSLA 把云 AI、手机、汽车和工业需求传导到整条半导体链。"],
+  ],
+};
+
+const semiGlossaryGroups = {
+  "EDA/IP": [
+    ["RTL", "寄存器传输级设计描述，是数字芯片设计的重要抽象层。"],
+    ["IP 核", "可复用的设计模块，例如 CPU、SerDes、PCIe、DDR 控制器。"],
+    ["Tape-out", "芯片设计完成并提交晶圆厂制造的关键节点。"],
+    ["DFM", "面向制造的设计，用来降低制造风险并提升良率。"],
+    ["形式验证", "用数学方法证明设计逻辑满足规格，降低高复杂度芯片错误率。"],
+  ],
+  材料: [
+    ["硅片", "晶圆制造基础载体，尺寸、缺陷和供给稳定性会影响产线。"],
+    ["光刻胶", "接受曝光并形成图形的关键化学材料。"],
+    ["电子特气", "晶圆制造所需高纯气体，常用于沉积、刻蚀和清洗。"],
+    ["CMP slurry", "化学机械抛光浆料，用于晶圆表面平坦化。"],
+    ["湿电子化学品", "用于清洗、蚀刻、显影等环节的高纯化学品。"],
+  ],
+  设备: [
+    ["EUV", "极紫外光刻，是先进逻辑制程的关键设备能力。"],
+    ["DUV", "深紫外光刻，仍广泛用于成熟制程和部分先进层。"],
+    ["刻蚀", "按图形移除材料，先进结构对刻蚀精度要求极高。"],
+    ["薄膜沉积", "在晶圆表面形成材料薄膜，包括 CVD、PVD、ALD 等。"],
+    ["量测检测", "发现缺陷、测量关键尺寸和支持良率爬坡的过程控制。"],
+  ],
+  晶圆制造: [
+    ["Foundry", "晶圆代工厂，为设计公司制造芯片。"],
+    ["IDM", "设计与制造一体化公司，例如 Intel、Samsung、TI。"],
+    ["制程节点", "描述晶体管世代和工艺能力，先进节点通常资本开支更高。"],
+    ["良率", "合格芯片占比，直接影响成本和供给。"],
+    ["产能利用率", "晶圆厂产线使用程度，影响毛利率和设备材料需求。"],
+  ],
+  芯片设计: [
+    ["GPU", "并行计算芯片，是 AI 训练和推理的重要算力载体。"],
+    ["ASIC", "面向特定用途定制的芯片，云厂商常用于降低推理成本。"],
+    ["SoC", "系统级芯片，把 CPU、GPU、NPU、接口等集成在一颗芯片中。"],
+    ["SerDes", "高速串并转换接口，是网络和 AI 互联的重要模块。"],
+    ["Chiplet", "把多个芯粒封装成一个系统，提高设计弹性和良率。"],
+  ],
+  存储: [
+    ["HBM", "高带宽内存，通过先进封装靠近 GPU，决定 AI 芯片吞吐。"],
+    ["DRAM", "动态随机存取存储器，服务器、PC、手机和汽车广泛使用。"],
+    ["NAND", "非易失存储，常用于 SSD 和数据存储。"],
+    ["DDR5", "新一代服务器和 PC 内存规格，带宽和能效提升。"],
+    ["SSD 控制器", "管理 NAND 读写、纠错和性能的核心芯片。"],
+  ],
+  封装测试: [
+    ["OSAT", "外包封装测试厂，为芯片公司提供封装和测试服务。"],
+    ["CoWoS", "台积电先进封装方案，用于 GPU 与 HBM 集成。"],
+    ["TSV", "硅通孔，用于 3D 堆叠和 HBM 等先进封装。"],
+    ["ABF 基板", "高端芯片封装基板，HPC 芯片需求的重要瓶颈。"],
+    ["ATE", "自动测试设备，用于芯片功能和性能测试。"],
+  ],
+  下游应用: [
+    ["Hyperscaler", "大型云厂商，如 Microsoft、Amazon、Google，是 AI 芯片需求核心。"],
+    ["AI Server", "用于训练或推理的高功率服务器，拉动 GPU、HBM、网络和电源。"],
+    ["AI Phone", "具备端侧 AI 能力的手机，影响 SoC、内存和传感器需求。"],
+    ["汽车电子", "智能驾驶、电动化和座舱电子带动 MCU、功率和传感器。"],
+    ["工业 IoT", "工业自动化和边缘计算场景，偏模拟、MCU 和连接芯片。"],
+  ],
+};
+
 async function loadData() {
   if (window.__MARKET_DATA__) {
     return window.__MARKET_DATA__;
@@ -613,9 +1097,22 @@ function companyBySymbol(symbol) {
   return state.data.companies.find((company) => company.symbol === symbol) || companyDirectory[symbol];
 }
 
+function semiCompanyBySymbol(symbol) {
+  return semiCompanyDirectory[symbol] || state.data.companies.find((company) => company.symbol === symbol) || companyDirectory[symbol];
+}
+
 function allKnownCompanies() {
   const seen = new Set();
-  return [...state.data.companies, ...Object.values(companyDirectory)].filter((company) => {
+  return [...state.data.companies, ...Object.values(companyDirectory), ...Object.values(semiCompanyDirectory)].filter((company) => {
+    if (seen.has(company.symbol)) return false;
+    seen.add(company.symbol);
+    return true;
+  });
+}
+
+function allSemiCompanies() {
+  const seen = new Set();
+  return Object.values(semiCompanyDirectory).filter((company) => {
     if (seen.has(company.symbol)) return false;
     seen.add(company.symbol);
     return true;
@@ -660,6 +1157,26 @@ function enrichCompany(company) {
     socialToday,
     socialWeek,
     socialCurrent,
+    score: Math.max(0, Math.min(100, score)),
+  };
+}
+
+function enrichSemiCompany(company) {
+  const quote = quoteFor(company.symbol);
+  const baseScore = company.baseScore ?? 72;
+  const earningsDelivery = company.earningsDelivery ?? baseScore;
+  const valuationPercentile = company.valuationPercentile ?? 66;
+  const priceChange = quote.changePercent ?? 0;
+  const score = Math.round(
+    baseScore +
+      (earningsDelivery - 70) * 0.12 -
+      Math.max(valuationPercentile - 70, 0) * 0.08 +
+      Math.max(Math.min(priceChange, 6), -6) * 0.5,
+  );
+
+  return {
+    ...company,
+    quote,
     score: Math.max(0, Math.min(100, score)),
   };
 }
@@ -830,6 +1347,52 @@ function setupAiIndustry() {
   elements.aiTabs.forEach((button) => {
     button.addEventListener("click", () => {
       document.querySelector(`#${button.dataset.aiScroll}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+function setupSemiIndustry() {
+  if (!elements.semiLayer || !elements.semiSearch || !elements.semiIncludeAll || !elements.semiReset) return;
+
+  elements.semiLayer.innerHTML = ["全部层级", ...semiLayers]
+    .map((layer) => `<option value="${layer}">${layer}</option>`)
+    .join("");
+
+  elements.semiSearch.addEventListener("input", (event) => {
+    state.semi.query = event.target.value.trim().toLowerCase();
+    renderSemiIndustry();
+  });
+
+  elements.semiLayer.addEventListener("change", (event) => {
+    state.semi.layer = event.target.value;
+    renderSemiIndustry();
+  });
+
+  elements.semiIncludeAll.addEventListener("change", (event) => {
+    state.semi.includeAll = event.target.checked;
+    renderSemiIndustry();
+  });
+
+  elements.semiReset.addEventListener("click", () => {
+    state.semi = {
+      query: "",
+      layer: "全部层级",
+      segment: "全部",
+      includeAll: true,
+      selectedNode: "semi-equipment",
+    };
+    elements.semiSearch.value = "";
+    elements.semiLayer.value = "全部层级";
+    elements.semiIncludeAll.checked = true;
+    state.selectedSemiSymbol = null;
+    state.selectedSemiGlossary = "设备";
+    renderSemiIndustry();
+    renderSemiGlossary();
+  });
+
+  elements.semiTabs.forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelector(`#${button.dataset.semiScroll}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 }
@@ -1044,6 +1607,291 @@ function renderAiDeepItem([title, text]) {
   `;
 }
 
+function semiCompaniesFor(node) {
+  if (!node) return [];
+  return Array.from(new Set(node.symbols || []))
+    .map(semiCompanyBySymbol)
+    .filter(Boolean)
+    .map(enrichSemiCompany)
+    .sort((a, b) => b.score - a.score || a.symbol.localeCompare(b.symbol));
+}
+
+function semiNodeMatches(node) {
+  const layerMatch = state.semi.layer === "全部层级" || node.layer === state.semi.layer;
+  const segmentMatch = state.semi.segment === "全部" || node.segment === state.semi.segment;
+  const query = state.semi.query;
+  if (!layerMatch || !segmentMatch) return false;
+  if (!query) return true;
+
+  const companies = semiCompaniesFor(node);
+  const text = [
+    node.title,
+    node.layer,
+    node.segment,
+    node.summary,
+    ...companies.flatMap((company) => [company.symbol, company.name, company.industry, company.logic]),
+  ]
+    .join(" ")
+    .toLowerCase();
+  return text.includes(query);
+}
+
+function semiGlossaryKeyForNode(node) {
+  if (!node) return state.selectedSemiGlossary;
+  if (semiGlossaryGroups[node.layer]) return node.layer;
+  return state.selectedSemiGlossary;
+}
+
+function semiProfileFor(company, node) {
+  const fallback = semiProfileDefaults[company.industry] || semiProfileDefaults[node?.layer] || semiProfileDefaults["芯片设计"];
+  return {
+    ...fallback,
+    ...semiCompanyProfiles[company.symbol],
+  };
+}
+
+function renderSemiIndustry() {
+  if (!state.data || !elements.semiMapCanvas) return;
+
+  const matchingNodes = semiNodes.filter(semiNodeMatches);
+  const matchingIds = new Set(matchingNodes.map((node) => node.id));
+  const filterActive = Boolean(state.semi.query || state.semi.layer !== "全部层级" || state.semi.segment !== "全部");
+  const visibleNodes = state.semi.includeAll ? semiNodes : matchingNodes;
+  const visibleIds = new Set(visibleNodes.map((node) => node.id));
+
+  if (!visibleIds.has(state.semi.selectedNode)) {
+    state.semi.selectedNode = matchingNodes[0]?.id || "semi-equipment";
+  }
+
+  if (elements.semiStatGrid) {
+    elements.semiStatGrid.innerHTML = [
+      ["Layers", semiLayers.length],
+      ["Nodes", semiNodes.length],
+      ["Companies", Object.keys(semiCompanyDirectory).length],
+      ["Links", semiLinks.length],
+    ]
+      .map(
+        ([label, value]) => `
+          <div class="ai-stat">
+            <span>${label}</span>
+            <b>${value}</b>
+          </div>
+        `,
+      )
+      .join("");
+  }
+
+  if (elements.semiSegments) {
+    elements.semiSegments.innerHTML = ["全部", ...semiLayers]
+      .map(
+        (segment) => `
+          <button class="${state.semi.segment === segment ? "active" : ""}" type="button" data-semi-segment="${segment}">
+            ${segment}
+          </button>
+        `,
+      )
+      .join("");
+
+    elements.semiSegments.querySelectorAll("[data-semi-segment]").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.semi.segment = button.dataset.semiSegment;
+        renderSemiIndustry();
+      });
+    });
+  }
+
+  const edgeHtml = semiLinks
+    .filter(([from, to]) => visibleIds.has(from) && visibleIds.has(to))
+    .map(([from, to]) => {
+      const start = semiNodeById.get(from);
+      const end = semiNodeById.get(to);
+      if (!start || !end) return "";
+      const dim = filterActive && (!matchingIds.has(from) || !matchingIds.has(to));
+      return `<line class="${dim ? "dim" : ""}" x1="${start.x}%" y1="${start.y}%" x2="${end.x}%" y2="${end.y}%" />`;
+    })
+    .join("");
+
+  const nodeHtml = visibleNodes
+    .map((node) => {
+      const companies = semiCompaniesFor(node);
+      const dim = filterActive && !matchingIds.has(node.id);
+      const labelSide = node.x > 88 ? "left-label" : "";
+      return `
+        <button
+          class="ai-node semi-node ${node.kind} ${labelSide} ${state.semi.selectedNode === node.id ? "active" : ""} ${dim ? "dim" : ""}"
+          type="button"
+          data-semi-node="${node.id}"
+          style="left:${node.x}%; top:${node.y}%"
+        >
+          <span>${node.title}</span>
+          <small>${companies.length ? `${companies.length}家公司` : "待补档案"}</small>
+        </button>
+      `;
+    })
+    .join("");
+
+  elements.semiMapCanvas.innerHTML = `
+    <span class="ai-map-count">${visibleNodes.length} nodes · ${semiLinks.length} links</span>
+    <svg class="ai-map-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      ${edgeHtml}
+    </svg>
+    <div class="ai-node-layer">${nodeHtml}</div>
+  `;
+
+  elements.semiMapCanvas.querySelectorAll("[data-semi-node]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.semi.selectedNode = button.dataset.semiNode;
+      state.selectedSemiSymbol = null;
+      state.selectedSemiGlossary = semiGlossaryKeyForNode(semiNodeById.get(state.semi.selectedNode));
+      renderSemiIndustry();
+      renderSemiGlossary();
+    });
+  });
+
+  renderSemiNodeSummary();
+  renderSemiDeepViews();
+}
+
+function renderSemiNodeSummary() {
+  if (!elements.semiNodeTitle || !elements.semiNodeSummary || !elements.semiSummaryStats || !elements.semiNodeCompanies) return;
+  const node = semiNodeById.get(state.semi.selectedNode) || semiNodeById.get("semi-equipment");
+  const companies = semiCompaniesFor(node);
+  const connected = semiLinks.filter(([from, to]) => from === node.id || to === node.id).length;
+
+  elements.semiNodeTitle.textContent = `${node.title} 关系卡`;
+  elements.semiNodeSummary.textContent = node.summary;
+  elements.semiSummaryStats.innerHTML = [
+    ["层级", node.layer],
+    ["连接边", connected],
+    ["研究池公司", companies.length],
+    ["节点类型", node.kind === "hub" ? "产业层" : "细分节点"],
+  ]
+    .map(
+      ([label, value]) => `
+        <div>
+          <span>${label}</span>
+          <b>${value}</b>
+        </div>
+      `,
+    )
+    .join("");
+
+  if (companies.length && !companies.some((company) => company.symbol === state.selectedSemiSymbol)) {
+    state.selectedSemiSymbol = companies[0].symbol;
+  }
+
+  elements.semiNodeCompanies.innerHTML = companies.length
+    ? companies
+        .map(
+          (company) => `
+            <button class="${state.selectedSemiSymbol === company.symbol ? "active" : ""}" type="button" data-semi-symbol="${company.symbol}">
+              <b>${company.symbol}</b>
+              <span>${company.name}</span>
+              <em>${company.score}</em>
+            </button>
+          `,
+        )
+        .join("")
+    : `
+      <div class="ai-empty">
+        <b>公司档案待补</b>
+        <span>这个节点先保留在产业链关系图里，后续可以继续补全公司池。</span>
+      </div>
+    `;
+
+  elements.semiNodeCompanies.querySelectorAll("[data-semi-symbol]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const company = semiCompanyBySymbol(button.dataset.semiSymbol);
+      if (!company) return;
+      state.selectedSemiSymbol = company.symbol;
+      renderSemiNodeSummary();
+      document.querySelector("#semi-research")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  const activeCompany = companies.find((company) => company.symbol === state.selectedSemiSymbol) || companies[0];
+  if (activeCompany) renderSemiDetail(activeCompany, node);
+}
+
+function renderSemiDeepViews() {
+  if (!elements.semiFrontView || !elements.semiManufacturingView || !elements.semiMarketView) return;
+  elements.semiFrontView.innerHTML = semiDeepViews.front.map(renderSemiDeepItem).join("");
+  elements.semiManufacturingView.innerHTML = semiDeepViews.manufacturing.map(renderSemiDeepItem).join("");
+  elements.semiMarketView.innerHTML = semiDeepViews.market.map(renderSemiDeepItem).join("");
+}
+
+function renderSemiDeepItem([title, text]) {
+  const matched = allSemiCompanies()
+    .map(enrichSemiCompany)
+    .filter((company) => text.includes(company.symbol) || text.includes(company.name) || text.includes(company.name.split(" ")[0]))
+    .slice(0, 5);
+  return `
+    <div class="ai-deep-item" data-searchable>
+      <b>${title}</b>
+      <p>${text}</p>
+      ${
+        matched.length
+          ? `<div class="ai-mini-symbols">${matched.map((company) => `<span>${company.symbol} ${company.score}</span>`).join("")}</div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function renderSemiDetail(company, node) {
+  if (!company || !elements.semiDetailBody || !elements.semiDetailTitle || !elements.semiDetailSymbol) return;
+  const enriched = company.score === undefined ? enrichSemiCompany(company) : company;
+  const quote = enriched.quote || {};
+  const profile = semiProfileFor(enriched, node);
+  const relatedNodes = semiNodes
+    .filter((item) => item.symbols?.includes(enriched.symbol))
+    .map((item) => item.title)
+    .slice(0, 10);
+
+  elements.semiDetailTitle.textContent = enriched.name;
+  elements.semiDetailSymbol.textContent = enriched.symbol;
+  elements.semiDetailBody.innerHTML = `
+    <div class="detail-block" data-searchable>
+      <b>研究位置</b>
+      <span>${enriched.industry} · ${enriched.tier} · 研究分 ${enriched.score}</span>
+      <small>价格：${quote.close ? priceFormatter.format(quote.close) : "--"} / ${changeText(quote)}</small>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>公司业务</b>
+      <span>${profile.business}</span>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>产业链角色</b>
+      <span>${profile.chainRole}</span>
+      <small>${relatedNodes.length ? `对应节点：${relatedNodes.join(" / ")}` : "当前公司暂未绑定到半导体图谱节点。"}</small>
+    </div>
+    <div class="detail-block detail-list" data-searchable>
+      <b>收入构成</b>
+      <ul>${profile.revenueMix.map((item) => `<li>${item}</li>`).join("")}</ul>
+    </div>
+    <div class="detail-block detail-list" data-searchable>
+      <b>成本 / 支出构成</b>
+      <ul>${profile.expenseMix.map((item) => `<li>${item}</li>`).join("")}</ul>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>财报跟踪</b>
+      <span>${profile.financials}</span>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>研究逻辑</b>
+      <span>${enriched.logic}</span>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>主要风险</b>
+      <span>${enriched.risk}</span>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>下一步观察</b>
+      <span>${profile.watch} ${enriched.nextCheck}</span>
+    </div>
+  `;
+}
+
 function renderHeader() {
   const { generatedAt, sourceStatus, macro, cycles } = state.data;
   if (elements.updated) elements.updated.textContent = formatDate(generatedAt);
@@ -1130,6 +1978,9 @@ function renderPortal() {
   if (elements.portalAiSummary) {
     elements.portalAiSummary.textContent = `AI 图谱按 ${aiLayers.length} 层、${aiNodes.length} 个节点组织，当前默认从芯片和基础设施切入。`;
   }
+  if (elements.portalSemiSummary) {
+    elements.portalSemiSummary.textContent = `半导体图谱按 ${semiLayers.length} 层、${semiNodes.length} 个节点组织，覆盖 ${Object.keys(semiCompanyDirectory).length} 家全球龙头。`;
+  }
   if (elements.portalSocialSource) elements.portalSocialSource.textContent = sourceStatus.socialOk ? "WSB 已更新" : "热度待刷新";
   if (elements.portalMacroBadge) elements.portalMacroBadge.textContent = `${macro.stage} · ${sourceStatus.macroOk ? "macro ok" : "macro wait"}`;
   if (elements.portalLeaders) {
@@ -1151,6 +2002,7 @@ function renderPortal() {
       ["配置结论", playbook.text],
       ["本周热度", weekLeaders.length ? weekLeaders.map((item) => item.symbol).join(" / ") : "等待本周热度确认"],
       ["AI 入口", "产业链页从能源、芯片、基础设施、模型、应用五层进入公司档案。"],
+      ["半导体入口", "半导体页从 EDA/IP、材料、设备、制造、设计、存储、封测、下游应用八层进入公司档案。"],
     ];
     elements.portalCyclePoints.innerHTML = rows
       .map(
@@ -1621,14 +2473,59 @@ function renderGlossary() {
   });
 }
 
+function renderSemiGlossary() {
+  if (!elements.semiGlossaryList) return;
+  const groups = Object.keys(semiGlossaryGroups);
+  if (!groups.includes(state.selectedSemiGlossary)) {
+    state.selectedSemiGlossary = groups[0];
+  }
+  const terms = semiGlossaryGroups[state.selectedSemiGlossary] || [];
+  elements.semiGlossaryList.innerHTML = `
+    <div class="glossary-tabs" role="group" aria-label="半导体产业术语分类">
+      ${groups
+        .map(
+          (group) => `
+            <button class="${state.selectedSemiGlossary === group ? "active" : ""}" type="button" data-semi-glossary-group="${group}">
+              ${group}
+            </button>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="glossary-group-title">
+      <b>${state.selectedSemiGlossary}术语</b>
+      <span>和半导体八层产业链对应，点上方行业切换术语池。</span>
+    </div>
+    ${terms
+      .map(
+        ([term, definition]) => `
+        <div class="glossary-item" data-searchable>
+          <b>${term}</b>
+          <span>${definition}</span>
+        </div>
+      `,
+      )
+      .join("")}
+  `;
+
+  elements.semiGlossaryList.querySelectorAll("[data-semi-glossary-group]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedSemiGlossary = button.dataset.semiGlossaryGroup;
+      renderSemiGlossary();
+    });
+  });
+}
+
 function renderAll() {
   renderHeader();
   renderPortal();
   renderThesis();
   renderSocialHeat();
   renderAiIndustry();
+  renderSemiIndustry();
   renderCompanies();
   renderGlossary();
+  renderSemiGlossary();
   renderSiteSearch();
 }
 
@@ -1637,6 +2534,7 @@ async function init() {
   setupNavigation();
   setupSearch();
   setupAiIndustry();
+  setupSemiIndustry();
 
   try {
     state.data = await loadData();

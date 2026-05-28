@@ -405,7 +405,7 @@ p {
 
 .portal-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -439,6 +439,10 @@ p {
 
 .portal-card.ai::before {
   background: var(--green);
+}
+
+.portal-card.semi::before {
+  background: #58d3ff;
 }
 
 .portal-card > span {
@@ -1045,6 +1049,38 @@ tbody tr.selected {
   background: #070e1b;
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+.semi-industry-panel {
+  border-color: color-mix(in srgb, var(--line) 64%, #58d3ff 36%);
+}
+
+.semi-hero {
+  background:
+    linear-gradient(135deg, rgba(88, 211, 255, 0.12), transparent 42%),
+    linear-gradient(90deg, rgba(130, 178, 255, 0.08), transparent 72%);
+}
+
+.semi-map-canvas {
+  min-width: 1420px;
+  min-height: 760px;
+  background:
+    linear-gradient(rgba(88, 211, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 211, 255, 0.045) 1px, transparent 1px),
+    #06111f;
+  background-size: 36px 36px;
+}
+
+.semi-node::before {
+  background: #d7f4ff;
+  border-color: rgba(88, 211, 255, 0.16);
+  box-shadow: 0 0 0 1px rgba(88, 211, 255, 0.52);
+}
+
+.semi-node.hub::before {
+  background: #58d3ff;
+  border-color: rgba(88, 211, 255, 0.2);
+  box-shadow: 0 0 0 1px rgba(88, 211, 255, 0.62);
 }
 
 .ai-map-area {
@@ -2328,6 +2364,14 @@ body.light .ai-map-canvas {
   background-size: 34px 34px;
 }
 
+body.light .semi-map-canvas {
+  background:
+    linear-gradient(rgba(25, 117, 180, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(25, 117, 180, 0.06) 1px, transparent 1px),
+    #f5fbff;
+  background-size: 36px 36px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2338,6 +2382,10 @@ body.light .ai-map-canvas {
 }
 
 @media (max-width: 1320px) {
+  .portal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .ai-workbench {
     grid-template-columns: 1fr;
   }
@@ -2348,6 +2396,10 @@ body.light .ai-map-canvas {
 
   .ai-map-canvas {
     min-width: 980px;
+  }
+
+  .semi-map-canvas {
+    min-width: 1280px;
   }
 }
 

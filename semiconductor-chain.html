@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="半导体产业链研究工作台：EDA/IP、材料、设备、晶圆制造、芯片设计、存储、封装测试、下游应用。"
+    />
+    <title>半导体产业链 | Daily Investment Terminal</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050810'/%3E%3Cpath d='M14 42h36M18 34l9-9 8 7 11-15' fill='none' stroke='%2366a3ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='46' cy='17' r='4' fill='%2335d39a'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="semi">
+    <div class="terminal-shell">
+      <aside class="sidebar" aria-label="研究导航">
+        <a class="brand" href="./index.html" aria-label="回到总页面">
+          <span>INVESTMENT</span>
+          <b>RESEARCH</b>
+          <small>每日更新研究平台</small>
+        </a>
+
+        <form class="side-search" id="site-search-form">
+          <input id="site-search" type="search" placeholder="搜索本页" autocomplete="off" />
+          <button type="submit" aria-label="搜索">搜索</button>
+        </form>
+
+        <button class="theme-toggle" id="theme-toggle" type="button">切换亮色</button>
+
+        <nav class="nav-groups primary-nav">
+          <a href="./index.html" data-page-nav="home">总页面</a>
+          <a href="./hot-stocks.html" data-page-nav="hot">每日 / 每周最热股票</a>
+          <a href="./macro-cycle.html" data-page-nav="macro">康波周期 × 美林时钟</a>
+          <a href="./ai-chain.html" data-page-nav="ai">AI 产业链</a>
+          <a href="./semiconductor-chain.html" data-page-nav="semi" class="active">半导体产业链</a>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-head">
+          <div>
+            <p class="breadcrumb">核心功能 4 / Semiconductor Chain</p>
+            <h1>半导体产业链</h1>
+          </div>
+          <div class="status-strip" aria-label="数据状态">
+            <span id="last-updated">--</span>
+            <span id="freshness-dot" class="quality-dot"></span>
+            <span id="source-status">DATA LOADING</span>
+          </div>
+        </header>
+
+        <section class="panel ai-industry-panel semi-industry-panel" id="semi-industry" data-search-block>
+          <div class="ai-hero semi-hero">
+            <div>
+              <p class="breadcrumb">核心功能 4 / 半导体产业链 / Relationship Map</p>
+              <h2>全球龙头 × 半导体产业链图谱</h2>
+              <p>
+                从 EDA/IP 到下游应用，把材料、设备、晶圆制造、设计、存储和封测放在同一张关系图里，点击节点查看公司和档案。
+              </p>
+            </div>
+            <div class="ai-stat-grid" id="semi-stat-grid"></div>
+          </div>
+
+          <div class="ai-tabs" role="tablist" aria-label="半导体产业链视图">
+            <button class="active" type="button" data-semi-scroll="semi-industry">关系图谱</button>
+            <button type="button" data-semi-scroll="semi-front-end">EDA / IP / 设计</button>
+            <button type="button" data-semi-scroll="semi-manufacturing">制造 / 设备 / 材料</button>
+            <button type="button" data-semi-scroll="semi-market">封测 / 存储 / 下游</button>
+          </div>
+
+          <div class="ai-workbench">
+            <div class="ai-map-area">
+              <div class="ai-controls">
+                <input id="semi-chain-search" type="search" placeholder="搜索公司、节点、代码" />
+                <select id="semi-layer-filter" aria-label="半导体产业层级"></select>
+                <button id="semi-reset-view" type="button">重置视图</button>
+                <label class="ai-check">
+                  <input id="semi-include-all" type="checkbox" checked />
+                  <span>全量</span>
+                </label>
+              </div>
+              <div class="ai-segments" id="semi-segments"></div>
+              <div class="ai-map-canvas semi-map-canvas" id="semi-map-canvas" aria-label="半导体产业链关系图谱"></div>
+            </div>
+
+            <aside class="ai-summary-card">
+              <p class="breadcrumb">Map Summary</p>
+              <h3 id="semi-node-title">半导体产业链总览</h3>
+              <div class="ai-summary-stats" id="semi-summary-stats"></div>
+              <p id="semi-node-summary">
+                默认展示八层产业链。选择节点后会展开对应全球龙头，选择公司后进入公司档案。
+              </p>
+              <div class="ai-company-rail" id="semi-node-companies"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="ai-deep-grid" aria-label="半导体产业链拆解">
+          <article class="panel ai-deep-card" id="semi-front-end" data-search-block>
+            <div class="panel-head">
+              <span>EDA / IP / 芯片设计</span>
+              <b>前端</b>
+            </div>
+            <div id="semi-front-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="semi-manufacturing" data-search-block>
+            <div class="panel-head">
+              <span>材料 / 设备 / 晶圆制造</span>
+              <b>制造底座</b>
+            </div>
+            <div id="semi-manufacturing-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="semi-market" data-search-block>
+            <div class="panel-head">
+              <span>存储 / 封测 / 下游应用</span>
+              <b>交付与需求</b>
+            </div>
+            <div id="semi-market-view" class="ai-deep-list"></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel detail-panel" id="semi-research" data-search-block>
+            <div class="panel-head">
+              <span>半导体产业链：公司档案拆解</span>
+              <b id="semi-detail-symbol">--</b>
+            </div>
+            <h2 id="semi-detail-title">选择一家公司</h2>
+            <div id="semi-detail-body" class="detail-body">
+              <p>点击半导体产业链图谱里的公司，查看业务、产业链角色、收入构成、成本支出、财报跟踪和风险。</p>
+            </div>
+          </article>
+
+          <article class="panel glossary-panel" id="semi-glossary" data-search-block>
+            <div class="panel-head">
+              <span>半导体产业链术语表</span>
+              <b>GLOSSARY</b>
+            </div>
+            <div id="semi-glossary-list" class="glossary-list"></div>
+          </article>
+        </section>
+
+        <p class="disclaimer">数据来自公开免费源，可能延迟或缺失。本页面只做研究记录，不构成投资建议。</p>
+      </main>
+    </div>
+
+    <script src="./data/market-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
