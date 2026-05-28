@@ -346,6 +346,179 @@ p {
   padding: 8px 0 0;
 }
 
+.portal-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.65fr);
+  gap: 24px;
+  align-items: end;
+  min-height: 260px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(102, 163, 255, 0.15), transparent 38%),
+    linear-gradient(90deg, rgba(53, 211, 154, 0.1), transparent 62%),
+    var(--panel);
+}
+
+.portal-hero h2 {
+  max-width: 780px;
+  margin-bottom: 12px;
+  font-size: 58px;
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.portal-hero p:not(.breadcrumb) {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.portal-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.portal-status-grid div {
+  display: grid;
+  gap: 8px;
+  min-height: 94px;
+  padding: 14px;
+  background: var(--panel-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.portal-status-grid span {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.portal-status-grid b {
+  color: #f7e68a;
+  font-size: 24px;
+  line-height: 1.12;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.portal-card {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 18px;
+  min-height: 270px;
+  padding: 22px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012)),
+    var(--panel);
+  border: 1px solid color-mix(in srgb, var(--line) 74%, var(--blue) 26%);
+  border-radius: var(--radius);
+  box-shadow: var(--soft-shadow);
+}
+
+.portal-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--blue);
+}
+
+.portal-card.hot::before {
+  background: var(--amber);
+}
+
+.portal-card.ai::before {
+  background: var(--green);
+}
+
+.portal-card > span {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+.portal-card h2 {
+  margin-bottom: 0;
+  font-size: 30px;
+  line-height: 1.12;
+}
+
+.portal-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.portal-card b {
+  justify-self: start;
+  padding: 8px 11px;
+  color: var(--text);
+  background: rgba(102, 163, 255, 0.12);
+  border: 1px solid rgba(102, 163, 255, 0.22);
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.portal-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.portal-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 18px;
+}
+
+.portal-leaders {
+  display: grid;
+  gap: 9px;
+}
+
+.portal-leaders a {
+  display: grid;
+  grid-template-columns: 34px minmax(64px, 0.35fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 48px;
+  padding: 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.portal-leaders span {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  color: #07101f;
+  background: var(--amber);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.portal-leaders small {
+  color: var(--muted);
+}
+
+.portal-leaders em {
+  color: var(--green);
+  font-style: normal;
+  font-weight: 850;
+}
+
 .section-heading h2 {
   margin-bottom: 0;
   font-size: 25px;
@@ -2188,10 +2361,17 @@ body.light .ai-map-canvas {
     padding: 22px;
   }
 
+  .portal-hero h2 {
+    font-size: 44px;
+  }
+
   .top-grid,
   .content-grid,
   .lower-grid,
   .mini-grid,
+  .portal-hero,
+  .portal-grid,
+  .portal-summary-grid,
   .cycle-visual-grid,
   .ai-hero,
   .ai-deep-grid {
@@ -2199,7 +2379,8 @@ body.light .ai-map-canvas {
   }
 
   .ai-stat-grid,
-  .ai-tabs {
+  .ai-tabs,
+  .portal-status-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2223,6 +2404,11 @@ body.light .ai-map-canvas {
   .workspace {
     width: 100%;
     padding: 18px;
+  }
+
+  .portal-hero h2,
+  .portal-card h2 {
+    font-size: 30px;
   }
 
   .ai-workbench {
@@ -2263,9 +2449,18 @@ body.light .ai-map-canvas {
   .ai-controls,
   .ai-stat-grid,
   .ai-tabs,
+  .portal-status-grid,
   .heat-leaders,
   .topic-grid {
     grid-template-columns: 1fr;
+  }
+
+  .portal-leaders a {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+  }
+
+  .portal-leaders small {
+    grid-column: 2 / -1;
   }
 
   .brief-row {

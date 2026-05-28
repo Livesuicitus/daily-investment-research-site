@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="每日更新的投资研究终端：康波周期与美林时钟、WSB 热门股票、AI 产业观察。"
+    />
+    <title>AI 产业链 | Daily Investment Terminal</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050810'/%3E%3Cpath d='M14 42h36M18 34l9-9 8 7 11-15' fill='none' stroke='%2366a3ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='46' cy='17' r='4' fill='%2335d39a'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="ai">
+    <div class="terminal-shell">
+      <aside class="sidebar" aria-label="研究导航">
+        <a class="brand" href="./index.html" aria-label="回到总页面">
+          <span>INVESTMENT</span>
+          <b>RESEARCH</b>
+          <small>每日更新研究平台</small>
+        </a>
+
+        <form class="side-search" id="site-search-form">
+          <input id="site-search" type="search" placeholder="搜索本页" autocomplete="off" />
+          <button type="submit" aria-label="搜索">搜索</button>
+        </form>
+
+        <button class="theme-toggle" id="theme-toggle" type="button">切换亮色</button>
+
+        <nav class="nav-groups primary-nav">
+          <a href="./index.html" data-page-nav="home">总页面</a>
+          <a href="./hot-stocks.html" data-page-nav="hot">每日 / 每周最热股票</a>
+          <a href="./macro-cycle.html" data-page-nav="macro">康波周期 × 美林时钟</a>
+          <a href="./ai-chain.html" data-page-nav="ai" class="active">AI 产业链</a>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-head">
+          <div>
+            <p class="breadcrumb">核心功能 3 / AI Chain</p>
+            <h1>AI 产业链</h1>
+          </div>
+          <div class="status-strip" aria-label="数据状态">
+            <span id="last-updated">--</span>
+            <span id="freshness-dot" class="quality-dot"></span>
+            <span id="source-status">DATA LOADING</span>
+          </div>
+        </header>
+
+        <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
+          <div class="ai-hero">
+            <div>
+              <p class="breadcrumb">核心功能 3 / AI 产业观察 / Relationship Map</p>
+              <h2>黄仁勋 5 层蛋糕 × AI 产业链图谱</h2>
+              <p>
+                按 NVIDIA 官方五层框架重排：能源、芯片、基础设施、模型、应用。每个节点列出多家公司，方便从环节反查标的。
+              </p>
+            </div>
+            <div class="ai-stat-grid" id="ai-stat-grid"></div>
+          </div>
+
+          <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
+            <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
+            <button type="button" data-ai-scroll="ai-semiconductor-chain">能源 / 芯片 / 基建</button>
+            <button type="button" data-ai-scroll="ai-models">模型 / Agent</button>
+            <button type="button" data-ai-scroll="ai-applications">应用落地</button>
+          </div>
+
+          <div class="ai-workbench">
+            <div class="ai-map-area">
+              <div class="ai-controls">
+                <input id="ai-chain-search" type="search" placeholder="搜索公司、节点、代码" />
+                <select id="ai-layer-filter" aria-label="AI 产业层级"></select>
+                <button id="ai-reset-view" type="button">重置视图</button>
+                <label class="ai-check">
+                  <input id="ai-include-all" type="checkbox" checked />
+                  <span>全量</span>
+                </label>
+              </div>
+              <div class="ai-segments" id="ai-segments"></div>
+              <div class="ai-map-canvas" id="ai-map-canvas" aria-label="AI 产业链关系图谱"></div>
+            </div>
+
+            <aside class="ai-summary-card">
+              <p class="breadcrumb">Map Summary</p>
+              <h3 id="ai-node-title">产业链关系总览</h3>
+              <div class="ai-summary-stats" id="ai-summary-stats"></div>
+              <p id="ai-node-summary">
+                默认展示黄仁勋五层框架。选择节点后会展开多家公司，选择公司后会反查它的产业链角色。
+              </p>
+              <div class="ai-company-rail" id="ai-node-companies"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="ai-deep-grid" aria-label="AI 产业链拆解">
+          <article class="panel ai-deep-card" id="ai-semiconductor-chain" data-search-block>
+            <div class="panel-head">
+              <span>能源 / 芯片 / 基础设施</span>
+              <b>底层三层</b>
+            </div>
+            <div id="ai-semi-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="ai-models" data-search-block>
+            <div class="panel-head">
+              <span>模型 / Agent</span>
+              <b>能力层</b>
+            </div>
+            <div id="ai-model-view" class="ai-deep-list"></div>
+          </article>
+
+          <article class="panel ai-deep-card" id="ai-applications" data-search-block>
+            <div class="panel-head">
+              <span>AI 应用</span>
+              <b>需求侧</b>
+            </div>
+            <div id="ai-app-view" class="ai-deep-list"></div>
+          </article>
+        </section>
+
+        <section class="lower-grid">
+          <article class="panel detail-panel" id="research" data-search-block>
+            <div class="panel-head">
+              <span>AI 产业观察：公司档案拆解</span>
+              <b id="detail-symbol">--</b>
+            </div>
+            <h2 id="detail-title">选择一家公司</h2>
+            <div id="detail-body" class="detail-body">
+              <p>点击 AI 产业链图谱里的公司，查看业务、财报、收入构成、成本支出和验证要点。</p>
+            </div>
+          </article>
+
+          <article class="panel glossary-panel" id="glossary" data-search-block>
+            <div class="panel-head">
+              <span>AI 产业观察术语表</span>
+              <b>GLOSSARY</b>
+            </div>
+            <div id="glossary-list" class="glossary-list"></div>
+          </article>
+        </section>
+
+        <p class="disclaimer">数据来自公开免费源，可能延迟或缺失。本页面只做研究记录，不构成投资建议。</p>
+      </main>
+    </div>
+
+    <script src="./data/market-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -22,9 +22,20 @@ const state = {
 };
 
 const elements = {
+  page: document.body.dataset.page || "home",
   updated: document.querySelector("#last-updated"),
   freshnessDot: document.querySelector("#freshness-dot"),
   sourceStatus: document.querySelector("#source-status"),
+  portalUpdated: document.querySelector("#portal-updated"),
+  portalStage: document.querySelector("#portal-stage"),
+  portalHotCount: document.querySelector("#portal-hot-count"),
+  portalHotSummary: document.querySelector("#portal-hot-summary"),
+  portalCycleSummary: document.querySelector("#portal-cycle-summary"),
+  portalAiSummary: document.querySelector("#portal-ai-summary"),
+  portalSocialSource: document.querySelector("#portal-social-source"),
+  portalLeaders: document.querySelector("#portal-leaders"),
+  portalMacroBadge: document.querySelector("#portal-macro-badge"),
+  portalCyclePoints: document.querySelector("#portal-cycle-points"),
   marketSummary: document.querySelector("#market-summary"),
   macroBadge: document.querySelector("#macro-badge"),
   thesisPoints: document.querySelector("#thesis-points"),
@@ -46,7 +57,7 @@ const elements = {
   siteSearchForm: document.querySelector("#site-search-form"),
   siteSearch: document.querySelector("#site-search"),
   themeToggle: document.querySelector("#theme-toggle"),
-  navLinks: document.querySelectorAll("[data-nav]"),
+  navLinks: document.querySelectorAll("[data-page-nav]"),
   navDisclosure: document.querySelectorAll(".nav-disclosure"),
   searchableBlocks: document.querySelectorAll("[data-search-block]"),
   industry: document.querySelector("#industry-filter"),
@@ -698,6 +709,7 @@ function setHeatWindow(value) {
 }
 
 function setupTheme() {
+  if (!elements.themeToggle) return;
   const saved = localStorage.getItem("investment-theme") || "dark";
   document.body.classList.toggle("light", saved === "light");
   elements.themeToggle.textContent = document.body.classList.contains("light") ? "切换深色" : "切换亮色";
@@ -709,6 +721,10 @@ function setupTheme() {
 }
 
 function setupNavigation() {
+  elements.navLinks.forEach((link) => {
+    link.classList.toggle("active", link.dataset.pageNav === elements.page);
+  });
+
   elements.navDisclosure.forEach((button) => {
     button.addEventListener("click", () => {
       const expanded = button.getAttribute("aria-expanded") === "true";
@@ -716,22 +732,10 @@ function setupNavigation() {
       button.nextElementSibling.hidden = expanded;
     });
   });
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      elements.navLinks.forEach((link) => link.classList.toggle("active", link.dataset.nav === visible.target.id));
-    },
-    { rootMargin: "-20% 0px -65% 0px", threshold: [0.1, 0.3, 0.6] },
-  );
-
-  document.querySelectorAll("main section[id], main article[id]").forEach((section) => observer.observe(section));
 }
 
 function setupSearch() {
+  if (!elements.siteSearchForm || !elements.siteSearch) return;
   elements.siteSearchForm.addEventListener("submit", (event) => event.preventDefault());
   elements.siteSearch.addEventListener("input", (event) => {
     state.filters.siteQuery = event.target.value.trim().toLowerCase();
@@ -740,6 +744,7 @@ function setupSearch() {
 }
 
 function renderSiteSearch() {
+  if (!elements.searchableBlocks.length) return;
   const query = state.filters.siteQuery;
   elements.searchableBlocks.forEach((block) => {
     const text = block.textContent.toLowerCase();
@@ -749,6 +754,11 @@ function renderSiteSearch() {
 }
 
 function setupFilters(companies) {
+  elements.heatTabs.forEach((button) => {
+    button.addEventListener("click", () => setHeatWindow(button.dataset.heatWindow));
+  });
+
+  if (!elements.stockSearch || !elements.industry || !elements.tier || !elements.heatFilter || !elements.focus) return;
   elements.industry.innerHTML = optionList(companies.map((item) => item.industry))
     .map((item) => `<option value="${item}">${item}</option>`)
     .join("");
@@ -773,9 +783,6 @@ function setupFilters(companies) {
     state.filters.companyHeat = event.target.value;
     renderCompanies();
   });
-  elements.heatTabs.forEach((button) => {
-    button.addEventListener("click", () => setHeatWindow(button.dataset.heatWindow));
-  });
   elements.focus.addEventListener("change", (event) => {
     state.filters.focusOnly = event.target.checked;
     renderCompanies();
@@ -783,7 +790,7 @@ function setupFilters(companies) {
 }
 
 function setupAiIndustry() {
-  if (!elements.aiLayer) return;
+  if (!elements.aiLayer || !elements.aiSearch || !elements.aiIncludeAll || !elements.aiReset) return;
 
   elements.aiLayer.innerHTML = ["全部层级", ...aiLayers]
     .map((layer) => `<option value="${layer}">${layer}</option>`)
@@ -1039,29 +1046,35 @@ function renderAiDeepItem([title, text]) {
 
 function renderHeader() {
   const { generatedAt, sourceStatus, macro, cycles } = state.data;
-  elements.updated.textContent = formatDate(generatedAt);
-  elements.sourceStatus.textContent = sourceStatus.summary;
-  elements.freshnessDot.classList.toggle("fresh", sourceStatus.quoteOk || sourceStatus.macroOk);
-  elements.macroBadge.textContent = `${macro.stage} · ${sourceStatus.socialOk ? "social ok" : "social wait"}`;
-  elements.kWaveTag.textContent = cycles.kondratiev.stage;
-  elements.marketSummary.textContent = `当前框架：康波处于「${cycles.kondratiev.stage}」，美林时钟偏「${macro.stage}」。`;
-  elements.kWaveSummary.textContent = cycles.kondratiev.summary;
-  elements.kWavePosition.textContent = `当前处于第五轮信息技术革命后段：AI 正从芯片和模型能力，扩散到数据中心、电力、网络、安全和企业工作流。`;
-  elements.merrillStage.textContent = macro.stage;
-  elements.merrillPosition.textContent = merrillConclusion(macro.stage);
-  elements.merrillClock.dataset.stage = macro.stage;
-  elements.clockMarker.textContent = macro.stage;
-  elements.clockCurrentCard.querySelector("span").textContent = `${macro.stage}：${merrillConclusion(macro.stage)}`;
-  elements.kWaveSignals.innerHTML = cycles.kondratiev.signals
-    .map(
-      (signal) => `
-        <div class="compact-item" data-searchable>
-          <b>${signal.title}</b>
-          <span>${signal.text}</span>
-        </div>
-      `,
-    )
-    .join("");
+  if (elements.updated) elements.updated.textContent = formatDate(generatedAt);
+  if (elements.sourceStatus) elements.sourceStatus.textContent = sourceStatus.summary;
+  if (elements.freshnessDot) elements.freshnessDot.classList.toggle("fresh", sourceStatus.quoteOk || sourceStatus.macroOk);
+  if (elements.macroBadge) elements.macroBadge.textContent = `${macro.stage} · ${sourceStatus.socialOk ? "social ok" : "social wait"}`;
+  if (elements.kWaveTag) elements.kWaveTag.textContent = cycles.kondratiev.stage;
+  if (elements.marketSummary) elements.marketSummary.textContent = `当前框架：康波处于「${cycles.kondratiev.stage}」，美林时钟偏「${macro.stage}」。`;
+  if (elements.kWaveSummary) elements.kWaveSummary.textContent = cycles.kondratiev.summary;
+  if (elements.kWavePosition) {
+    elements.kWavePosition.textContent = "当前处于第五轮信息技术革命后段：AI 正从芯片和模型能力，扩散到数据中心、电力、网络、安全和企业工作流。";
+  }
+  if (elements.merrillStage) elements.merrillStage.textContent = macro.stage;
+  if (elements.merrillPosition) elements.merrillPosition.textContent = merrillConclusion(macro.stage);
+  if (elements.merrillClock) elements.merrillClock.dataset.stage = macro.stage;
+  if (elements.clockMarker) elements.clockMarker.textContent = macro.stage;
+  if (elements.clockCurrentCard) {
+    elements.clockCurrentCard.querySelector("span").textContent = `${macro.stage}：${merrillConclusion(macro.stage)}`;
+  }
+  if (elements.kWaveSignals) {
+    elements.kWaveSignals.innerHTML = cycles.kondratiev.signals
+      .map(
+        (signal) => `
+          <div class="compact-item" data-searchable>
+            <b>${signal.title}</b>
+            <span>${signal.text}</span>
+          </div>
+        `,
+      )
+      .join("");
+  }
 }
 
 function merrillConclusion(stage) {
@@ -1075,6 +1088,7 @@ function merrillConclusion(stage) {
 }
 
 function renderThesis() {
+  if (!elements.thesisPoints) return;
   const playbook = cyclePlaybook[state.data.macro.stage] || cyclePlaybook.复苏;
   const thesis = [
     ["康波位置", "第五轮信息技术革命后段，AI 是这一轮信息技术向基础设施和应用扩散的核心变量。"],
@@ -1093,6 +1107,62 @@ function renderThesis() {
       `,
     )
     .join("");
+}
+
+function renderPortal() {
+  if (elements.page !== "home") return;
+  const { generatedAt, macro, cycles, sourceStatus } = state.data;
+  const todayLeaders = hotCompanies("today", 5);
+  const weekLeaders = hotCompanies("week", 3);
+  const playbook = cyclePlaybook[macro.stage] || cyclePlaybook.复苏;
+
+  if (elements.portalUpdated) elements.portalUpdated.textContent = formatDate(generatedAt);
+  if (elements.portalStage) elements.portalStage.textContent = macro.stage;
+  if (elements.portalHotCount) elements.portalHotCount.textContent = `${todayLeaders.length} 只`;
+  if (elements.portalHotSummary) {
+    elements.portalHotSummary.textContent = todayLeaders.length
+      ? `今日热度靠前：${todayLeaders.slice(0, 3).map((item) => item.symbol).join(" / ")}。`
+      : "等待今日热度数据。";
+  }
+  if (elements.portalCycleSummary) {
+    elements.portalCycleSummary.textContent = `康波处于「${cycles.kondratiev.stage}」，美林时钟偏「${macro.stage}」。`;
+  }
+  if (elements.portalAiSummary) {
+    elements.portalAiSummary.textContent = `AI 图谱按 ${aiLayers.length} 层、${aiNodes.length} 个节点组织，当前默认从芯片和基础设施切入。`;
+  }
+  if (elements.portalSocialSource) elements.portalSocialSource.textContent = sourceStatus.socialOk ? "WSB 已更新" : "热度待刷新";
+  if (elements.portalMacroBadge) elements.portalMacroBadge.textContent = `${macro.stage} · ${sourceStatus.macroOk ? "macro ok" : "macro wait"}`;
+  if (elements.portalLeaders) {
+    elements.portalLeaders.innerHTML = todayLeaders
+      .map(
+        (item, index) => `
+          <a href="./hot-stocks.html" data-searchable>
+            <span>${index + 1}</span>
+            <b>${item.symbol}</b>
+            <small>${item.company?.name || item.name || item.symbol}</small>
+            <em>${item.score}</em>
+          </a>
+        `,
+      )
+      .join("");
+  }
+  if (elements.portalCyclePoints) {
+    const rows = [
+      ["配置结论", playbook.text],
+      ["本周热度", weekLeaders.length ? weekLeaders.map((item) => item.symbol).join(" / ") : "等待本周热度确认"],
+      ["AI 入口", "产业链页从能源、芯片、基础设施、模型、应用五层进入公司档案。"],
+    ];
+    elements.portalCyclePoints.innerHTML = rows
+      .map(
+        ([label, text]) => `
+          <div class="compact-item" data-searchable>
+            <b>${label}</b>
+            <span>${text}</span>
+          </div>
+        `,
+      )
+      .join("");
+  }
 }
 
 function renderMacroTable() {
@@ -1288,6 +1358,7 @@ function renderWatchlist() {
 }
 
 function renderSocialHeat() {
+  if (!elements.socialLeaders || !elements.socialSource || !elements.socialNote || !elements.hotDetail) return;
   const selectedWindow = heatWindowKey();
   const heat = socialWindow(selectedWindow);
   const leaders = hotCompanies(selectedWindow, 10);
@@ -1340,6 +1411,7 @@ function renderSocialHeat() {
 }
 
 function renderHotDetail(item) {
+  if (!elements.hotDetail) return;
   if (!item) {
     elements.hotDetail.innerHTML = "";
     return;
@@ -1404,6 +1476,7 @@ function filteredCompanies() {
 }
 
 function renderCompanies() {
+  if (!elements.table || !elements.count) return;
   const companies = filteredCompanies();
   elements.count.textContent = `${companies.length} / ${state.data.companies.length}`;
   if (!companies.length) {
@@ -1454,7 +1527,7 @@ function renderCompanies() {
 }
 
 function renderDetail(company) {
-  if (!company) return;
+  if (!company || !elements.detailBody || !elements.detailTitle || !elements.detailSymbol) return;
   const quote = company.quote || {};
   const profile = profileFor(company);
   const relatedNodes = aiNodes
@@ -1506,6 +1579,7 @@ function renderDetail(company) {
 }
 
 function renderGlossary() {
+  if (!elements.glossaryList) return;
   const groups = Object.keys(glossaryGroups);
   if (!groups.includes(state.selectedGlossary)) {
     state.selectedGlossary = groups[0];
@@ -1549,6 +1623,7 @@ function renderGlossary() {
 
 function renderAll() {
   renderHeader();
+  renderPortal();
   renderThesis();
   renderSocialHeat();
   renderAiIndustry();
@@ -1568,9 +1643,9 @@ async function init() {
     setupFilters(state.data.companies);
     renderAll();
   } catch (error) {
-    elements.marketSummary.textContent = error.message;
-    elements.updated.textContent = "数据不可用";
-    elements.sourceStatus.textContent = "DATA ERROR";
+    if (elements.marketSummary) elements.marketSummary.textContent = error.message;
+    if (elements.updated) elements.updated.textContent = "数据不可用";
+    if (elements.sourceStatus) elements.sourceStatus.textContent = "DATA ERROR";
   }
 }
 

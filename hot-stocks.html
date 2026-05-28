@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="每日更新的投资研究终端：康波周期与美林时钟、WSB 热门股票、AI 产业观察。"
+    />
+    <title>每日 / 每周最热股票 | Daily Investment Terminal</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050810'/%3E%3Cpath d='M14 42h36M18 34l9-9 8 7 11-15' fill='none' stroke='%2366a3ff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='46' cy='17' r='4' fill='%2335d39a'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-page="hot">
+    <div class="terminal-shell">
+      <aside class="sidebar" aria-label="研究导航">
+        <a class="brand" href="./index.html" aria-label="回到总页面">
+          <span>INVESTMENT</span>
+          <b>RESEARCH</b>
+          <small>每日更新研究平台</small>
+        </a>
+
+        <form class="side-search" id="site-search-form">
+          <input id="site-search" type="search" placeholder="搜索本页" autocomplete="off" />
+          <button type="submit" aria-label="搜索">搜索</button>
+        </form>
+
+        <button class="theme-toggle" id="theme-toggle" type="button">切换亮色</button>
+
+        <nav class="nav-groups primary-nav">
+          <a href="./index.html" data-page-nav="home">总页面</a>
+          <a href="./hot-stocks.html" data-page-nav="hot" class="active">每日 / 每周最热股票</a>
+          <a href="./macro-cycle.html" data-page-nav="macro">康波周期 × 美林时钟</a>
+          <a href="./ai-chain.html" data-page-nav="ai">AI 产业链</a>
+        </nav>
+      </aside>
+
+      <main class="workspace">
+        <header class="workspace-head">
+          <div>
+            <p class="breadcrumb">核心功能 1 / WSB Heat</p>
+            <h1>每日 / 每周最热股票</h1>
+          </div>
+          <div class="status-strip" aria-label="数据状态">
+            <span id="last-updated">--</span>
+            <span id="freshness-dot" class="quality-dot"></span>
+            <span id="source-status">DATA LOADING</span>
+          </div>
+        </header>
+
+        <section class="panel social-panel" id="hot-stocks" data-search-block>
+          <div class="panel-head">
+            <span>WSB 热度终端</span>
+            <b id="social-source">--</b>
+          </div>
+          <div class="heat-toolbar" role="group" aria-label="热度窗口">
+            <button class="heat-tab active" type="button" data-heat-window="today">今日热门</button>
+            <button class="heat-tab" type="button" data-heat-window="week">本周热门</button>
+          </div>
+          <div class="heat-leaders" id="social-leaders"></div>
+          <div class="hot-detail" id="hot-detail"></div>
+          <p class="heat-note" id="social-note">正在读取社媒热度...</p>
+        </section>
+
+        <p class="disclaimer">数据来自公开免费源，可能延迟或缺失。本页面只做研究记录，不构成投资建议。</p>
+      </main>
+    </div>
+
+    <script src="./data/market-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

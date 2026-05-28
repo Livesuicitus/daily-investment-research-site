@@ -9,7 +9,7 @@ const dist = join(root, "dist");
 await rm(dist, { recursive: true, force: true });
 await mkdir(join(dist, "data"), { recursive: true });
 
-for (const file of ["index.html", "styles.css", "app.js"]) {
+for (const file of ["index.html", "hot-stocks.html", "macro-cycle.html", "ai-chain.html", "styles.css", "app.js"]) {
   await cp(join(root, file), join(dist, file));
 }
 
