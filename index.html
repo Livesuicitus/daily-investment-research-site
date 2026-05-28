@@ -143,10 +143,6 @@
             <div class="merrill-clock" id="merrill-clock" aria-label="美林时钟四象限">
               <div class="clock-axis x">增长</div>
               <div class="clock-axis y">通胀</div>
-              <div class="clock-current-card" id="clock-current-card">
-                <b>当前阶段</b>
-                <span>等待宏观数据...</span>
-              </div>
               <div class="clock-quadrant recovery">
                 <b>复苏</b>
                 <span>股票 / 成长</span>
@@ -165,18 +161,61 @@
               </div>
               <span class="clock-marker" id="clock-marker">当前</span>
             </div>
+            <div class="clock-current-card" id="clock-current-card">
+              <b>当前阶段</b>
+              <span>等待宏观数据...</span>
+            </div>
             <p class="clock-note" id="merrill-position">等待宏观数据...</p>
           </article>
         </section>
 
-        <section class="panel sector-panel" data-search-block>
+        <section class="panel stock-panel" id="stock-lab" data-search-block>
           <div class="panel-head">
-            <span>周期行业选择</span>
-            <b>点击行业看股票</b>
+            <span>康波 / 美林时钟：公司研究池</span>
+            <b id="visible-count">0 / 0</b>
           </div>
-          <p class="sector-conclusion" id="sector-conclusion">等待周期结论...</p>
-          <div class="sector-buttons" id="sector-buttons" role="group" aria-label="周期看好行业"></div>
-          <div class="sector-company-grid" id="sector-companies"></div>
+          <div class="controls">
+            <label>
+              <span>搜索</span>
+              <input id="search-input" type="search" placeholder="公司、代码、逻辑、行业" />
+            </label>
+            <label>
+              <span>行业</span>
+              <select id="industry-filter"></select>
+            </label>
+            <label>
+              <span>梯队</span>
+              <select id="tier-filter"></select>
+            </label>
+            <label>
+              <span>热度筛选</span>
+              <select id="heat-filter">
+                <option value="all">全部</option>
+                <option value="today" selected>今日热门</option>
+                <option value="week">本周热门</option>
+              </select>
+            </label>
+            <label class="toggle">
+              <input id="focus-toggle" type="checkbox" />
+              <span>强信号</span>
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table class="stock-table">
+              <thead>
+                <tr>
+                  <th>公司</th>
+                  <th>代码</th>
+                  <th>价格</th>
+                  <th>日涨跌</th>
+                  <th>综合分</th>
+                  <th>热度</th>
+                  <th>逻辑</th>
+                </tr>
+              </thead>
+              <tbody id="company-table"></tbody>
+            </table>
+          </div>
         </section>
 
         <section class="panel ai-industry-panel" id="ai-industry" data-search-block>
@@ -195,7 +234,7 @@
             <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
             <button type="button" data-ai-scroll="ai-semiconductor-chain">能源 / 芯片 / 基建</button>
             <button type="button" data-ai-scroll="ai-models">模型 / Agent</button>
-            <button type="button" data-ai-scroll="stock-lab">公司研究池</button>
+            <button type="button" data-ai-scroll="ai-applications">应用落地</button>
           </div>
 
           <div class="ai-workbench">
@@ -251,55 +290,6 @@
           </article>
         </section>
 
-        <section class="panel stock-panel" id="stock-lab" data-search-block>
-          <div class="panel-head">
-            <span>AI 产业观察：公司研究池</span>
-            <b id="visible-count">0 / 0</b>
-          </div>
-          <div class="controls">
-            <label>
-              <span>搜索</span>
-              <input id="search-input" type="search" placeholder="公司、代码、逻辑、行业" />
-            </label>
-            <label>
-              <span>行业</span>
-              <select id="industry-filter"></select>
-            </label>
-            <label>
-              <span>梯队</span>
-              <select id="tier-filter"></select>
-            </label>
-            <label>
-              <span>社媒热度</span>
-              <select id="heat-filter">
-                <option value="all">全部</option>
-                <option value="today" selected>今日热门</option>
-                <option value="week">本周热门</option>
-              </select>
-            </label>
-            <label class="toggle">
-              <input id="focus-toggle" type="checkbox" />
-              <span>强信号</span>
-            </label>
-          </div>
-          <div class="table-wrap">
-            <table class="stock-table">
-              <thead>
-                <tr>
-                  <th>公司</th>
-                  <th>代码</th>
-                  <th>价格</th>
-                  <th>日涨跌</th>
-                  <th>综合分</th>
-                  <th>社媒热度</th>
-                  <th>逻辑</th>
-                </tr>
-              </thead>
-              <tbody id="company-table"></tbody>
-            </table>
-          </div>
-        </section>
-
         <section class="lower-grid">
           <article class="panel detail-panel" id="research" data-search-block>
             <div class="panel-head">
@@ -308,7 +298,7 @@
             </div>
             <h2 id="detail-title">选择一家公司</h2>
             <div id="detail-body" class="detail-body">
-              <p>点击研究池里的公司，查看逻辑、风险、下一步跟踪和社媒证据。</p>
+              <p>点击 AI 产业链图谱里的公司，查看业务、财报、收入构成、成本支出和验证要点。</p>
             </div>
           </article>
 

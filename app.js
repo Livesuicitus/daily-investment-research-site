@@ -18,7 +18,7 @@ const state = {
   },
   selectedSymbol: null,
   selectedHotSymbol: null,
-  selectedSector: null,
+  selectedGlossary: "芯片",
 };
 
 const elements = {
@@ -63,9 +63,6 @@ const elements = {
   merrillClock: document.querySelector("#merrill-clock"),
   clockMarker: document.querySelector("#clock-marker"),
   clockCurrentCard: document.querySelector("#clock-current-card"),
-  sectorConclusion: document.querySelector("#sector-conclusion"),
-  sectorButtons: document.querySelector("#sector-buttons"),
-  sectorCompanies: document.querySelector("#sector-companies"),
   aiStatGrid: document.querySelector("#ai-stat-grid"),
   aiTabs: document.querySelectorAll("[data-ai-scroll]"),
   aiSearch: document.querySelector("#ai-chain-search"),
@@ -101,14 +98,56 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
-const glossary = [
-  ["HBM", "高带宽内存，决定高端 GPU 训练吞吐和封装供给弹性。"],
-  ["CoWoS", "台积电先进封装能力，连接 GPU 与 HBM，是 AI 芯片交付的重要瓶颈。"],
-  ["AI ASIC", "云厂商或大客户定制 AI 加速芯片，主要用于降低推理成本。"],
-  ["CPO", "共封装光学，把光互联更靠近交换芯片，用来降低高带宽网络功耗。"],
-  ["液冷", "高功率机柜散热方案，AI 数据中心功率密度提升后渗透率上升。"],
-  ["推理", "模型被真实调用和部署的环节，比训练更接近应用收入兑现。"],
-];
+const glossaryGroups = {
+  能源: [
+    ["PPA", "长期购电协议。AI 数据中心需要锁定电价、电量和可再生能源属性。"],
+    ["容量市场", "电网为可用发电容量付费的机制，负荷上行时电力资产弹性更明显。"],
+    ["变压器", "输配电扩容核心设备，交期和产能会影响数据中心接电速度。"],
+    ["UPS", "不间断电源，保证高价值算力集群在电力波动时持续运行。"],
+    ["液冷", "高功率机柜散热方案，AI 数据中心功率密度提升后渗透率上升。"],
+    ["PUE", "数据中心能源效率指标，越接近 1 越省电，影响运营成本和选址。"],
+  ],
+  芯片: [
+    ["GPU", "并行计算芯片，训练和推理仍以高端 GPU 为主要算力载体。"],
+    ["AI ASIC", "云厂商或大客户定制 AI 加速芯片，主要用于降低推理成本。"],
+    ["HBM", "高带宽内存，决定高端 GPU 训练吞吐和封装供给弹性。"],
+    ["CoWoS", "先进封装能力，连接 GPU 与 HBM，是高端 AI 芯片交付瓶颈之一。"],
+    ["Chiplet", "把多个芯粒封装成一个系统，提升设计弹性并改善良率和成本。"],
+    ["EUV", "极紫外光刻，高端逻辑制程的关键设备能力。"],
+  ],
+  存储: [
+    ["HBM", "训练集群的高带宽内存，影响 GPU 利用率和高端显存供给。"],
+    ["DRAM", "服务器和推理集群的通用内存，周期弹性和 AI 需求相关。"],
+    ["NAND", "非易失存储，数据湖、缓存和企业数据管线都会消耗容量。"],
+    ["企业级 SSD", "高性能存储设备，支撑模型训练数据、检索和低延迟访问。"],
+    ["向量数据库", "把文本、图片等转为向量后检索，是 RAG 应用的常见底座。"],
+    ["数据湖", "集中存放结构化和非结构化数据，决定企业模型能否吃到自己的数据。"],
+  ],
+  基础设施: [
+    ["InfiniBand", "高性能集群网络，强调低延迟和高吞吐，常用于训练集群。"],
+    ["Ethernet", "以太网方案，成本、生态和可运维性推动 AI 数据中心采用。"],
+    ["CPO", "共封装光学，把光互联更靠近交换芯片，用来降低高带宽网络功耗。"],
+    ["光模块", "数据中心高速互联器件，训练集群扩张会推高 800G/1.6T 需求。"],
+    ["交换芯片", "网络交换设备核心，影响集群东西向流量和吞吐。"],
+    ["可观测性", "对应用、模型、数据和基础设施运行状态做监控和诊断。"],
+  ],
+  模型: [
+    ["训练", "用大规模数据更新模型参数，资本开支集中但频率低于推理。"],
+    ["推理", "模型被真实调用和部署的环节，比训练更接近应用收入兑现。"],
+    ["RAG", "检索增强生成，让模型调用企业知识库，减少幻觉并提升可用性。"],
+    ["Fine-tuning", "在通用模型上用特定数据微调，适合垂直场景。"],
+    ["Token", "模型处理文本的基本计量单位，直接影响调用成本。"],
+    ["Agent", "能规划、调用工具和执行多步骤任务的 AI 工作流。"],
+  ],
+  应用: [
+    ["Copilot", "嵌入办公、开发、设计或客服流程的辅助型 AI 功能。"],
+    ["工作流自动化", "让 AI 进入审批、销售、客服、ITSM 等企业流程。"],
+    ["AIOps", "用 AI 做系统监控、故障定位和自动化运维。"],
+    ["AI 安全", "围绕身份、数据、模型输入输出和新攻击面建立防护。"],
+    ["垂直模型", "针对医疗、金融、工业等行业训练或适配的模型。"],
+    ["边缘 AI", "在终端、汽车、机器人或工厂设备上本地推理。"],
+  ],
+};
 
 const cyclePlaybook = {
   复苏: {
@@ -163,15 +202,79 @@ const companyDirectory = Object.fromEntries(
   ].map((company) => [company.symbol, company]),
 );
 
-const cycleSectorCandidates = {
-  "数据中心电力与冷却": ["VRT", "ETN", "GEV", "HUBB", "TT", "CARR", "JCI", "PWR"],
-  "低碳电力与电网": ["GEV", "CEG", "VST", "NEE", "PWR", "ETN", "HUBB"],
-  "半导体设备与制造": ["TSM", "ASML", "AMAT", "LRCX", "KLAC"],
-  "AI 算力与芯片": ["NVDA", "AVGO", "AMD", "MRVL", "MU", "ARM", "TSM"],
-  "资源品": ["FCX", "SCCO", "NEM", "GOLD", "CCJ", "XOM"],
-  "云平台与 AI 软件": ["MSFT", "GOOGL", "AMZN", "META", "ORCL", "NOW", "CRM", "ADBE", "SNOW"],
-  "网络安全": ["PANW", "CRWD", "DDOG"],
-  "医疗创新": ["LLY", "ISRG"],
+const companyProfiles = {
+  GOOGL: {
+    business: "Alphabet 以搜索广告、YouTube、Google Cloud、Android/Chrome 生态和 AI 模型为核心。AI 价值主要体现在搜索体验、广告投放效率、云端模型服务和企业生产力工具。",
+    chainRole: "基础设施 / 模型 / 应用：自研 TPU、Gemini、Google Cloud 和广告分发共同形成闭环。",
+    revenueMix: ["搜索广告仍是现金流核心", "YouTube 广告与订阅提供内容入口", "Google Cloud 承接企业 AI 与数据平台需求", "Other Bets 保留自动驾驶和前沿技术期权"],
+    expenseMix: ["TAC 流量获取成本", "AI 芯片、数据中心和折旧", "研发人员与模型训练", "销售管理和监管合规"],
+    financials: "重点看广告增速、Google Cloud 利润率、资本开支强度和 AI 搜索对商业化的影响。",
+    watch: "跟踪 Gemini/Vertex AI 客户、Cloud backlog、搜索广告份额和 CapEx 指引。",
+  },
+  MSFT: {
+    business: "Microsoft 以 Azure、Office、Windows、GitHub、LinkedIn 和企业安全为底座，AI 通过 Copilot、Azure AI 和开发者工具进入企业预算。",
+    chainRole: "基础设施 / 模型 / 应用：云算力、OpenAI 生态和企业软件入口绑定紧密。",
+    revenueMix: ["Azure 和服务器产品", "Office / Dynamics 企业订阅", "Windows 与设备生态", "LinkedIn、广告和游戏"],
+    expenseMix: ["数据中心资本开支与折旧", "云基础设施运营", "AI 研发和模型合作成本", "销售渠道与并购摊销"],
+    financials: "重点看 Azure 增速中 AI 贡献、Copilot 渗透率、毛利率变化和自由现金流。",
+    watch: "跟踪 Azure AI 使用量、M365 Copilot 席位、GitHub Copilot 留存和 CapEx 回报。",
+  },
+  NVDA: {
+    business: "NVIDIA 是 AI 加速计算龙头，核心来自数据中心 GPU、网络、系统、CUDA 软件生态，并向推理、机器人和自动驾驶扩展。",
+    chainRole: "芯片 / 基础设施：GPU、网络、系统级机柜和软件生态定义算力供给。",
+    revenueMix: ["数据中心 GPU 和系统", "网络与交换互联", "游戏 GPU", "专业可视化、汽车和机器人"],
+    expenseMix: ["晶圆与先进封装采购", "HBM 和供应链锁产能", "研发与软件生态", "渠道、库存和质量保障"],
+    financials: "重点看数据中心收入、毛利率、Blackwell/后续平台爬坡、网络收入和客户集中度。",
+    watch: "跟踪云厂商 CapEx、供给交付、推理占比、HBM/CoWoS 约束和竞争芯片价格。",
+  },
+  AMZN: {
+    business: "Amazon 的 AI 逻辑来自 AWS、Bedrock、Trainium/Inferentia、自营零售效率和广告业务。",
+    chainRole: "基础设施 / 模型 / 应用：AWS 是企业 AI 上云和推理部署的重要平台。",
+    revenueMix: ["AWS 云服务", "北美和国际电商", "广告服务", "Prime 订阅和第三方卖家服务"],
+    expenseMix: ["履约和物流网络", "AWS 数据中心 CapEx", "内容与设备投入", "研发和销售管理"],
+    financials: "重点看 AWS 增速和利润率、电商经营杠杆、广告增速和资本开支回收。",
+    watch: "跟踪 Bedrock 客户、Trainium 采用、AWS backlog、广告货币化和物流成本率。",
+  },
+  META: {
+    business: "Meta 以社交广告现金流支持推荐系统、生成式 AI、开源模型和元宇宙长期投入。",
+    chainRole: "模型 / 应用：Llama、推荐广告和社交入口让模型快速接触海量用户。",
+    revenueMix: ["Facebook / Instagram 广告", "Reels 和推荐流变现", "WhatsApp 商业化", "Reality Labs 长期期权"],
+    expenseMix: ["AI 服务器和数据中心", "内容安全和研发人员", "Reality Labs 投入", "销售管理和监管合规"],
+    financials: "重点看广告单价、展示量、AI 推荐带来的转化率、CapEx 和 Reality Labs 亏损。",
+    watch: "跟踪 Llama 生态、AI 广告工具采用、Reels 货币化和资本开支节奏。",
+  },
+  TSM: {
+    business: "台积电是先进制程和先进封装核心制造平台，高端 GPU、ASIC、CPU 和移动芯片都依赖其产能。",
+    chainRole: "芯片：先进制程、CoWoS 和客户工艺迁移决定 AI 芯片交付。",
+    revenueMix: ["先进逻辑制程", "高性能计算客户", "智能手机和消费电子", "先进封装服务"],
+    expenseMix: ["晶圆厂折旧和设备采购", "EUV/先进设备投入", "能源和材料成本", "研发与工艺良率爬坡"],
+    financials: "重点看 HPC 收入占比、毛利率、资本开支、CoWoS 产能和先进节点利用率。",
+    watch: "跟踪 N2/N3 迁移、AI 客户订单、封装扩产和地缘风险。",
+  },
+  MU: {
+    business: "Micron 提供 DRAM、NAND 和 HBM，是 AI 训练、推理和数据中心存储周期弹性最高的环节之一。",
+    chainRole: "芯片 / 存储：HBM、服务器 DRAM 和企业级存储决定 AI 集群吞吐和缓存能力。",
+    revenueMix: ["DRAM", "NAND", "HBM 和数据中心内存", "移动、PC、汽车和工业存储"],
+    expenseMix: ["晶圆制造和折旧", "研发与工艺升级", "库存周期成本", "封装测试和材料"],
+    financials: "重点看 HBM 订单、bit 出货、ASP、毛利率和库存周期位置。",
+    watch: "跟踪 HBM 份额、云客户需求、DRAM/NAND 价格和资本开支纪律。",
+  },
+  VRT: {
+    business: "Vertiv 提供数据中心电力、热管理、机柜和服务，是 AI 数据中心高功率密度建设的直接受益者。",
+    chainRole: "能源 / 基础设施：配电、UPS、液冷和热管理把电力转成可运营算力。",
+    revenueMix: ["热管理", "电力管理和 UPS", "机柜与集成方案", "服务和备件"],
+    expenseMix: ["原材料和供应链", "制造人工与外包", "研发和定制项目", "销售渠道和安装服务"],
+    financials: "重点看订单、backlog、毛利率、液冷占比和数据中心客户交付节奏。",
+    watch: "跟踪 hyperscaler 订单、液冷渗透、交付周期和原材料成本。",
+  },
+  ANET: {
+    business: "Arista 提供云数据中心交换机和网络操作系统，训练集群扩大后东西向流量会带动高速网络需求。",
+    chainRole: "基础设施：以太网 AI 网络、交换机和网络软件支撑算力集群互联。",
+    revenueMix: ["云客户交换机", "企业和园区网络", "网络软件和服务", "AI 集群网络升级"],
+    expenseMix: ["芯片与光模块采购", "研发和网络操作系统", "销售渠道", "库存和供应链"],
+    financials: "重点看云客户集中度、AI 网络收入、毛利率和 800G/1.6T 迁移节奏。",
+    watch: "跟踪以太网 AI 网络渗透、云厂商订单和交换芯片供应。",
+  },
 };
 
 function candidate(symbol, name, industry, tier, logic, baseScore = 72) {
@@ -190,10 +293,93 @@ function candidate(symbol, name, industry, tier, logic, baseScore = 72) {
   };
 }
 
+function profileFor(company) {
+  const fallbackByIndustry = {
+    "低碳电力与电网": {
+      business: "围绕发电资产、输配电、变电设备和电网工程提供供给能力，受益于 AI 数据中心、电气化和电网升级。",
+      chainRole: "能源：决定 AI 工厂能否拿到足够、稳定、可持续的电力。",
+      revenueMix: ["发电或电网资产收入", "电力设备和工程交付", "长协或服务收入", "项目型订单"],
+      expenseMix: ["燃料、材料或设备采购", "工程施工和维护", "折旧与资本开支", "融资成本和监管成本"],
+      financials: "重点看订单、容量价格、电价合同、资本开支和资产负债表。",
+      watch: "跟踪数据中心用电合同、并网进度、设备交期和监管审批。",
+    },
+    "数据中心电力与冷却": {
+      business: "提供数据中心供配电、UPS、热管理、液冷、楼宇控制或工程服务，是 AI 机柜功率提升后的硬约束环节。",
+      chainRole: "能源 / 基础设施：把电力、散热和可靠性转化为可运营算力。",
+      revenueMix: ["设备销售", "项目交付", "服务和备件", "数据中心客户订单"],
+      expenseMix: ["原材料和制造", "研发和定制设计", "安装服务", "销售渠道和保修"],
+      financials: "重点看 backlog、订单增速、毛利率、液冷占比和交付周期。",
+      watch: "跟踪 hyperscaler 资本开支、AI 机柜密度、液冷渗透和供应链交期。",
+    },
+    "半导体设备与制造": {
+      business: "为先进逻辑、存储和封装提供制造、设备、检测或工艺能力，订单来自晶圆厂资本开支。",
+      chainRole: "芯片：决定先进制程、良率、HBM 和封装扩产速度。",
+      revenueMix: ["设备或制造服务", "服务合约和备件", "先进节点相关收入", "存储或封装客户需求"],
+      expenseMix: ["研发和工程人员", "高精密零部件", "制造与服务交付", "库存和供应链"],
+      financials: "重点看订单、出货、毛利率、客户 CapEx 和先进制程渗透。",
+      watch: "跟踪晶圆厂扩产、出口限制、良率爬坡和存储周期。",
+    },
+    "AI 算力与芯片": {
+      business: "提供 AI 加速器、定制芯片、CPU/IP、内存或高速互联芯片，直接决定训练和推理成本曲线。",
+      chainRole: "芯片：连接模型能力、算力供给和数据中心资本开支。",
+      revenueMix: ["数据中心芯片", "定制 ASIC 或互联", "存储/CPU/IP 授权", "消费和边缘设备"],
+      expenseMix: ["晶圆、封装和 HBM", "研发和软件生态", "库存与供应保障", "销售和客户支持"],
+      financials: "重点看数据中心收入、毛利率、新平台爬坡、客户集中度和供应约束。",
+      watch: "跟踪云厂商 CapEx、推理需求、竞品定价和先进封装产能。",
+    },
+    "云平台与 AI 软件": {
+      business: "提供云基础设施、企业软件、数据平台或工作流系统，AI 价值来自算力调用、订阅提价和流程自动化。",
+      chainRole: "基础设施 / 模型 / 应用：把模型能力导入企业数据和工作流。",
+      revenueMix: ["云或订阅收入", "数据/平台服务", "企业软件席位", "专业服务和广告/生态收入"],
+      expenseMix: ["数据中心和折旧", "研发与模型集成", "销售获客", "云运营和客户支持"],
+      financials: "重点看收入增速、净留存、AI 产品渗透、毛利率和自由现金流。",
+      watch: "跟踪 AI SKU 采用、客户扩容、续费率、CapEx 和竞争价格。",
+    },
+    "网络安全": {
+      business: "提供云安全、终端安全、身份、威胁检测和安全运营平台，AI 扩散会增加攻击面和防护需求。",
+      chainRole: "基础设施 / 应用：企业部署 AI 前需要安全边界、数据保护和运行监控。",
+      revenueMix: ["订阅和平台收入", "云安全模块", "终端或身份安全", "专业服务"],
+      expenseMix: ["研发和威胁情报", "销售获客", "云基础设施", "客户成功和支持"],
+      financials: "重点看 ARR、净留存、平台化收入、经营利润率和现金流。",
+      watch: "跟踪大型企业合并采购、AI 安全产品采用和竞争性折扣。",
+    },
+    "医疗创新": {
+      business: "围绕药物研发、医疗设备、手术机器人或临床流程创新，AI 主要提升发现效率、自动化和决策辅助。",
+      chainRole: "应用：AI 落地到高价值、强监管、长周期的垂直行业。",
+      revenueMix: ["核心药品或设备", "耗材和服务", "新适应症或系统升级", "国际市场"],
+      expenseMix: ["研发和临床试验", "销售和医生教育", "制造和质量体系", "监管合规"],
+      financials: "重点看收入增长、管线进展、毛利率、研发费用率和监管里程碑。",
+      watch: "跟踪临床数据、获批节奏、医保/支付和新产品放量。",
+    },
+    "AI 应用": {
+      business: "把模型能力嵌入自动驾驶、机器人、自动化或企业流程，弹性大但兑现路径差异很大。",
+      chainRole: "应用：验证 AI 是否能从演示进入真实收入和生产率提升。",
+      revenueMix: ["核心产品或订阅", "服务和部署", "硬件/系统收入", "长期期权业务"],
+      expenseMix: ["研发和工程", "硬件供应链", "销售部署", "数据、训练和运营"],
+      financials: "重点看收入兑现、毛利率、订单、现金消耗和单位经济模型。",
+      watch: "跟踪商业化节奏、客户留存、监管许可和竞争壁垒。",
+    },
+    资源品: {
+      business: "提供铜、铀、黄金、油气等实物资源，受益于电气化、AI 电力需求或通胀环境。",
+      chainRole: "能源 / 上游材料：为电网、数据中心和宏观对冲提供实物约束。",
+      revenueMix: ["核心资源销售", "副产品", "长协或现货价格", "区域资产组合"],
+      expenseMix: ["采掘和加工成本", "能源和运输", "维持性资本开支", "税费和环保成本"],
+      financials: "重点看商品价格、产量、现金成本、自由现金流和资产负债表。",
+      watch: "跟踪库存、供给扰动、实际利率、地缘风险和扩产项目。",
+    },
+  };
+
+  const fallback = fallbackByIndustry[company.industry] || fallbackByIndustry["云平台与 AI 软件"];
+  return {
+    ...fallback,
+    ...companyProfiles[company.symbol],
+  };
+}
+
 const aiLayers = ["能源", "芯片", "基础设施", "模型", "应用"];
 
-const aiLayerX = [9, 30, 51, 72, 93];
-const aiLeafY = [18, 32, 46, 60, 74];
+const aiLayerX = [8, 28, 48, 68, 96];
+const aiLeafY = [16, 29, 42, 68, 81];
 
 const aiLayerConfig = [
   {
@@ -278,7 +464,7 @@ const aiNodes = aiLayerConfig.flatMap((layer, layerIndex) => {
       segment: layer.segment,
       kind: "hub",
       x,
-      y: 50,
+      y: 55,
       summary: layer.summary,
       symbols: layer.symbols,
     },
@@ -629,7 +815,9 @@ function setupAiIndustry() {
     elements.aiSearch.value = "";
     elements.aiLayer.value = "全部层级";
     elements.aiIncludeAll.checked = true;
+    state.selectedGlossary = "芯片";
     renderAiIndustry();
+    renderGlossary();
   });
 
   elements.aiTabs.forEach((button) => {
@@ -665,6 +853,14 @@ function aiNodeMatches(node) {
     .join(" ")
     .toLowerCase();
   return text.includes(query);
+}
+
+function glossaryKeyForNode(node) {
+  if (!node) return state.selectedGlossary;
+  if (node.id.includes("storage") || node.id.includes("hbm")) return "存储";
+  if (node.layer === "基础设施") return node.id === "storage-data" ? "存储" : "基础设施";
+  if (glossaryGroups[node.layer]) return node.layer;
+  return state.selectedGlossary;
 }
 
 function renderAiIndustry() {
@@ -753,7 +949,9 @@ function renderAiIndustry() {
   elements.aiMapCanvas.querySelectorAll("[data-ai-node]").forEach((button) => {
     button.addEventListener("click", () => {
       state.ai.selectedNode = button.dataset.aiNode;
+      state.selectedGlossary = glossaryKeyForNode(aiNodeById.get(state.ai.selectedNode));
       renderAiIndustry();
+      renderGlossary();
     });
   });
 
@@ -882,7 +1080,7 @@ function renderThesis() {
     ["康波位置", "第五轮信息技术革命后段，AI 是这一轮信息技术向基础设施和应用扩散的核心变量。"],
     ["美林位置", merrillConclusion(state.data.macro.stage)],
     ["配置结论", playbook.text],
-    ["操作方式", `先点下方行业按钮，再看每个行业里综合分、估值分位和社媒热度排序靠前的股票。`],
+    ["操作方式", "在公司研究池按行业、梯队、热度和强信号筛选；宏观阶段负责控制行业偏好，个股仍要回到财报、估值和订单兑现。"],
   ];
 
   elements.thesisPoints.innerHTML = thesis
@@ -895,65 +1093,6 @@ function renderThesis() {
       `,
     )
     .join("");
-}
-
-function renderCycleSectors() {
-  const playbook = cyclePlaybook[state.data.macro.stage] || cyclePlaybook.复苏;
-  const available = playbook.industries.filter((industry) => cycleSectorCandidates[industry]?.length);
-  if (!state.selectedSector || !available.includes(state.selectedSector)) {
-    state.selectedSector = available[0] || "全部";
-  }
-
-  elements.sectorConclusion.textContent = playbook.text;
-  elements.sectorButtons.innerHTML = available
-    .map(
-      (industry) => `
-        <button class="${state.selectedSector === industry ? "active" : ""}" type="button" data-sector="${industry}">
-          ${industry}
-        </button>
-      `,
-    )
-    .join("");
-
-  elements.sectorButtons.querySelectorAll("[data-sector]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.selectedSector = button.dataset.sector;
-      renderCycleSectors();
-    });
-  });
-
-  const companies = (cycleSectorCandidates[state.selectedSector] || [])
-    .map(companyBySymbol)
-    .filter(Boolean)
-    .map(enrichCompany)
-    .sort((a, b) => b.score - a.score || b.socialWeek.score - a.socialWeek.score)
-    .slice(0, 8);
-
-  elements.sectorCompanies.innerHTML = companies
-    .map(
-      (company) => `
-        <button class="sector-company" type="button" data-sector-symbol="${company.symbol}" data-searchable>
-          <span>
-            <b>${company.symbol}</b>
-            <small>${company.name} · ${company.tier}</small>
-          </span>
-          <em>${company.score}</em>
-          <p>${company.logic}</p>
-          <small class="sector-check">${company.nextCheck}</small>
-        </button>
-      `,
-    )
-    .join("");
-
-  elements.sectorCompanies.querySelectorAll("[data-sector-symbol]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const company = companyBySymbol(button.dataset.sectorSymbol);
-      if (!company) return;
-      state.selectedSymbol = company.symbol;
-      renderCompanies();
-      document.querySelector("#stock-lab")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  });
 }
 
 function renderMacroTable() {
@@ -1270,9 +1409,6 @@ function renderCompanies() {
   if (!companies.length) {
     state.selectedSymbol = null;
     elements.table.innerHTML = `<tr><td colspan="7">当前筛选条件下没有匹配股票。</td></tr>`;
-    elements.detailTitle.textContent = "选择一家公司";
-    elements.detailSymbol.textContent = "--";
-    elements.detailBody.innerHTML = "<p>调整筛选条件后，点击表格里的公司查看详情。</p>";
     return;
   }
 
@@ -1313,31 +1449,46 @@ function renderCompanies() {
     row.addEventListener("click", () => {
       state.selectedSymbol = row.dataset.symbol;
       renderCompanies();
-      renderDetail(enrichCompany(companyBySymbol(state.selectedSymbol)));
     });
   });
-
-  renderDetail(enrichCompany(companyBySymbol(state.selectedSymbol)));
 }
 
 function renderDetail(company) {
   if (!company) return;
   const quote = company.quote || {};
-  const today = company.socialToday || emptyHeat(company.symbol);
-  const week = company.socialWeek || emptyHeat(company.symbol);
-  const current = company.socialCurrent || today;
-  const topPost = current.sources?.reddit?.topPosts?.[0];
+  const profile = profileFor(company);
+  const relatedNodes = aiNodes
+    .filter((node) => node.symbols?.includes(company.symbol))
+    .map((node) => node.title)
+    .slice(0, 8);
   elements.detailTitle.textContent = company.name;
   elements.detailSymbol.textContent = company.symbol;
   elements.detailBody.innerHTML = `
     <div class="detail-block" data-searchable>
-      <b>价格与变化</b>
-      <span>${quote.close ? priceFormatter.format(quote.close) : "--"} / ${changeText(quote)}</span>
+      <b>研究位置</b>
+      <span>${company.industry} · ${company.tier} · 综合分 ${company.score}</span>
+      <small>价格：${quote.close ? priceFormatter.format(quote.close) : "--"} / ${changeText(quote)}</small>
     </div>
     <div class="detail-block" data-searchable>
-      <b>社媒热度</b>
-      <span>今日 ${today.score} 分（${today.posts}帖 / ${today.comments}评），本周 ${week.score} 分（${week.posts}帖 / ${week.comments}评）。</span>
-      <small>${topPost ? `代表帖子：${topPost.title}` : "WSB 暂无代表帖子；X 热度字段已预留，需配置 API 后接入。"}</small>
+      <b>公司业务</b>
+      <span>${profile.business}</span>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>产业链角色</b>
+      <span>${profile.chainRole}</span>
+      <small>${relatedNodes.length ? `对应节点：${relatedNodes.join(" / ")}` : "当前公司暂未绑定到 AI 图谱节点。"}</small>
+    </div>
+    <div class="detail-block detail-list" data-searchable>
+      <b>收入构成</b>
+      <ul>${profile.revenueMix.map((item) => `<li>${item}</li>`).join("")}</ul>
+    </div>
+    <div class="detail-block detail-list" data-searchable>
+      <b>成本 / 支出构成</b>
+      <ul>${profile.expenseMix.map((item) => `<li>${item}</li>`).join("")}</ul>
+    </div>
+    <div class="detail-block" data-searchable>
+      <b>财报跟踪</b>
+      <span>${profile.financials}</span>
     </div>
     <div class="detail-block" data-searchable>
       <b>研究逻辑</b>
@@ -1349,28 +1500,56 @@ function renderDetail(company) {
     </div>
     <div class="detail-block" data-searchable>
       <b>下一步跟踪</b>
-      <span>${company.nextCheck}</span>
+      <span>${profile.watch} ${company.nextCheck}</span>
     </div>
   `;
 }
 
 function renderGlossary() {
-  elements.glossaryList.innerHTML = glossary
-    .map(
-      ([term, definition]) => `
+  const groups = Object.keys(glossaryGroups);
+  if (!groups.includes(state.selectedGlossary)) {
+    state.selectedGlossary = groups[0];
+  }
+  const terms = glossaryGroups[state.selectedGlossary] || [];
+  elements.glossaryList.innerHTML = `
+    <div class="glossary-tabs" role="group" aria-label="AI 产业术语分类">
+      ${groups
+        .map(
+          (group) => `
+            <button class="${state.selectedGlossary === group ? "active" : ""}" type="button" data-glossary-group="${group}">
+              ${group}
+            </button>
+          `,
+        )
+        .join("")}
+    </div>
+    <div class="glossary-group-title">
+      <b>${state.selectedGlossary}术语</b>
+      <span>和 AI 五层产业链对应，点上方行业切换术语池。</span>
+    </div>
+    ${terms
+      .map(
+        ([term, definition]) => `
         <div class="glossary-item" data-searchable>
           <b>${term}</b>
           <span>${definition}</span>
         </div>
       `,
-    )
-    .join("");
+      )
+      .join("")}
+  `;
+
+  elements.glossaryList.querySelectorAll("[data-glossary-group]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedGlossary = button.dataset.glossaryGroup;
+      renderGlossary();
+    });
+  });
 }
 
 function renderAll() {
   renderHeader();
   renderThesis();
-  renderCycleSectors();
   renderSocialHeat();
   renderAiIndustry();
   renderCompanies();
