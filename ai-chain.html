@@ -66,9 +66,11 @@
 
           <div class="ai-tabs" role="tablist" aria-label="AI 产业观察视图">
             <button class="active" type="button" data-ai-scroll="ai-industry">关系图谱</button>
-            <button type="button" data-ai-scroll="ai-semiconductor-chain">能源 / 芯片 / 基建</button>
-            <button type="button" data-ai-scroll="ai-models">模型 / Agent</button>
-            <button type="button" data-ai-scroll="ai-applications">应用落地</button>
+            <button type="button" data-ai-scroll="research">公司档案</button>
+            <button type="button" data-ai-scroll="glossary">术语表</button>
+            <button type="button" data-ai-scroll="ai-semiconductor-chain">底层三层</button>
+            <button type="button" data-ai-scroll="ai-models">能力层</button>
+            <button type="button" data-ai-scroll="ai-applications">需求侧</button>
           </div>
 
           <div class="ai-workbench">
@@ -98,6 +100,27 @@
           </div>
         </section>
 
+        <section class="lower-grid">
+          <article class="panel detail-panel" id="research" data-search-block>
+            <div class="panel-head">
+              <span>AI 产业观察：公司档案拆解</span>
+              <b id="detail-symbol">--</b>
+            </div>
+            <h2 id="detail-title">选择一家公司</h2>
+            <div id="detail-body" class="detail-body">
+              <p>点击 AI 产业链图谱里的公司，查看业务、财报、收入构成、成本支出和验证要点。</p>
+            </div>
+          </article>
+
+          <article class="panel glossary-panel" id="glossary" data-search-block>
+            <div class="panel-head">
+              <span>AI 产业观察术语表</span>
+              <b>GLOSSARY</b>
+            </div>
+            <div id="glossary-list" class="glossary-list"></div>
+          </article>
+        </section>
+
         <section class="ai-deep-grid" aria-label="AI 产业链拆解">
           <article class="panel ai-deep-card" id="ai-semiconductor-chain" data-search-block>
             <div class="panel-head">
@@ -121,27 +144,6 @@
               <b>需求侧</b>
             </div>
             <div id="ai-app-view" class="ai-deep-list"></div>
-          </article>
-        </section>
-
-        <section class="lower-grid">
-          <article class="panel detail-panel" id="research" data-search-block>
-            <div class="panel-head">
-              <span>AI 产业观察：公司档案拆解</span>
-              <b id="detail-symbol">--</b>
-            </div>
-            <h2 id="detail-title">选择一家公司</h2>
-            <div id="detail-body" class="detail-body">
-              <p>点击 AI 产业链图谱里的公司，查看业务、财报、收入构成、成本支出和验证要点。</p>
-            </div>
-          </article>
-
-          <article class="panel glossary-panel" id="glossary" data-search-block>
-            <div class="panel-head">
-              <span>AI 产业观察术语表</span>
-              <b>GLOSSARY</b>
-            </div>
-            <div id="glossary-list" class="glossary-list"></div>
           </article>
         </section>
 

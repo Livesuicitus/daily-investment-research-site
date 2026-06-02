@@ -66,9 +66,11 @@
 
           <div class="ai-tabs" role="tablist" aria-label="半导体产业链视图">
             <button class="active" type="button" data-semi-scroll="semi-industry">关系图谱</button>
-            <button type="button" data-semi-scroll="semi-front-end">EDA / IP / 设计</button>
-            <button type="button" data-semi-scroll="semi-manufacturing">制造 / 设备 / 材料</button>
-            <button type="button" data-semi-scroll="semi-market">封测 / 存储 / 下游</button>
+            <button type="button" data-semi-scroll="semi-research">公司档案</button>
+            <button type="button" data-semi-scroll="semi-glossary">术语表</button>
+            <button type="button" data-semi-scroll="semi-front-end">前端</button>
+            <button type="button" data-semi-scroll="semi-manufacturing">制造底座</button>
+            <button type="button" data-semi-scroll="semi-market">交付与需求</button>
           </div>
 
           <div class="ai-workbench">
@@ -98,6 +100,27 @@
           </div>
         </section>
 
+        <section class="lower-grid">
+          <article class="panel detail-panel" id="semi-research" data-search-block>
+            <div class="panel-head">
+              <span>半导体产业链：公司档案拆解</span>
+              <b id="semi-detail-symbol">--</b>
+            </div>
+            <h2 id="semi-detail-title">选择一家公司</h2>
+            <div id="semi-detail-body" class="detail-body">
+              <p>点击半导体产业链图谱里的公司，查看业务、产业链角色、收入构成、成本支出、财报跟踪和风险。</p>
+            </div>
+          </article>
+
+          <article class="panel glossary-panel" id="semi-glossary" data-search-block>
+            <div class="panel-head">
+              <span>半导体产业链术语表</span>
+              <b>GLOSSARY</b>
+            </div>
+            <div id="semi-glossary-list" class="glossary-list"></div>
+          </article>
+        </section>
+
         <section class="ai-deep-grid" aria-label="半导体产业链拆解">
           <article class="panel ai-deep-card" id="semi-front-end" data-search-block>
             <div class="panel-head">
@@ -121,27 +144,6 @@
               <b>交付与需求</b>
             </div>
             <div id="semi-market-view" class="ai-deep-list"></div>
-          </article>
-        </section>
-
-        <section class="lower-grid">
-          <article class="panel detail-panel" id="semi-research" data-search-block>
-            <div class="panel-head">
-              <span>半导体产业链：公司档案拆解</span>
-              <b id="semi-detail-symbol">--</b>
-            </div>
-            <h2 id="semi-detail-title">选择一家公司</h2>
-            <div id="semi-detail-body" class="detail-body">
-              <p>点击半导体产业链图谱里的公司，查看业务、产业链角色、收入构成、成本支出、财报跟踪和风险。</p>
-            </div>
-          </article>
-
-          <article class="panel glossary-panel" id="semi-glossary" data-search-block>
-            <div class="panel-head">
-              <span>半导体产业链术语表</span>
-              <b>GLOSSARY</b>
-            </div>
-            <div id="semi-glossary-list" class="glossary-list"></div>
           </article>
         </section>
 
