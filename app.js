@@ -372,6 +372,118 @@ function candidate(symbol, name, industry, tier, logic, baseScore = 72) {
   };
 }
 
+const officialSites = {
+  AA: "https://www.alcoa.com/",
+  AAOI: "https://www.ao-inc.com/",
+  AAPL: "https://www.apple.com/",
+  ADBE: "https://www.adobe.com/",
+  ADI: "https://www.analog.com/",
+  ALAB: "https://www.asteralabs.com/",
+  AMAT: "https://www.appliedmaterials.com/",
+  AMD: "https://www.amd.com/",
+  AMKR: "https://www.amkor.com/",
+  AMZN: "https://www.aboutamazon.com/",
+  ANSS: "https://www.ansys.com/",
+  ARM: "https://www.arm.com/",
+  ASML: "https://www.asml.com/",
+  ASTS: "https://ast-science.com/",
+  ASX: "https://www.aseglobal.com/",
+  ATEYY: "https://www.advantest.com/",
+  AVAV: "https://www.avinc.com/",
+  AVGO: "https://www.broadcom.com/",
+  CARR: "https://www.corporate.carrier.com/",
+  CCJ: "https://www.cameco.com/",
+  CDNS: "https://www.cadence.com/",
+  CEG: "https://www.constellationenergy.com/",
+  CIEN: "https://www.ciena.com/",
+  CIFR: "https://www.ciphermining.com/",
+  COHR: "https://www.coherent.com/",
+  CORZ: "https://corescientific.com/",
+  CRM: "https://www.salesforce.com/",
+  CRDO: "https://www.credosemi.com/",
+  CRWV: "https://www.coreweave.com/",
+  CSCO: "https://www.cisco.com/",
+  DD: "https://www.dupont.com/",
+  DDOG: "https://www.datadoghq.com/",
+  ENTG: "https://www.entegris.com/",
+  FN: "https://www.fabrinet.com/",
+  GFS: "https://gf.com/",
+  GLW: "https://www.corning.com/",
+  GOLD: "https://www.barrick.com/",
+  GOOGL: "https://abc.xyz/",
+  HXSCF: "https://www.skhynix.com/",
+  HUBB: "https://www.hubbell.com/",
+  IBIDY: "https://www.ibiden.com/",
+  INTC: "https://www.intel.com/",
+  IREN: "https://iren.com/",
+  ISRG: "https://www.intuitive.com/",
+  JCI: "https://www.johnsoncontrols.com/",
+  KLAC: "https://www.kla.com/",
+  KTOS: "https://www.kratosdefense.com/",
+  LIN: "https://www.linde.com/",
+  LITE: "https://www.lumentum.com/",
+  LLY: "https://www.lilly.com/",
+  LMT: "https://www.lockheedmartin.com/",
+  LRCX: "https://www.lamresearch.com/",
+  LUNR: "https://www.intuitivemachines.com/",
+  META: "https://about.meta.com/",
+  MP: "https://mpmaterials.com/",
+  MRVL: "https://www.marvell.com/",
+  MSFT: "https://www.microsoft.com/",
+  MU: "https://www.micron.com/",
+  NBIS: "https://nebius.com/",
+  NEE: "https://www.nexteraenergy.com/",
+  NOK: "https://www.nokia.com/",
+  NOW: "https://www.servicenow.com/",
+  NVDA: "https://www.nvidia.com/",
+  NXPI: "https://www.nxp.com/",
+  OKLO: "https://oklo.com/",
+  ON: "https://www.onsemi.com/",
+  ONDS: "https://ondas.com/",
+  ORCL: "https://www.oracle.com/",
+  P: "https://www.pinterest.com/",
+  PATH: "https://www.uipath.com/",
+  PL: "https://www.planet.com/",
+  PLTR: "https://www.palantir.com/",
+  PWR: "https://www.quantaservices.com/",
+  QCOM: "https://www.qualcomm.com/",
+  RKLB: "https://www.rocketlabusa.com/",
+  SCCO: "https://southerncoppercorp.com/",
+  SERV: "https://www.serverobotics.com/",
+  SIMO: "https://www.siliconmotion.com/",
+  SMR: "https://www.nuscalepower.com/",
+  SNDK: "https://www.sandisk.com/",
+  SNOW: "https://www.snowflake.com/",
+  SNPS: "https://www.synopsys.com/",
+  SSNLF: "https://www.samsung.com/",
+  STX: "https://www.seagate.com/",
+  SYM: "https://www.symbotic.com/",
+  TER: "https://www.teradyne.com/",
+  TOELY: "https://www.tel.com/",
+  TSLA: "https://www.tesla.com/",
+  TSM: "https://www.tsmc.com/",
+  TT: "https://www.tranetechnologies.com/",
+  TXN: "https://www.ti.com/",
+  UMC: "https://www.umc.com/",
+  USAR: "https://www.usare.com/",
+  UUUU: "https://www.energyfuels.com/",
+  VST: "https://www.vistracorp.com/",
+  VRT: "https://www.vertiv.com/",
+  WDC: "https://www.westerndigital.com/",
+  WULF: "https://www.terawulf.com/",
+  XOM: "https://corporate.exxonmobil.com/",
+};
+
+function officialSiteFor(company) {
+  return officialSites[company?.symbol] || "";
+}
+
+function renderOfficialLink(company, className = "official-link") {
+  const url = officialSiteFor(company);
+  if (!url) return "";
+  return `<a class="${className}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="打开 ${company.name} 官网">官网</a>`;
+}
+
 function profileFor(company) {
   const fallbackByIndustry = {
     "低碳电力与电网": {
@@ -1687,11 +1799,14 @@ function renderAiNodeSummary() {
     ? companies
         .map(
           (company) => `
-            <button type="button" data-symbol="${company.symbol}">
-              <b>${company.symbol}</b>
-              <span>${company.name}</span>
-              <em>${company.score}</em>
-            </button>
+            <div class="ai-company-row">
+              <button class="ai-company-button" type="button" data-symbol="${company.symbol}">
+                <b>${company.symbol}</b>
+                <span>${company.name}</span>
+                <em>${company.score}</em>
+              </button>
+              ${renderOfficialLink(company)}
+            </div>
           `,
         )
         .join("")
@@ -1915,11 +2030,14 @@ function renderSemiNodeSummary() {
     ? companies
         .map(
           (company) => `
-            <button class="${state.selectedSemiSymbol === company.symbol ? "active" : ""}" type="button" data-semi-symbol="${company.symbol}">
-              <b>${company.symbol}</b>
-              <span>${company.name}</span>
-              <em>${company.score}</em>
-            </button>
+            <div class="ai-company-row">
+              <button class="ai-company-button ${state.selectedSemiSymbol === company.symbol ? "active" : ""}" type="button" data-semi-symbol="${company.symbol}">
+                <b>${company.symbol}</b>
+                <span>${company.name}</span>
+                <em>${company.score}</em>
+              </button>
+              ${renderOfficialLink(company)}
+            </div>
           `,
         )
         .join("")
@@ -1974,6 +2092,7 @@ function renderSemiDetail(company, node) {
   const enriched = company.score === undefined ? enrichSemiCompany(company) : company;
   const quote = enriched.quote || {};
   const profile = semiProfileFor(enriched, node);
+  const officialLink = renderOfficialLink(enriched, "detail-official-link");
   const relatedNodes = semiNodes
     .filter((item) => item.symbols?.includes(enriched.symbol))
     .map((item) => item.title)
@@ -1986,6 +2105,7 @@ function renderSemiDetail(company, node) {
       <b>研究位置</b>
       <span>${enriched.industry} · ${enriched.tier} · 研究分 ${enriched.score}</span>
       <small>价格：${quote.close ? priceFormatter.format(quote.close) : "--"} / ${changeText(quote)}</small>
+      ${officialLink}
     </div>
     <div class="detail-block" data-searchable>
       <b>公司业务</b>
@@ -2513,6 +2633,7 @@ function renderDetail(company) {
   if (!company || !elements.detailBody || !elements.detailTitle || !elements.detailSymbol) return;
   const quote = company.quote || {};
   const profile = profileFor(company);
+  const officialLink = renderOfficialLink(company, "detail-official-link");
   const relatedNodes = aiNodes
     .filter((node) => node.symbols?.includes(company.symbol))
     .map((node) => node.title)
@@ -2524,6 +2645,7 @@ function renderDetail(company) {
       <b>研究位置</b>
       <span>${company.industry} · ${company.tier} · 综合分 ${company.score}</span>
       <small>价格：${quote.close ? priceFormatter.format(quote.close) : "--"} / ${changeText(quote)}</small>
+      ${officialLink}
     </div>
     <div class="detail-block" data-searchable>
       <b>公司业务</b>

@@ -1258,10 +1258,17 @@ tbody tr.selected {
   gap: 8px;
 }
 
-.ai-company-rail button,
+.ai-company-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.ai-company-button,
 .ai-empty {
   display: grid;
-  grid-template-columns: 54px 1fr auto;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
   min-height: 48px;
@@ -1274,20 +1281,53 @@ tbody tr.selected {
   text-align: left;
 }
 
-.ai-company-rail button:hover {
+.ai-company-button:hover,
+.ai-company-button.active {
   border-color: var(--blue);
 }
 
-.ai-company-rail span,
+.ai-company-button span,
 .ai-empty span {
+  min-width: 0;
   color: var(--muted);
   font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.ai-company-rail em {
+.ai-company-button em {
   color: var(--amber);
   font-style: normal;
   font-weight: 850;
+}
+
+.official-link,
+.detail-official-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 10px;
+  color: var(--blue-2);
+  background: rgba(76, 141, 255, 0.1);
+  border: 1px solid rgba(76, 141, 255, 0.32);
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 820;
+  text-decoration: none;
+}
+
+.official-link:hover,
+.detail-official-link:hover {
+  color: var(--text);
+  border-color: var(--blue);
+  background: rgba(76, 141, 255, 0.18);
+}
+
+.detail-official-link {
+  justify-self: start;
+  margin-top: 2px;
 }
 
 .ai-empty {
@@ -2288,7 +2328,7 @@ tbody tr.selected {
   border-radius: var(--radius);
 }
 
-.ai-company-rail button,
+.ai-company-button,
 .ai-empty {
   border-radius: 9px;
 }
