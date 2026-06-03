@@ -102,7 +102,7 @@ p {
   gap: 16px;
   height: 100vh;
   padding: 26px 22px;
-  overflow-y: scroll;
+  overflow-y: auto;
   background: var(--rail);
   border-right: 1px solid var(--line);
 }
@@ -640,7 +640,7 @@ p {
 .lower-grid .glossary-list,
 .lower-grid .detail-body {
   min-height: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-right: 6px;
   scrollbar-gutter: stable;
 }
