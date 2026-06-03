@@ -327,12 +327,13 @@ p {
 
 .lower-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.8fr);
+  grid-template-columns: minmax(300px, 0.52fr) minmax(0, 1fr);
   gap: 18px;
 }
 
 .lower-grid .detail-panel,
-.lower-grid .glossary-panel {
+.lower-grid .glossary-panel,
+.lower-grid .ai-summary-card {
   display: grid;
   height: clamp(430px, 58dvh, 560px);
   overflow: hidden;
@@ -344,6 +345,14 @@ p {
 
 .lower-grid .glossary-panel {
   grid-template-rows: auto minmax(0, 1fr);
+}
+
+.lower-grid .ai-summary-card {
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+  max-height: clamp(430px, 58dvh, 560px);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .panel {
@@ -638,7 +647,8 @@ p {
 }
 
 .lower-grid .glossary-list,
-.lower-grid .detail-body {
+.lower-grid .detail-body,
+.ai-deep-grid .glossary-list {
   min-height: 0;
   overflow-y: auto;
   padding-right: 6px;
@@ -646,18 +656,21 @@ p {
 }
 
 .lower-grid .glossary-list::-webkit-scrollbar,
-.lower-grid .detail-body::-webkit-scrollbar {
+.lower-grid .detail-body::-webkit-scrollbar,
+.ai-deep-grid .glossary-list::-webkit-scrollbar {
   width: 8px;
 }
 
 .lower-grid .glossary-list::-webkit-scrollbar-thumb,
-.lower-grid .detail-body::-webkit-scrollbar-thumb {
+.lower-grid .detail-body::-webkit-scrollbar-thumb,
+.ai-deep-grid .glossary-list::-webkit-scrollbar-thumb {
   background: rgba(102, 163, 255, 0.32);
   border-radius: 999px;
 }
 
 .lower-grid .glossary-list::-webkit-scrollbar-track,
-.lower-grid .detail-body::-webkit-scrollbar-track {
+.lower-grid .detail-body::-webkit-scrollbar-track,
+.ai-deep-grid .glossary-list::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 999px;
 }
@@ -1131,6 +1144,10 @@ tbody tr.selected {
   align-items: start;
 }
 
+.ai-map-shell.map-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .semi-industry-panel .ai-map-shell {
   --map-height: 760px;
 }
@@ -1410,8 +1427,17 @@ tbody tr.selected {
 
 .ai-deep-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
+  align-items: stretch;
+}
+
+.ai-deep-grid .glossary-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .ai-deep-list {
