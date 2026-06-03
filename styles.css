@@ -331,6 +331,21 @@ p {
   gap: 18px;
 }
 
+.lower-grid .detail-panel,
+.lower-grid .glossary-panel {
+  display: grid;
+  height: clamp(430px, 58dvh, 560px);
+  overflow: hidden;
+}
+
+.lower-grid .detail-panel {
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.lower-grid .glossary-panel {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
 .panel {
   min-width: 0;
   padding: 20px;
@@ -620,6 +635,31 @@ p {
 .detail-body {
   display: grid;
   gap: 10px;
+}
+
+.lower-grid .glossary-list,
+.lower-grid .detail-body {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+}
+
+.lower-grid .glossary-list::-webkit-scrollbar,
+.lower-grid .detail-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lower-grid .glossary-list::-webkit-scrollbar-thumb,
+.lower-grid .detail-body::-webkit-scrollbar-thumb {
+  background: rgba(102, 163, 255, 0.32);
+  border-radius: 999px;
+}
+
+.lower-grid .glossary-list::-webkit-scrollbar-track,
+.lower-grid .detail-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
 }
 
 .rank-item {
@@ -1465,6 +1505,19 @@ tbody tr.selected {
 }
 
 .detail-list li::marker {
+  color: var(--blue);
+}
+
+.business-points {
+  display: grid;
+  gap: 7px;
+  margin: 4px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.business-points li::marker {
   color: var(--blue);
 }
 

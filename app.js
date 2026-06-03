@@ -484,6 +484,75 @@ function renderOfficialLink(company, className = "official-link") {
   return `<a class="${className}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="打开 ${company.name} 官网">官网</a>`;
 }
 
+const businessDetailOverrides = {
+  NVDA: [
+    "数据中心是主轴：GPU 加速器、整机系统、NVLink/NVSwitch 和网络设备一起销售，形成从单卡到 AI 工厂的系统方案。",
+    "软件生态是护城河：CUDA、推理库、企业 AI 软件和开发者生态降低客户迁移意愿，也影响毛利率和平台粘性。",
+    "外延业务包括游戏 GPU、专业可视化、自动驾驶和机器人，但当前估值核心仍取决于数据中心平台换代和推理放量。",
+  ],
+  AMD: [
+    "数据中心 CPU 和 GPU 是核心增量：EPYC 承接服务器份额，Instinct 加速器验证 AI 训练和推理订单能否持续放量。",
+    "Chiplet 设计和先进封装提升产品弹性，但需要同时跟踪 HBM 供应、软件生态和云厂商认证节奏。",
+    "客户端、游戏和嵌入式业务提供周期底盘，AI 估值主要看数据中心收入占比和毛利率改善。",
+  ],
+  GOOGL: [
+    "广告现金流仍是底座：搜索、YouTube 和广告技术决定利润基本盘，AI 改造会影响搜索体验、广告匹配和流量获取成本。",
+    "Google Cloud、Vertex AI、Gemini 和 TPU 构成企业 AI 平台，核心看云收入增速、利润率和客户迁移。",
+    "Other Bets 和自动驾驶保留长期期权，但短期研究重点仍是广告韧性、云利润率和 AI CapEx 回报。",
+  ],
+  MSFT: [
+    "Azure 是 AI 基建入口，承接 OpenAI、企业模型部署、数据平台和推理服务需求。",
+    "M365 Copilot、GitHub Copilot、Dynamics 和安全产品把 AI 直接嵌入企业工作流，重点看席位渗透和续费。",
+    "资本开支会压低短期自由现金流弹性，所以要同时看 Azure AI 贡献、毛利率和数据中心利用率。",
+  ],
+  AMZN: [
+    "AWS 是核心 AI 平台，Bedrock、SageMaker、Trainium/Inferentia 和 GPU 实例承接训练与推理需求。",
+    "电商、广告和物流自动化提供应用侧样本，AI 价值会体现在广告投放、搜索推荐和履约效率。",
+    "研究重点是 AWS 增速、云利润率、CapEx 消化、电商经营杠杆和广告增长。",
+  ],
+  META: [
+    "广告和推荐系统是盈利核心，AI 直接影响信息流排序、广告转化率、内容生成和商家工具。",
+    "Llama 和开源模型生态提升开发者影响力，同时带来训练和推理基础设施投入。",
+    "需要分开看广告现金流、AI CapEx、Reality Labs 亏损和新产品商业化节奏。",
+  ],
+  ASML: [
+    "EUV 是先进逻辑和高端存储扩产的关键设备，High-NA 是下一轮先进节点的重要观察点。",
+    "DUV、量测和服务收入提供周期缓冲，客户主要来自先进晶圆厂、IDM 和存储厂。",
+    "研究重点是订单、backlog、出货节奏、中国 DUV 需求、先进节点迁移和出口限制。",
+  ],
+  TSM: [
+    "先进逻辑代工是核心，N3/N2 等节点承接 AI GPU、ASIC、CPU 和高端手机芯片需求。",
+    "CoWoS 和先进封装直接影响 AI 芯片交付，封装产能已经成为比晶圆更紧的环节之一。",
+    "研究重点是 HPC 收入占比、毛利率、CapEx、先进节点利用率、客户集中度和地缘风险。",
+  ],
+  MU: [
+    "HBM 是 AI 训练和高端 GPU 的关键约束，认证进度、客户份额和产能分配决定弹性。",
+    "DRAM、NAND 和企业 SSD 仍有周期属性，需要结合 ASP、bit 出货和库存位置判断利润弹性。",
+    "研究重点是 HBM 订单、数据中心收入占比、毛利率修复和资本开支纪律。",
+  ],
+};
+
+function businessDetailLines(company, profile) {
+  if (businessDetailOverrides[company.symbol]) return businessDetailOverrides[company.symbol];
+  const revenueFocus = profile.revenueMix?.slice(0, 3).join(" / ") || company.industry;
+  const expenseFocus = profile.expenseMix?.slice(0, 2).join(" / ") || "研发、供应链和销售投入";
+  return [
+    `业务边界：主要围绕 ${revenueFocus} 展开，先判断收入是否真正来自产业链主线，而不是只靠题材估值。`,
+    `投入结构：重点关注 ${expenseFocus}，这些项目会决定毛利率、现金流和扩产节奏。`,
+    "验证方式：结合订单、收入增速、毛利率、客户集中度和管理层指引，确认业务是否持续兑现。",
+  ];
+}
+
+function renderBusinessBlock(company, profile) {
+  const lines = businessDetailLines(company, profile);
+  return `
+    <span>${profile.business}</span>
+    <ul class="business-points">
+      ${lines.map((line) => `<li>${line}</li>`).join("")}
+    </ul>
+  `;
+}
+
 function profileFor(company) {
   const fallbackByIndustry = {
     "低碳电力与电网": {
@@ -2109,7 +2178,7 @@ function renderSemiDetail(company, node) {
     </div>
     <div class="detail-block" data-searchable>
       <b>公司业务</b>
-      <span>${profile.business}</span>
+      ${renderBusinessBlock(enriched, profile)}
     </div>
     <div class="detail-block" data-searchable>
       <b>产业链角色</b>
@@ -2649,7 +2718,7 @@ function renderDetail(company) {
     </div>
     <div class="detail-block" data-searchable>
       <b>公司业务</b>
-      <span>${profile.business}</span>
+      ${renderBusinessBlock(company, profile)}
     </div>
     <div class="detail-block" data-searchable>
       <b>产业链角色</b>
