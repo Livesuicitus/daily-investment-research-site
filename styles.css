@@ -102,7 +102,7 @@ p {
   gap: 16px;
   height: 100vh;
   padding: 26px 22px;
-  overflow-y: auto;
+  overflow-y: scroll;
   background: var(--rail);
   border-right: 1px solid var(--line);
 }
@@ -640,7 +640,7 @@ p {
 .lower-grid .glossary-list,
 .lower-grid .detail-body {
   min-height: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
   padding-right: 6px;
   scrollbar-gutter: stable;
 }
@@ -1024,7 +1024,7 @@ tbody tr.selected {
 
 .ai-workbench {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: 1fr;
   gap: 14px;
   padding: 12px 26px 26px;
 }
@@ -1123,7 +1123,20 @@ tbody tr.selected {
   box-shadow: 0 0 0 1px rgba(88, 211, 255, 0.62);
 }
 
-.ai-map-area {
+.ai-map-shell {
+  --map-height: 720px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 14px;
+  align-items: start;
+}
+
+.semi-industry-panel .ai-map-shell {
+  --map-height: 760px;
+}
+
+.ai-map-scroll {
+  min-width: 0;
   overflow-x: auto;
 }
 
@@ -1249,10 +1262,11 @@ tbody tr.selected {
 .ai-summary-card {
   display: grid;
   align-content: start;
-  align-self: stretch;
+  align-self: start;
   gap: 16px;
-  height: 100%;
-  min-height: 620px;
+  height: var(--map-height);
+  max-height: var(--map-height);
+  min-height: 0;
   min-width: 0;
   overflow-y: scroll;
   padding: 22px;
