@@ -1427,15 +1427,19 @@ tbody tr.selected {
 
 .ai-deep-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   align-items: stretch;
 }
 
-.ai-deep-grid .glossary-panel {
+body[data-page="ai"] .ai-deep-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+body[data-page="ai"] .ai-deep-grid > .panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  height: auto;
+  height: clamp(400px, 46dvh, 480px);
   min-height: 0;
   overflow: hidden;
 }
@@ -1443,6 +1447,24 @@ tbody tr.selected {
 .ai-deep-list {
   display: grid;
   gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+}
+
+.ai-deep-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ai-deep-list::-webkit-scrollbar-thumb {
+  background: rgba(102, 163, 255, 0.32);
+  border-radius: 999px;
+}
+
+.ai-deep-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 999px;
 }
 
 .ai-deep-item {
