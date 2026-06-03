@@ -1432,11 +1432,13 @@ tbody tr.selected {
   align-items: stretch;
 }
 
-body[data-page="ai"] .ai-deep-grid {
+body[data-page="ai"] .ai-deep-grid,
+body[data-page="semi"] .ai-deep-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-body[data-page="ai"] .ai-deep-grid > .panel {
+body[data-page="ai"] .ai-deep-grid > .panel,
+body[data-page="semi"] .ai-deep-grid > .panel {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   height: clamp(400px, 46dvh, 480px);

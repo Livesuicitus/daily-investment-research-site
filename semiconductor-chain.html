@@ -64,15 +64,6 @@
             <div class="ai-stat-grid" id="semi-stat-grid"></div>
           </div>
 
-          <div class="ai-tabs" role="tablist" aria-label="半导体产业链视图">
-            <button class="active" type="button" data-semi-scroll="semi-industry">关系图谱</button>
-            <button type="button" data-semi-scroll="semi-research">公司档案</button>
-            <button type="button" data-semi-scroll="semi-glossary">术语表</button>
-            <button type="button" data-semi-scroll="semi-front-end">前端</button>
-            <button type="button" data-semi-scroll="semi-manufacturing">制造底座</button>
-            <button type="button" data-semi-scroll="semi-market">交付与需求</button>
-          </div>
-
           <div class="ai-workbench">
             <div class="ai-map-area">
               <div class="ai-controls">
@@ -85,26 +76,26 @@
                 </label>
               </div>
               <div class="ai-segments" id="semi-segments"></div>
-              <div class="ai-map-shell">
+              <div class="ai-map-shell map-only">
                 <div class="ai-map-scroll">
                   <div class="ai-map-canvas semi-map-canvas" id="semi-map-canvas" aria-label="半导体产业链关系图谱"></div>
                 </div>
-
-                <aside class="ai-summary-card">
-                  <p class="breadcrumb">Map Summary</p>
-                  <h3 id="semi-node-title">半导体产业链总览</h3>
-                  <div class="ai-summary-stats" id="semi-summary-stats"></div>
-                  <p id="semi-node-summary">
-                    默认展示八层产业链。选择节点后会展开对应全球龙头，选择公司后进入公司档案。
-                  </p>
-                  <div class="ai-company-rail" id="semi-node-companies"></div>
-                </aside>
               </div>
             </div>
           </div>
         </section>
 
         <section class="lower-grid">
+          <aside class="panel ai-summary-card">
+            <p class="breadcrumb">Map Summary</p>
+            <h3 id="semi-node-title">半导体产业链总览</h3>
+            <div class="ai-summary-stats" id="semi-summary-stats"></div>
+            <p id="semi-node-summary">
+              默认展示八层产业链。选择节点后会展开对应全球龙头，选择公司后进入公司档案。
+            </p>
+            <div class="ai-company-rail" id="semi-node-companies"></div>
+          </aside>
+
           <article class="panel detail-panel" id="semi-research" data-search-block>
             <div class="panel-head">
               <span>半导体产业链：公司档案拆解</span>
@@ -115,7 +106,9 @@
               <p>点击半导体产业链图谱里的公司，查看业务、产业链角色、收入构成、成本支出、财报跟踪和风险。</p>
             </div>
           </article>
+        </section>
 
+        <section class="ai-deep-grid" aria-label="半导体产业链拆解">
           <article class="panel glossary-panel" id="semi-glossary" data-search-block>
             <div class="panel-head">
               <span>半导体产业链术语表</span>
@@ -123,9 +116,7 @@
             </div>
             <div id="semi-glossary-list" class="glossary-list"></div>
           </article>
-        </section>
 
-        <section class="ai-deep-grid" aria-label="半导体产业链拆解">
           <article class="panel ai-deep-card" id="semi-front-end" data-search-block>
             <div class="panel-head">
               <span>EDA / IP / 芯片设计</span>
