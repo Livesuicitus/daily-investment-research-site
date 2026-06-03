@@ -1248,9 +1248,13 @@ tbody tr.selected {
 
 .ai-summary-card {
   display: grid;
-  align-content: start;
+  grid-template-rows: auto auto auto auto minmax(0, 1fr);
+  align-self: stretch;
   gap: 16px;
+  height: 100%;
   min-height: 620px;
+  min-width: 0;
+  overflow: hidden;
   padding: 22px;
   background: var(--panel-3);
   border: 1px solid var(--line-strong);
@@ -1296,6 +1300,11 @@ tbody tr.selected {
 .ai-company-rail {
   display: grid;
   gap: 8px;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
 }
 
 .ai-company-row {
@@ -1596,12 +1605,12 @@ tbody tr.selected {
 }
 
 .terminal-shell {
-  grid-template-columns: 282px minmax(0, 1fr);
+  grid-template-columns: 238px minmax(0, 1fr);
 }
 
 .sidebar {
   gap: 14px;
-  padding: 24px 20px;
+  padding: 22px 16px;
   background:
     linear-gradient(180deg, rgba(102, 163, 255, 0.08), transparent 190px),
     linear-gradient(180deg, var(--rail), #060a12);
@@ -1728,8 +1737,8 @@ tbody tr.selected {
 
 .workspace {
   gap: 22px;
-  width: min(1260px, calc(100vw - 282px));
-  padding: 30px 30px 48px;
+  width: min(1400px, calc(100vw - 238px));
+  padding: 28px 22px 48px;
 }
 
 .workspace-head {
@@ -2313,25 +2322,27 @@ tbody tr.selected {
 }
 
 .ai-hero {
-  padding: 30px;
+  padding: 22px 26px;
   background:
     linear-gradient(90deg, rgba(53, 211, 154, 0.12), transparent 42%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent);
 }
 
 .ai-hero h2 {
-  font-size: clamp(31px, 4vw, 48px);
+  margin-bottom: 8px;
+  font-size: clamp(28px, 3.2vw, 42px);
 }
 
 .ai-stat {
-  min-height: 94px;
+  min-height: 76px;
+  padding: 13px;
   background: rgba(21, 31, 50, 0.78);
   border-radius: var(--radius);
 }
 
 .ai-stat b {
   color: #f9e982;
-  font-size: 34px;
+  font-size: 28px;
 }
 
 .ai-tabs {
@@ -2343,8 +2354,9 @@ tbody tr.selected {
 }
 
 .ai-workbench {
+  align-items: stretch;
   gap: 18px;
-  padding: 14px 30px 30px;
+  padding: 18px 26px 26px;
 }
 
 .ai-map-canvas {

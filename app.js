@@ -1710,11 +1710,27 @@ function setupSemiIndustry() {
 }
 
 function aiCompaniesFor(node) {
-  return Array.from(new Set(node.symbols || []))
+  const layerConfig = node?.kind === "hub" ? aiLayerConfig.find((layer) => layer.id === node.id) : null;
+  const symbols =
+    layerConfig?.leaves?.flatMap(([, , , childSymbols]) => childSymbols) ||
+    node?.symbols ||
+    [];
+
+  return Array.from(new Set(symbols))
     .map(companyBySymbol)
     .filter(Boolean)
     .map(enrichCompany)
     .sort((a, b) => b.score - a.score || b.socialToday.score - a.socialToday.score);
+}
+
+function relatedNodeCount(links, nodeId) {
+  return new Set(
+    links.flatMap(([from, to]) => {
+      if (from === nodeId) return [to];
+      if (to === nodeId) return [from];
+      return [];
+    }),
+  ).size;
 }
 
 function aiNodeMatches(node) {
@@ -1806,6 +1822,9 @@ function renderAiIndustry() {
       const companies = aiCompaniesFor(node);
       const dim = filterActive && !matchingIds.has(node.id);
       const labelSide = node.x > 84 ? "left-label" : "";
+      const countLabel = companies.length
+        ? `${companies.length}家公司${node.kind === "hub" ? "汇总" : ""}`
+        : "待补档案";
       return `
         <button
           class="ai-node ${node.kind} ${labelSide} ${state.ai.selectedNode === node.id ? "active" : ""} ${dim ? "dim" : ""}"
@@ -1814,7 +1833,7 @@ function renderAiIndustry() {
           style="left:${node.x}%; top:${node.y}%"
         >
           <span>${node.title}</span>
-          <small>${companies.length ? `${companies.length}家公司` : "待补档案"}</small>
+          <small>${countLabel}</small>
         </button>
       `;
     })
@@ -1844,15 +1863,15 @@ function renderAiIndustry() {
 function renderAiNodeSummary() {
   const node = aiNodeById.get(state.ai.selectedNode) || aiNodeById.get("gpu");
   const companies = aiCompaniesFor(node);
-  const connected = aiLinks.filter(([from, to]) => from === node.id || to === node.id).length;
+  const connected = relatedNodeCount(aiLinks, node.id);
 
   elements.aiNodeTitle.textContent = `${node.title} 关系卡`;
   elements.aiNodeSummary.textContent = node.summary;
   elements.aiSummaryStats.innerHTML = [
     ["层级", node.layer],
-    ["连接边", connected],
+    ["关联节点", connected],
     ["研究池公司", companies.length],
-    ["节点类型", node.kind === "hub" ? "产业层" : "细分节点"],
+    ["节点类型", node.kind === "hub" ? "汇总层" : "细分节点"],
   ]
     .map(
       ([label, value]) => `
@@ -2071,15 +2090,15 @@ function renderSemiNodeSummary() {
   if (!elements.semiNodeTitle || !elements.semiNodeSummary || !elements.semiSummaryStats || !elements.semiNodeCompanies) return;
   const node = semiNodeById.get(state.semi.selectedNode) || semiNodeById.get("semi-equipment");
   const companies = semiCompaniesFor(node);
-  const connected = semiLinks.filter(([from, to]) => from === node.id || to === node.id).length;
+  const connected = relatedNodeCount(semiLinks, node.id);
 
   elements.semiNodeTitle.textContent = `${node.title} 关系卡`;
   elements.semiNodeSummary.textContent = node.summary;
   elements.semiSummaryStats.innerHTML = [
     ["层级", node.layer],
-    ["连接边", connected],
+    ["关联节点", connected],
     ["研究池公司", companies.length],
-    ["节点类型", node.kind === "hub" ? "产业层" : "细分节点"],
+    ["节点类型", node.kind === "hub" ? "汇总层" : "细分节点"],
   ]
     .map(
       ([label, value]) => `
